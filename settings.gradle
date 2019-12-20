@@ -1,3 +1,10 @@
 rootProject.name = 'book-library'
 include 'notification-service'
+include 'back-office'
+include 'back-office-interface'
+include 'user-service'
+include 'user-service-interface'
+include 'book-service'
+include 'book-service-interface'
+include 'book-service-db-migration'
 
