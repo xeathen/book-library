@@ -1,10 +1,10 @@
-import app.user.UserServiceApp;
+import app.BookServiceApp;
 
 /**
  * @author Ethan
  */
 public class Main {
     public static void main(String[] args) {
-        new UserServiceApp().start();
+        new BookServiceApp().start();
     }
 }
