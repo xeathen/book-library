@@ -1,7 +1,6 @@
 package app.book.api.book;
 
 import core.framework.api.validate.Length;
-import core.framework.api.validate.Max;
 import core.framework.api.validate.NotNull;
 import core.framework.api.web.service.QueryParam;
 

@@ -10,7 +10,6 @@ import app.book.service.BookService;
 import core.framework.inject.Inject;
 import core.framework.log.ActionLogContext;
 import core.framework.util.Strings;
-import org.bson.types.ObjectId;
 
 /**
  * @author Ethan
@@ -36,5 +35,4 @@ public class BookWebServiceImpl implements BookWebService {
     public ReturnBookResponse returnBook(Long id) {
         return null;
     }
-
 }

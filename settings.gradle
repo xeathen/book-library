@@ -9,4 +9,6 @@ include 'book-service-interface'
 include 'book-service-db-migration'
 include 'user-service-db-migration'
 include 'book-mongo-migration'
+include 'book-site'
+include 'book-site-interface'
 

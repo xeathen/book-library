@@ -2,14 +2,16 @@ package app.book.service;
 
 import app.book.api.book.BOCreateBookRequest;
 import app.book.api.book.BOCreateBookResponse;
-import app.book.api.book.BOGetHistoryResponse;
 import app.book.api.book.BOSearchBookRequest;
 import app.book.api.book.BOSearchBookResponse;
+import app.book.api.book.BOSearchHistoryResponse;
 import app.book.api.book.BOUpdateBookRequest;
 import app.book.api.book.BOUpdateBookResponse;
 import app.book.api.book.GetBookResponse;
+import app.book.api.book.GetBorrowedRecordResponse;
 import app.book.domain.Book;
 import app.book.domain.BorrowedRecords;
+import com.mongodb.ReadPreference;
 import com.mongodb.client.model.Filters;
 import core.framework.db.Query;
 import core.framework.db.Repository;
@@ -17,6 +19,7 @@ import core.framework.inject.Inject;
 import core.framework.mongo.MongoCollection;
 import core.framework.util.Strings;
 
+import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -57,11 +60,14 @@ public class BOBookService {
         return response;
     }
 
-    public BOGetHistoryResponse getBorrowedHistory(Long bookId) {
-        BOGetHistoryResponse response = new BOGetHistoryResponse();
+    public BOSearchHistoryResponse getBorrowedHistory(Long bookId) {
+        BOSearchHistoryResponse response = new BOSearchHistoryResponse();
         core.framework.mongo.Query query = new core.framework.mongo.Query();
         query.filter = Filters.eq("book_id", bookId);
-
+        query.readPreference = ReadPreference.secondaryPreferred();
+        List<BorrowedRecords> borrowedRecordsList = collection.find(query);
+        response.borrowedRecords = borrowedRecordsList.stream().map(this::convert).collect(Collectors.toList());
+        response.total = borrowedRecordsList.size();
         return response;
     }
 
@@ -129,6 +135,17 @@ public class BOBookService {
         response.tag = book.tag;
         response.description = book.description;
         response.num = book.num;
+        return response;
+    }
+
+    public GetBorrowedRecordResponse convert(BorrowedRecords borrowedRecords) {
+        GetBorrowedRecordResponse response = new GetBorrowedRecordResponse();
+        response.id = borrowedRecords.id;
+        response.userId = borrowedRecords.userId;
+        response.bookId = borrowedRecords.bookId;
+        response.borrowTime = borrowedRecords.borrowTime;
+        response.returnTime = borrowedRecords.returnTime;
+        response.isReturned = borrowedRecords.isReturned;
         return response;
     }
 }

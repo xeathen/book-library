@@ -23,7 +23,7 @@ public class BookService {
     @Inject
     Repository<Book> bookRepository;
     @Inject
-    MongoCollection<BorrowedRecords> collection;
+    MongoCollection<BorrowedRecords> mongoCollection;
 
     public SearchBookResponse search(SearchBookRequest request) {
         SearchBookResponse response = new SearchBookResponse();

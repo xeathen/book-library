@@ -72,5 +72,4 @@ public class BOUserService {
         response.password = request.password;
         response.userEmail = request.userEmail;
     }
-
 }

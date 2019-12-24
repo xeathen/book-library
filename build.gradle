@@ -76,14 +76,14 @@ configure([project(':back-office'),
     }
 }
 
-project(':user-service'){
+project(':user-service') {
     dependencies {
         runtimeOnly 'mysql:mysql-connector-java:8.0.17'
         implementation project(':user-service-interface')
     }
 }
 
-project(':book-service'){
+project(':book-service') {
     dependencies {
         runtimeOnly 'mysql:mysql-connector-java:8.0.17'
         implementation "core.framework:core-ng-mongo:${coreNGVersion}"
