@@ -2,11 +2,22 @@ package app.book.service;
 
 import app.book.api.book.BOCreateBookRequest;
 import app.book.api.book.BOCreateBookResponse;
+import app.book.api.book.BOGetHistoryResponse;
+import app.book.api.book.BOSearchBookRequest;
+import app.book.api.book.BOSearchBookResponse;
 import app.book.api.book.BOUpdateBookRequest;
 import app.book.api.book.BOUpdateBookResponse;
+import app.book.api.book.GetBookResponse;
 import app.book.domain.Book;
+import app.book.domain.BorrowedRecords;
+import com.mongodb.client.model.Filters;
+import core.framework.db.Query;
 import core.framework.db.Repository;
 import core.framework.inject.Inject;
+import core.framework.mongo.MongoCollection;
+import core.framework.util.Strings;
+
+import java.util.stream.Collectors;
 
 /**
  * @author Ethan
@@ -14,6 +25,8 @@ import core.framework.inject.Inject;
 public class BOBookService {
     @Inject
     Repository<Book> bookRepository;
+    @Inject
+    MongoCollection<BorrowedRecords> collection;
 
     public BOCreateBookResponse create(BOCreateBookRequest request) {
         BOCreateBookResponse response = new BOCreateBookResponse();
@@ -31,6 +44,46 @@ public class BOBookService {
         response.id = id;
         convert(request, response);
         return response;
+    }
+
+    public BOSearchBookResponse search(BOSearchBookRequest request) {
+        BOSearchBookResponse response = new BOSearchBookResponse();
+        Query<Book> query = bookRepository.select();
+        query.skip(request.skip);
+        query.limit(request.limit);
+        where(request, query);
+        response.books = query.fetch().stream().map(this::convert).collect(Collectors.toList());
+        response.total = query.count();
+        return response;
+    }
+
+    public BOGetHistoryResponse getBorrowedHistory(Long bookId) {
+        BOGetHistoryResponse response = new BOGetHistoryResponse();
+        core.framework.mongo.Query query = new core.framework.mongo.Query();
+        query.filter = Filters.eq("book_id", bookId);
+
+        return response;
+    }
+
+    private void where(BOSearchBookRequest request, Query query) {
+        if (!Strings.isBlank(request.name)) {
+            query.where("name like ?", Strings.format("%{}%", request.name));
+        }
+        if (!Strings.isBlank(request.author)) {
+            query.where("author like ?", Strings.format("%{}%", request.author));
+        }
+        if (!Strings.isBlank(request.pub)) {
+            query.where("pub like ?", Strings.format("%{}%", request.pub));
+        }
+        if (!Strings.isBlank(request.category)) {
+            query.where("category like ?", Strings.format("%{}%", request.category));
+        }
+        if (!Strings.isBlank(request.tag)) {
+            query.where("tag like ?", Strings.format("%{}%", request.tag));
+        }
+        if (!Strings.isBlank(request.description)) {
+            query.where("description like ?", Strings.format("%{}%", request.description));
+        }
     }
 
     public Book convert(BOCreateBookRequest request) {
@@ -65,5 +118,17 @@ public class BOBookService {
         response.tag = request.tag;
         response.description = request.description;
         response.num = request.num;
+    }
+
+    public GetBookResponse convert(Book book) {
+        GetBookResponse response = new GetBookResponse();
+        response.name = book.name;
+        response.author = book.author;
+        response.pub = book.pub;
+        response.category = book.category;
+        response.tag = book.tag;
+        response.description = book.description;
+        response.num = book.num;
+        return response;
     }
 }

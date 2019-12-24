@@ -21,15 +21,15 @@ public class BorrowedRecords {
 
     @NotNull
     @Field(name = "book_id")
-    public String bookId;
+    public Long bookId;
 
     @NotNull
     @Field(name = "borrow_time")
-    public ZonedDateTime borrow_time;
+    public ZonedDateTime borrowTime;
 
     @NotNull
     @Field(name = "return_time")
-    public ZonedDateTime return_time;
+    public ZonedDateTime returnTime;
 
     @NotNull
     @Field(name = "is_returned")

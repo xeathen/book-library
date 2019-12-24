@@ -1,7 +1,9 @@
 package app.book.web;
 
 import app.book.api.BookWebService;
+import app.book.api.book.BorrowBookRequest;
 import app.book.api.book.BorrowBookResponse;
+import app.book.api.book.ReturnBookResponse;
 import app.book.api.book.SearchBookRequest;
 import app.book.api.book.SearchBookResponse;
 import app.book.service.BookService;
@@ -26,7 +28,13 @@ public class BookWebServiceImpl implements BookWebService {
     }
 
     @Override
-    public BorrowBookResponse borrow(String id) {
+    public BorrowBookResponse borrowBook(BorrowBookRequest request) {
         return null;
     }
+
+    @Override
+    public ReturnBookResponse returnBook(Long id) {
+        return null;
+    }
+
 }

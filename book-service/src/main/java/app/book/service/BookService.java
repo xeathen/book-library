@@ -1,5 +1,6 @@
 package app.book.service;
 
+import app.book.api.book.BorrowBookRequest;
 import app.book.api.book.BorrowBookResponse;
 import app.book.api.book.GetBookResponse;
 import app.book.api.book.SearchBookRequest;
@@ -11,8 +12,8 @@ import core.framework.db.Repository;
 import core.framework.inject.Inject;
 import core.framework.mongo.MongoCollection;
 import core.framework.util.Strings;
-import core.framework.web.exception.NotFoundException;
 
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -35,14 +36,6 @@ public class BookService {
         return response;
     }
 
-    public BorrowBookResponse borrow(Long id) {
-        BorrowBookResponse response = new BorrowBookResponse();
-        if (bookRepository.get(id).get().num <= 0){
-//            throw new NotFoundException()
-        }
-        return response;
-    }
-
     private void where(SearchBookRequest request, Query query) {
         if (!Strings.isBlank(request.name)) {
             query.where("name like ?", Strings.format("%{}%", request.name));
@@ -62,6 +55,15 @@ public class BookService {
         if (!Strings.isBlank(request.description)) {
             query.where("description like ?", Strings.format("%{}%", request.description));
         }
+    }
+
+    public BorrowBookResponse borrow(BorrowBookRequest request) {
+        BorrowBookResponse response = new BorrowBookResponse();
+        Optional<Book> book = bookRepository.get(request.bookId);
+        if (book.isPresent() && book.get().num <= 0) {
+//            throw new NotFoundException()
+        }
+        return response;
     }
 
     public GetBookResponse convert(Book book) {
