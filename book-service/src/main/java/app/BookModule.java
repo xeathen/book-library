@@ -6,6 +6,7 @@ import app.book.domain.Author;
 import app.book.domain.Book;
 import app.book.domain.BorrowedRecord;
 import app.book.domain.Category;
+import app.book.domain.Reservation;
 import app.book.domain.Tag;
 import app.book.service.BOBookService;
 import app.book.service.BookService;
@@ -28,6 +29,7 @@ public class BookModule extends Module {
         db.repository(Category.class);
         db.repository(Tag.class);
         db.repository(Author.class);
+        db.repository(Reservation.class);
 
         MongoConfig config = config(MongoConfig.class);
         config.uri(requiredProperty("sys.mongo.uri"));

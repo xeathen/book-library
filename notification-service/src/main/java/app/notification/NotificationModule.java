@@ -12,7 +12,6 @@ import static core.framework.http.HTTPMethod.GET;
 public class NotificationModule extends Module {
     @Override
     protected void initialize() {
-        http().httpPort(8088);
-        http().route(GET, "/hello", request -> Response.text("hello world!").status(HTTPStatus.CREATED));
+
     }
 }

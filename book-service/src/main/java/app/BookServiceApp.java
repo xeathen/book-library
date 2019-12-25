@@ -12,5 +12,6 @@ public class BookServiceApp extends App {
         load(new SystemModule("sys.properties"));
         loadProperties("app.properties");
         load(new BookModule());
+        load(new ReservationModule());
     }
 }

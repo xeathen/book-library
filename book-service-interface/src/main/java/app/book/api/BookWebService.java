@@ -2,6 +2,8 @@ package app.book.api;
 
 import app.book.api.book.BorrowBookRequest;
 import app.book.api.book.BorrowBookResponse;
+import app.book.api.book.CreateReservationRequest;
+import app.book.api.book.CreateReservationResponse;
 import app.book.api.book.GetBookResponse;
 import app.book.api.book.ReturnBookRequest;
 import app.book.api.book.ReturnBookResponse;
@@ -36,4 +38,8 @@ public interface BookWebService {
     @POST
     @Path("/borrowed-record/return-book")
     ReturnBookResponse returnBook(ReturnBookRequest request);
+
+    @POST
+    @Path("/reservation")
+    CreateReservationResponse reserve(CreateReservationRequest request);
 }

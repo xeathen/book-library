@@ -2,6 +2,8 @@ package app.book.service;
 
 import app.book.api.book.BorrowBookRequest;
 import app.book.api.book.BorrowBookResponse;
+import app.book.api.book.CreateReservationRequest;
+import app.book.api.book.CreateReservationResponse;
 import app.book.api.book.GetBookResponse;
 import app.book.api.book.GetBorrowedRecordResponse;
 import app.book.api.book.ReturnBookRequest;
@@ -11,6 +13,7 @@ import app.book.api.book.SearchBookResponse;
 import app.book.api.book.SearchHistoryResponse;
 import app.book.domain.Book;
 import app.book.domain.BorrowedRecord;
+import app.book.domain.Reservation;
 import app.user.api.UserWebService;
 import com.mongodb.ReadPreference;
 import com.mongodb.client.model.Filters;
@@ -34,6 +37,8 @@ import java.util.stream.Collectors;
 public class BookService {
     @Inject
     Repository<Book> bookRepository;
+    @Inject
+    Repository<Reservation> reservationRepository;
     @Inject
     MongoCollection<BorrowedRecord> mongoCollection;
     @Inject
@@ -129,6 +134,18 @@ public class BookService {
 
         return response;
     }
+
+    public CreateReservationResponse reserve(CreateReservationRequest request) {
+        CreateReservationResponse response = new CreateReservationResponse();
+        Reservation reservation = new Reservation();
+        reservation.userId = request.userId;
+        reservation.bookId = request.bookId;
+        reservationRepository.insert(reservation);
+        response.userId = request.userId;
+        response.bookId = request.bookId;
+        return response;
+    }
+
 
     private void where(SearchBookRequest request, Query query) {
         if (!Strings.isBlank(request.name)) {

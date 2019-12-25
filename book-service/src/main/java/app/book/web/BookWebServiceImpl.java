@@ -3,6 +3,8 @@ package app.book.web;
 import app.book.api.BookWebService;
 import app.book.api.book.BorrowBookRequest;
 import app.book.api.book.BorrowBookResponse;
+import app.book.api.book.CreateReservationRequest;
+import app.book.api.book.CreateReservationResponse;
 import app.book.api.book.GetBookResponse;
 import app.book.api.book.ReturnBookRequest;
 import app.book.api.book.ReturnBookResponse;
@@ -47,5 +49,10 @@ public class BookWebServiceImpl implements BookWebService {
     @Override
     public ReturnBookResponse returnBook(ReturnBookRequest request) {
         return bookService.returnBook(request);
+    }
+
+    @Override
+    public CreateReservationResponse reserve(CreateReservationRequest request) {
+        return bookService.reserve(request);
     }
 }
