@@ -10,8 +10,6 @@ import core.framework.scheduler.JobContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.List;
-
 /**
  * @author Ethan
  */
@@ -22,11 +20,10 @@ public class NotifyJob implements Job {
     @Inject
     MessagePublisher<ReservationMessage> publisher;
 
-
     @Override
 
     public void execute(JobContext context) throws Exception {
-        reservationRepository.select().fetch().forEach(reservation ->{
+        reservationRepository.select().fetch().forEach(reservation -> {
             ReservationMessage message = new ReservationMessage();
             message.userId = reservation.userId;
             message.bookId = reservation.bookId;

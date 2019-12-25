@@ -146,7 +146,6 @@ public class BookService {
         return response;
     }
 
-
     private void where(SearchBookRequest request, Query query) {
         if (!Strings.isBlank(request.name)) {
             query.where("name like ?", Strings.format("%{}%", request.name));

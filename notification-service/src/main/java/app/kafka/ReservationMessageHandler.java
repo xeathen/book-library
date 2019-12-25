@@ -9,6 +9,7 @@ import core.framework.kafka.MessageHandler;
 public class ReservationMessageHandler implements MessageHandler<ReservationMessage> {
     @Override
     public void handle(String key, ReservationMessage value) throws Exception {
+        //TODO:Mock sending email to notify the user whose reservations will take effect soon.
 
     }
 }
