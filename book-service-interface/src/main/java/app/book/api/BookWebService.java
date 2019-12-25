@@ -1,6 +1,5 @@
 package app.book.api;
 
-import app.book.api.book.BOSearchHistoryResponse;
 import app.book.api.book.BorrowBookRequest;
 import app.book.api.book.BorrowBookResponse;
 import app.book.api.book.GetBookResponse;
@@ -29,7 +28,6 @@ public interface BookWebService {
     @GET
     @Path("/borrowed-record/:id")
     SearchHistoryResponse searchBorrowedHistory(@PathParam("id") Long userId);
-
 
     @POST
     @Path("/borrowed-record/borrow-book")

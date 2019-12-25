@@ -41,7 +41,5 @@ public class BookModule extends Module {
         bind(BookService.class);
         api.service(BookWebService.class, bind(BookWebServiceImpl.class));
         api.service(BOBookWebService.class, bind(BOBookWebServiceImpl.class));
-
-
     }
 }
