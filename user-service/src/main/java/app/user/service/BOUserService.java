@@ -6,9 +6,11 @@ import app.user.api.user.BODeleteUserResponse;
 import app.user.api.user.BOUpdateUserRequest;
 import app.user.api.user.BOUpdateUserResponse;
 import app.user.domain.User;
-import core.framework.db.Database;
 import core.framework.db.Repository;
 import core.framework.inject.Inject;
+import core.framework.web.exception.BadRequestException;
+
+import java.util.List;
 
 /**
  * @author Ethan
@@ -16,15 +18,17 @@ import core.framework.inject.Inject;
 public class BOUserService {
     @Inject
     Repository<User> userRepository;
-    @Inject
-    Database database;
 
     public BOCreateUserResponse create(BOCreateUserRequest request) {
         BOCreateUserResponse response = new BOCreateUserResponse();
-        //TODO:验证userName与email唯一性
-//        try (Transaction transaction = database.beginTransaction()) {
-//            userRepository.select()
-//        }
+        List<User> selectUserName = userRepository.select("user_name = ? ", request.userName);
+        if (selectUserName.size() > 0) {
+            throw new BadRequestException("find duplicate username");
+        }
+        List<User> selectUserEmail = userRepository.select("user_email = ?", request.userEmail);
+        if (selectUserEmail.size() > 0) {
+            throw new BadRequestException("find duplicate email");
+        }
         response.id = userRepository.insert(convert(request)).orElseThrow();
         convert(request, response);
         return response;
@@ -44,11 +48,6 @@ public class BOUserService {
         BODeleteUserResponse response = new BODeleteUserResponse();
         userRepository.delete(id);
         response.id = id;
-        return response;
-    }
-
-    public BOCreateUserResponse reset() {
-        BOCreateUserResponse response = new BOCreateUserResponse();
         return response;
     }
 
