@@ -11,7 +11,7 @@ import java.time.ZonedDateTime;
  * @author Ethan
  */
 @Collection(name = "borrowed_records")
-public class BorrowedRecords {
+public class BorrowedRecord {
     @Id
     public String id;
 

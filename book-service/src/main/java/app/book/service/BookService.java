@@ -3,17 +3,27 @@ package app.book.service;
 import app.book.api.book.BorrowBookRequest;
 import app.book.api.book.BorrowBookResponse;
 import app.book.api.book.GetBookResponse;
+import app.book.api.book.ReturnBookRequest;
+import app.book.api.book.ReturnBookResponse;
 import app.book.api.book.SearchBookRequest;
 import app.book.api.book.SearchBookResponse;
 import app.book.domain.Book;
-import app.book.domain.BorrowedRecords;
+import app.book.domain.BorrowedRecord;
+import app.user.api.UserWebService;
+import com.mongodb.ReadPreference;
+import com.mongodb.client.model.Filters;
 import core.framework.db.Query;
 import core.framework.db.Repository;
 import core.framework.inject.Inject;
 import core.framework.mongo.MongoCollection;
 import core.framework.util.Strings;
+import core.framework.web.exception.BadRequestException;
+import core.framework.web.exception.NotFoundException;
 
+import java.time.ZonedDateTime;
+import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 /**
@@ -23,7 +33,9 @@ public class BookService {
     @Inject
     Repository<Book> bookRepository;
     @Inject
-    MongoCollection<BorrowedRecords> mongoCollection;
+    MongoCollection<BorrowedRecord> mongoCollection;
+    @Inject
+    UserWebService userWebService;
 
     public SearchBookResponse search(SearchBookRequest request) {
         SearchBookResponse response = new SearchBookResponse();
@@ -33,6 +45,67 @@ public class BookService {
         where(request, query);
         response.books = query.fetch().stream().map(this::convert).collect(Collectors.toList());
         response.total = query.count();
+        return response;
+    }
+
+    public BorrowBookResponse borrowBook(BorrowBookRequest request) {
+        BorrowBookResponse response = new BorrowBookResponse();
+        Optional<Book> book = bookRepository.get(request.bookId);
+        if (userWebService.get(request.userId) == null) {
+            throw new NotFoundException("user not found, id=" + request.userId);
+        }
+        if (bookRepository.get(request.bookId).isEmpty()) {
+            throw new NotFoundException("book not found, id=" + request.userId);
+        }
+        if (!isReturned(request.userId, request.bookId)) {
+            throw new BadRequestException("you had borrowed this book already.");
+        }
+        if (book.isPresent() && book.get().num <= 0) {
+            throw new BadRequestException("no book rest.");
+        }
+        if (ZonedDateTime.now().isAfter(request.returnTime)) {
+            throw new BadRequestException("returnTime is after than now");
+        }
+        BorrowedRecord borrowedRecord = new BorrowedRecord();
+        borrowedRecord.id = UUID.randomUUID().toString();
+        borrowedRecord.bookId = request.bookId;
+        borrowedRecord.userId = request.userId;
+        borrowedRecord.borrowTime = ZonedDateTime.now();
+        borrowedRecord.returnTime = request.returnTime;
+        borrowedRecord.isReturned = false;
+
+        mongoCollection.insert(borrowedRecord);
+        Integer num = bookRepository.get(request.bookId).get().num;
+        Book borrowedBook = new Book();
+        borrowedBook.id = request.bookId;
+        borrowedBook.num = num - 1;
+        bookRepository.partialUpdate(borrowedBook);
+
+        response = convert(borrowedRecord);
+        return response;
+    }
+
+    public ReturnBookResponse returnBook(ReturnBookRequest request) {
+        ReturnBookResponse response = new ReturnBookResponse();
+        if (isReturned(request.userId, request.bookId)) {
+            throw new NotFoundException("no record");
+        }
+        BorrowedRecord borrowedRecord = new BorrowedRecord();
+        List<BorrowedRecord> borrowedRecordList = getNotReturnedRecordList(request.userId, request.bookId);
+        BorrowedRecord record = borrowedRecordList.get(0);
+        record.returnTime = ZonedDateTime.now();
+        record.isReturned = true;
+        mongoCollection.replace(record);
+        response.bookId = request.bookId;
+        response.userId = request.userId;
+        response.returnTime = ZonedDateTime.now();
+
+        Integer num = bookRepository.get(request.bookId).get().num;
+        Book borrowedBook = new Book();
+        borrowedBook.id = request.bookId;
+        borrowedBook.num = num + 1;
+        bookRepository.partialUpdate(borrowedBook);
+
         return response;
     }
 
@@ -57,16 +130,24 @@ public class BookService {
         }
     }
 
-    public BorrowBookResponse borrow(BorrowBookRequest request) {
-        BorrowBookResponse response = new BorrowBookResponse();
-        Optional<Book> book = bookRepository.get(request.bookId);
-        if (book.isPresent() && book.get().num <= 0) {
-//            throw new NotFoundException()
+    private Boolean isReturned(Long userId, Long bookId) {
+        List<BorrowedRecord> borrowedRecordList = getNotReturnedRecordList(userId, bookId);
+        if (borrowedRecordList.size() > 0) {
+            return false;
         }
-        return response;
+        return true;
     }
 
-    public GetBookResponse convert(Book book) {
+    private List<BorrowedRecord> getNotReturnedRecordList(Long userId, Long bookId) {
+        core.framework.mongo.Query query = new core.framework.mongo.Query();
+        query.filter = Filters.and(Filters.eq("book_id", bookId),
+            Filters.eq("user_id", userId),
+            Filters.eq("is_returned", false));
+        query.readPreference = ReadPreference.secondaryPreferred();
+        return mongoCollection.find(query);
+    }
+
+    private GetBookResponse convert(Book book) {
         GetBookResponse response = new GetBookResponse();
         response.name = book.name;
         response.author = book.author;
@@ -75,6 +156,15 @@ public class BookService {
         response.tag = book.tag;
         response.description = book.description;
         response.num = book.num;
+        return response;
+    }
+
+    private BorrowBookResponse convert(BorrowedRecord borrowedRecord) {
+        BorrowBookResponse response = new BorrowBookResponse();
+        response.userId = borrowedRecord.userId;
+        response.bookId = borrowedRecord.bookId;
+        response.borrowTime = borrowedRecord.borrowTime;
+        response.returnTime = borrowedRecord.returnTime;
         return response;
     }
 }

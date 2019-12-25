@@ -88,5 +88,6 @@ project(':book-service') {
         runtimeOnly 'mysql:mysql-connector-java:8.0.17'
         implementation "core.framework:core-ng-mongo:${coreNGVersion}"
         implementation project(':book-service-interface')
+        implementation project(':user-service-interface')
     }
 }

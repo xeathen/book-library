@@ -10,7 +10,7 @@ import app.book.api.book.BOUpdateBookResponse;
 import app.book.api.book.GetBookResponse;
 import app.book.api.book.GetBorrowedRecordResponse;
 import app.book.domain.Book;
-import app.book.domain.BorrowedRecords;
+import app.book.domain.BorrowedRecord;
 import com.mongodb.ReadPreference;
 import com.mongodb.client.model.Filters;
 import core.framework.db.Query;
@@ -29,7 +29,7 @@ public class BOBookService {
     @Inject
     Repository<Book> bookRepository;
     @Inject
-    MongoCollection<BorrowedRecords> collection;
+    MongoCollection<BorrowedRecord> collection;
 
     public BOCreateBookResponse create(BOCreateBookRequest request) {
         BOCreateBookResponse response = new BOCreateBookResponse();
@@ -65,9 +65,9 @@ public class BOBookService {
         core.framework.mongo.Query query = new core.framework.mongo.Query();
         query.filter = Filters.eq("book_id", bookId);
         query.readPreference = ReadPreference.secondaryPreferred();
-        List<BorrowedRecords> borrowedRecordsList = collection.find(query);
-        response.borrowedRecords = borrowedRecordsList.stream().map(this::convert).collect(Collectors.toList());
-        response.total = borrowedRecordsList.size();
+        List<BorrowedRecord> borrowedRecordList = collection.find(query);
+        response.borrowedRecords = borrowedRecordList.stream().map(this::convert).collect(Collectors.toList());
+        response.total = borrowedRecordList.size();
         return response;
     }
 
@@ -92,7 +92,7 @@ public class BOBookService {
         }
     }
 
-    public Book convert(BOCreateBookRequest request) {
+    private Book convert(BOCreateBookRequest request) {
         Book book = new Book();
         book.name = request.name;
         book.author = request.author;
@@ -104,7 +104,7 @@ public class BOBookService {
         return book;
     }
 
-    public Book convert(BOUpdateBookRequest request) {
+    private Book convert(BOUpdateBookRequest request) {
         Book book = new Book();
         book.name = request.name;
         book.author = request.author;
@@ -116,7 +116,7 @@ public class BOBookService {
         return book;
     }
 
-    public void convert(BOUpdateBookRequest request, BOUpdateBookResponse response) {
+    private void convert(BOUpdateBookRequest request, BOUpdateBookResponse response) {
         response.name = request.name;
         response.author = request.author;
         response.pub = request.pub;
@@ -126,7 +126,7 @@ public class BOBookService {
         response.num = request.num;
     }
 
-    public GetBookResponse convert(Book book) {
+    private GetBookResponse convert(Book book) {
         GetBookResponse response = new GetBookResponse();
         response.name = book.name;
         response.author = book.author;
@@ -138,14 +138,14 @@ public class BOBookService {
         return response;
     }
 
-    public GetBorrowedRecordResponse convert(BorrowedRecords borrowedRecords) {
+    private GetBorrowedRecordResponse convert(BorrowedRecord borrowedRecord) {
         GetBorrowedRecordResponse response = new GetBorrowedRecordResponse();
-        response.id = borrowedRecords.id;
-        response.userId = borrowedRecords.userId;
-        response.bookId = borrowedRecords.bookId;
-        response.borrowTime = borrowedRecords.borrowTime;
-        response.returnTime = borrowedRecords.returnTime;
-        response.isReturned = borrowedRecords.isReturned;
+        response.id = borrowedRecord.id;
+        response.userId = borrowedRecord.userId;
+        response.bookId = borrowedRecord.bookId;
+        response.borrowTime = borrowedRecord.borrowTime;
+        response.returnTime = borrowedRecord.returnTime;
+        response.isReturned = borrowedRecord.isReturned;
         return response;
     }
 }

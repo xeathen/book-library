@@ -3,11 +3,12 @@ package app;
 import app.book.api.BOBookWebService;
 import app.book.api.BookWebService;
 import app.book.domain.Book;
-import app.book.domain.BorrowedRecords;
+import app.book.domain.BorrowedRecord;
 import app.book.service.BOBookService;
 import app.book.service.BookService;
 import app.book.web.BOBookWebServiceImpl;
 import app.book.web.BookWebServiceImpl;
+import app.user.api.UserWebService;
 import core.framework.module.APIConfig;
 import core.framework.module.DBConfig;
 import core.framework.module.Module;
@@ -24,13 +25,17 @@ public class BookModule extends Module {
 
         MongoConfig config = config(MongoConfig.class);
         config.uri(requiredProperty("sys.mongo.uri"));
-        config.collection(BorrowedRecords.class);
+        config.collection(BorrowedRecord.class);
 
-        bind(BookService.class);
-        bind(BOBookService.class);
 
         APIConfig api = api();
+        api.client(UserWebService.class, requiredProperty("app.userWebService.URL"));
+
+        bind(BOBookService.class);
+        bind(BookService.class);
         api.service(BookWebService.class, bind(BookWebServiceImpl.class));
         api.service(BOBookWebService.class, bind(BOBookWebServiceImpl.class));
+
+
     }
 }

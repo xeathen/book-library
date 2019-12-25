@@ -2,14 +2,13 @@ package app.book.api;
 
 import app.book.api.book.BorrowBookRequest;
 import app.book.api.book.BorrowBookResponse;
+import app.book.api.book.ReturnBookRequest;
 import app.book.api.book.ReturnBookResponse;
 import app.book.api.book.SearchBookRequest;
 import app.book.api.book.SearchBookResponse;
 import core.framework.api.web.service.GET;
 import core.framework.api.web.service.POST;
-import core.framework.api.web.service.PUT;
 import core.framework.api.web.service.Path;
-import core.framework.api.web.service.PathParam;
 
 /**
  * @author Ethan
@@ -23,7 +22,7 @@ public interface BookWebService {
     @Path("/book/borrow-book")
     BorrowBookResponse borrowBook(BorrowBookRequest request);
 
-    @PUT
-    @Path("/book/:id")
-    ReturnBookResponse returnBook(@PathParam("id") Long id);
+    @POST
+    @Path("/book/return-book")
+    ReturnBookResponse returnBook(ReturnBookRequest request);
 }
