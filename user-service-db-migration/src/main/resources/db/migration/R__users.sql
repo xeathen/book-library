@@ -17,13 +17,5 @@ CREATE TABLE `users`
 ) ENGINE = InnoDB
   DEFAULT CHARACTER SET = utf8;
 
--- ----------------------------
--- Records of users
--- ----------------------------
-INSERT INTO `users`
-VALUES (1, 'ethan', 'updated_password', 'hey@gmail.com', b'1');
-INSERT INTO `users`
-VALUES (2, 'lyx', '123123', 'test@gmail.com', b'0');
-
 SET FOREIGN_KEY_CHECKS = 1;
 
