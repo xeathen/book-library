@@ -3,10 +3,12 @@ package app.book.service;
 import app.book.api.book.BorrowBookRequest;
 import app.book.api.book.BorrowBookResponse;
 import app.book.api.book.GetBookResponse;
+import app.book.api.book.GetBorrowedRecordResponse;
 import app.book.api.book.ReturnBookRequest;
 import app.book.api.book.ReturnBookResponse;
 import app.book.api.book.SearchBookRequest;
 import app.book.api.book.SearchBookResponse;
+import app.book.api.book.SearchHistoryResponse;
 import app.book.domain.Book;
 import app.book.domain.BorrowedRecord;
 import app.user.api.UserWebService;
@@ -37,6 +39,14 @@ public class BookService {
     @Inject
     UserWebService userWebService;
 
+    public GetBookResponse get(Long id) {
+        Optional<Book> book = bookRepository.get(id);
+        if (book.isEmpty()) {
+            throw new NotFoundException("book not found");
+        }
+        return convert(book.get());
+    }
+
     public SearchBookResponse search(SearchBookRequest request) {
         SearchBookResponse response = new SearchBookResponse();
         Query<Book> query = bookRepository.select();
@@ -45,6 +55,17 @@ public class BookService {
         where(request, query);
         response.books = query.fetch().stream().map(this::convert).collect(Collectors.toList());
         response.total = query.count();
+        return response;
+    }
+
+    public SearchHistoryResponse searchBorrowedHistory(Long userId) {
+        SearchHistoryResponse response = new SearchHistoryResponse();
+        core.framework.mongo.Query query = new core.framework.mongo.Query();
+        query.filter = Filters.eq("user_id", userId);
+        query.readPreference = ReadPreference.secondaryPreferred();
+        List<BorrowedRecord> borrowedRecordList = mongoCollection.find(query);
+        response.borrowedRecords = borrowedRecordList.stream().map(this::recordConvert).collect(Collectors.toList());
+        response.total = borrowedRecordList.size();
         return response;
     }
 
@@ -149,6 +170,7 @@ public class BookService {
 
     private GetBookResponse convert(Book book) {
         GetBookResponse response = new GetBookResponse();
+        response.id = book.id;
         response.name = book.name;
         response.author = book.author;
         response.pub = book.pub;
@@ -165,6 +187,17 @@ public class BookService {
         response.bookId = borrowedRecord.bookId;
         response.borrowTime = borrowedRecord.borrowTime;
         response.returnTime = borrowedRecord.returnTime;
+        return response;
+    }
+
+    private GetBorrowedRecordResponse recordConvert(BorrowedRecord borrowedRecord) {
+        GetBorrowedRecordResponse response = new GetBorrowedRecordResponse();
+        response.id = borrowedRecord.id;
+        response.userId = borrowedRecord.userId;
+        response.bookId = borrowedRecord.bookId;
+        response.borrowTime = borrowedRecord.borrowTime;
+        response.returnTime = borrowedRecord.returnTime;
+        response.isReturned = borrowedRecord.isReturned;
         return response;
     }
 }

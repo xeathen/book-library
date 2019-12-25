@@ -7,10 +7,10 @@ import java.util.List;
 /**
  * @author Ethan
  */
-public class BOSearchBookResponse {
+public class SearchHistoryResponse {
     @Property(name = "total")
     public Integer total;
 
     @Property(name = "books")
-    public List<BOGetBookResponse> books;
+    public List<GetBorrowedRecordResponse> borrowedRecords;
 }
