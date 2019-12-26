@@ -99,7 +99,7 @@ project(':notification-service') {
     }
 }
 
-project(':back-office'){
+project(':back-office') {
     dependencies {
         implementation project(':back-office-interface')
         implementation project(':book-service-interface')

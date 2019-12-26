@@ -8,6 +8,8 @@ import app.bo.api.user.UpdateUserAJAXResponse;
 import app.user.api.BOUserWebService;
 import app.user.api.user.BOCreateUserRequest;
 import app.user.api.user.BOCreateUserResponse;
+import app.user.api.user.BOUpdateUserRequest;
+import app.user.api.user.BOUpdateUserResponse;
 import core.framework.api.web.service.PathParam;
 import core.framework.inject.Inject;
 
@@ -27,11 +29,18 @@ public class UserService {
     }
 
     public DeleteUserAJAXResponse delete(@PathParam("id") Long id) {
-        return null;
+        DeleteUserAJAXResponse response = new DeleteUserAJAXResponse();
+        boUserWebService.delete(id);
+        response.id = id;
+        return response;
     }
 
     public UpdateUserAJAXResponse update(@PathParam("id") Long id, UpdateUserAJAXRequest request) {
-        return null;
+        UpdateUserAJAXResponse response = new UpdateUserAJAXResponse();
+        BOUpdateUserRequest boRequest = new BOUpdateUserRequest();
+        convert(request, boRequest);
+        convert(boUserWebService.update(id, boRequest), response);
+        return response;
     }
 
     private void convert(CreateUserAJAXRequest ajaxRequest, BOCreateUserRequest boRequest) {
@@ -45,5 +54,15 @@ public class UserService {
         ajaxResponse.userName = boResponse.userName;
         ajaxResponse.password = boResponse.password;
         ajaxResponse.userEmail = boResponse.userEmail;
+    }
+
+    private void convert(UpdateUserAJAXRequest ajaxRequest, BOUpdateUserRequest boRequest) {
+        boRequest.password = ajaxRequest.password;
+        boRequest.status = ajaxRequest.status;
+    }
+
+    private void convert(BOUpdateUserResponse boResponse, UpdateUserAJAXResponse ajaxResponse) {
+        ajaxResponse.id = boResponse.id;
+        ajaxResponse.status = boResponse.status;
     }
 }
