@@ -23,7 +23,9 @@ public class NotifyJob implements Job {
     @Override
 
     public void execute(JobContext context) throws Exception {
+
         reservationRepository.select().fetch().forEach(reservation -> {
+            //TODO:num>0才提醒
             ReservationMessage message = new ReservationMessage();
             message.userId = reservation.userId;
             message.bookId = reservation.bookId;
