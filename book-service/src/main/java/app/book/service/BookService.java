@@ -15,6 +15,7 @@ import app.book.domain.Book;
 import app.book.domain.BorrowedRecord;
 import app.book.domain.Reservation;
 import app.user.api.UserWebService;
+import app.user.api.user.GetUserResponse;
 import com.mongodb.ReadPreference;
 import com.mongodb.client.model.Filters;
 import core.framework.db.Query;
@@ -78,8 +79,12 @@ public class BookService {
     public BorrowBookResponse borrowBook(BorrowBookRequest request) {
         BorrowBookResponse response;
         Optional<Book> book = bookRepository.get(request.bookId);
-        if (userWebService.get(request.userId) == null) {
+        GetUserResponse getUserResponse = userWebService.get(request.userId);
+        if (getUserResponse == null) {
             throw new NotFoundException("user not found, id=" + request.userId);
+        }
+        if (!getUserResponse.status){
+            throw new BadRequestException("you are banned!");
         }
         if (bookRepository.get(request.bookId).isEmpty()) {
             throw new NotFoundException("book not found, id=" + request.userId);

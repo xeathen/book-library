@@ -23,5 +23,6 @@ public class UserService {
         ajaxResponse.id = response.id;
         ajaxResponse.userName = response.userName;
         ajaxResponse.userEmail = response.userEmail;
+        ajaxResponse.status = response.status;
     }
 }

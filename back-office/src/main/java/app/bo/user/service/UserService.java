@@ -47,6 +47,7 @@ public class UserService {
         boRequest.userName = ajaxRequest.userName;
         boRequest.password = ajaxRequest.password;
         boRequest.userEmail = ajaxRequest.userEmail;
+        boRequest.status = ajaxRequest.status;
     }
 
     private void convert(BOCreateUserResponse boResponse, CreateUserAJAXResponse ajaxResponse) {
@@ -54,6 +55,7 @@ public class UserService {
         ajaxResponse.userName = boResponse.userName;
         ajaxResponse.password = boResponse.password;
         ajaxResponse.userEmail = boResponse.userEmail;
+        ajaxResponse.status = boResponse.status;
     }
 
     private void convert(UpdateUserAJAXRequest ajaxRequest, BOUpdateUserRequest boRequest) {

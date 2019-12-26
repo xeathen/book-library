@@ -23,6 +23,7 @@ public class UserService {
         response.id = user.id;
         response.userName = user.userName;
         response.userEmail = user.userEmail;
+        response.status = user.status;
         return response;
     }
 }

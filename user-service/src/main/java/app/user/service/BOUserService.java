@@ -63,6 +63,7 @@ public class BOUserService {
         user.userName = request.userName;
         user.password = request.password;
         user.userEmail = request.userEmail;
+        user.status = request.status;
         return user;
     }
 
@@ -70,5 +71,6 @@ public class BOUserService {
         response.userName = request.userName;
         response.password = request.password;
         response.userEmail = request.userEmail;
+        response.status = request.status;
     }
 }

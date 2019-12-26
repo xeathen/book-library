@@ -22,4 +22,8 @@ public class BOCreateUserRequest {
     @NotBlank
     @Property(name = "user_email")
     public String userEmail;
+
+    @NotNull
+    @Property(name = "status")
+    public Boolean status;
 }

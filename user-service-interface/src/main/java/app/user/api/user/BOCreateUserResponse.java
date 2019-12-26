@@ -1,6 +1,7 @@
 package app.user.api.user;
 
 import core.framework.api.json.Property;
+import core.framework.api.validate.NotNull;
 
 /**
  * @author Ethan
@@ -17,4 +18,7 @@ public class BOCreateUserResponse {
 
     @Property(name = "user_email")
     public String userEmail;
+
+    @Property(name = "status")
+    public Boolean status;
 }
