@@ -37,22 +37,29 @@ public class BookWebServiceImpl implements BookWebService {
     }
 
     @Override
-    public SearchHistoryResponse searchBorrowedHistory(Long id) {
-        return bookService.searchBorrowedHistory(id);
+    public SearchHistoryResponse searchBorrowedHistory(Long userId) {
+        ActionLogContext.put("user_id", userId);
+        return bookService.searchBorrowedHistory(userId);
     }
 
     @Override
     public BorrowBookResponse borrowBook(BorrowBookRequest request) {
+        ActionLogContext.put("user_id", request.userId);
+        ActionLogContext.put("book_id", request.bookId);
         return bookService.borrowBook(request);
     }
 
     @Override
     public ReturnBookResponse returnBook(ReturnBookRequest request) {
+        ActionLogContext.put("user_id", request.userId);
+        ActionLogContext.put("book_id", request.bookId);
         return bookService.returnBook(request);
     }
 
     @Override
     public CreateReservationResponse reserve(CreateReservationRequest request) {
+        ActionLogContext.put("user_id", request.userId);
+        ActionLogContext.put("book_id", request.bookId);
         return bookService.reserve(request);
     }
 }

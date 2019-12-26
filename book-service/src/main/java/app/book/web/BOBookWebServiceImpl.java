@@ -15,6 +15,7 @@ import app.book.api.book.BOUpdateBookResponse;
 import app.book.service.BOBookService;
 import core.framework.inject.Inject;
 import core.framework.log.ActionLogContext;
+import core.framework.util.Strings;
 
 /**
  * @author Ethan
@@ -30,6 +31,9 @@ public class BOBookWebServiceImpl implements BOBookWebService {
 
     @Override
     public BOSearchBookResponse search(BOSearchBookRequest request) {
+        if (!Strings.isBlank(request.name)) {
+            ActionLogContext.put("book_name", request);
+        }
         return boBookService.search(request);
     }
 
@@ -56,16 +60,22 @@ public class BOBookWebServiceImpl implements BOBookWebService {
 
     @Override
     public BOCreateBookResponse createInCategory(BOCreateBookRequest request) {
+        ActionLogContext.put("book_name", request.name);
+        ActionLogContext.put("book_category", request.category);
         return boBookService.createInCategory(request);
     }
 
     @Override
     public BOCreateBookResponse createInTag(BOCreateBookRequest request) {
+        ActionLogContext.put("book_name", request.name);
+        ActionLogContext.put("book_tag", request.tag);
         return boBookService.createInTag(request);
     }
 
     @Override
     public BOCreateBookResponse createInAuthor(BOCreateBookRequest request) {
+        ActionLogContext.put("book_name", request.name);
+        ActionLogContext.put("book_author", request.author);
         return boBookService.createInAuthor(request);
     }
 

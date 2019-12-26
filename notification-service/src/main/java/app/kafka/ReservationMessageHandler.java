@@ -17,7 +17,7 @@ public class ReservationMessageHandler implements MessageHandler<ReservationMess
     UserWebService userWebService;
 
     @Override
-    public void handle(String key, ReservationMessage value) throws Exception {
+    public void handle(String key, ReservationMessage value) {
         GetUserResponse user = userWebService.get(value.userId);
         logger.info("sending email, userName={},userEmail={}", user.userName, user.userEmail);
     }
