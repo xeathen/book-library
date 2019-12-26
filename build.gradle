@@ -98,3 +98,11 @@ project(':notification-service') {
         implementation project(':user-service-interface')
     }
 }
+
+project(':back-office'){
+    dependencies {
+        implementation project(':back-office-interface')
+        implementation project(':book-service-interface')
+        implementation project(':user-service-interface')
+    }
+}

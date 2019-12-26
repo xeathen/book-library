@@ -75,7 +75,7 @@ public class BookService {
     }
 
     public BorrowBookResponse borrowBook(BorrowBookRequest request) {
-        BorrowBookResponse response = new BorrowBookResponse();
+        BorrowBookResponse response;
         Optional<Book> book = bookRepository.get(request.bookId);
         if (userWebService.get(request.userId) == null) {
             throw new NotFoundException("user not found, id=" + request.userId);
