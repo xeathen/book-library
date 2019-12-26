@@ -95,5 +95,6 @@ project(':book-service') {
 project(':notification-service') {
     dependencies {
         implementation project(':book-service-interface')
+        implementation project(':user-service-interface')
     }
 }

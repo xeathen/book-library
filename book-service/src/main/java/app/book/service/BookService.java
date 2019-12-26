@@ -116,7 +116,6 @@ public class BookService {
         if (isReturned(request.userId, request.bookId)) {
             throw new NotFoundException("no record");
         }
-        BorrowedRecord borrowedRecord = new BorrowedRecord();
         List<BorrowedRecord> borrowedRecordList = getNotReturnedRecordList(request.userId, request.bookId);
         BorrowedRecord record = borrowedRecordList.get(0);
         record.returnTime = ZonedDateTime.now();

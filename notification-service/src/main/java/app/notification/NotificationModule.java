@@ -2,6 +2,7 @@ package app.notification;
 
 import app.book.api.kafka.ReservationMessage;
 import app.kafka.ReservationMessageHandler;
+import app.user.api.UserWebService;
 import core.framework.module.Module;
 
 /**
@@ -11,6 +12,8 @@ public class NotificationModule extends Module {
     @Override
     protected void initialize() {
         configureKafka();
+        api().client(UserWebService.class, "app.userWebService.URL");
+        bind(UserWebService.class);
     }
 
     private void configureKafka() {

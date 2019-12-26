@@ -1,35 +1,43 @@
 package app.job;
 
 import app.book.api.kafka.ReservationMessage;
+import app.book.domain.Book;
 import app.book.domain.Reservation;
 import core.framework.db.Repository;
 import core.framework.inject.Inject;
 import core.framework.kafka.MessagePublisher;
 import core.framework.scheduler.Job;
 import core.framework.scheduler.JobContext;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import core.framework.web.exception.NotFoundException;
+
+import java.util.Optional;
 
 /**
  * @author Ethan
  */
 public class NotifyJob implements Job {
-    private final Logger logger = LoggerFactory.getLogger(NotifyJob.class);
     @Inject
     Repository<Reservation> reservationRepository;
+    @Inject
+    Repository<Book> bookRepository;
     @Inject
     MessagePublisher<ReservationMessage> publisher;
 
     @Override
 
     public void execute(JobContext context) throws Exception {
-
         reservationRepository.select().fetch().forEach(reservation -> {
-            //TODO:num>0才提醒
-            ReservationMessage message = new ReservationMessage();
-            message.userId = reservation.userId;
-            message.bookId = reservation.bookId;
-            publisher.publish(reservation.id.toString(), message);
+            Optional<Book> bookOptional = bookRepository.get(reservation.bookId);
+            if (bookOptional.isEmpty()) {
+                throw new NotFoundException("book not found.");
+            }
+            Book book = bookOptional.get();
+            if (book.num > 0) {
+                ReservationMessage message = new ReservationMessage();
+                message.userId = reservation.userId;
+                message.bookId = reservation.bookId;
+                publisher.publish(reservation.id.toString(), message);
+            }
         });
     }
 }
