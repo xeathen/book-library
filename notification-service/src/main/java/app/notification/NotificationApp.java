@@ -8,6 +8,7 @@ import core.framework.module.App;
 public class NotificationApp extends App {
     @Override
     protected void initialize() {
+        loadProperties("app.properties");
         load(new NotificationModule());
     }
 }
