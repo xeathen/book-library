@@ -101,7 +101,7 @@ public class BOBookService {
             throw new BadRequestException("category must be not null");
         }
         List<Category> select = categoryRepository.select("name = ?", request.category);
-        if (select.size() == 0) {
+        if (select.isEmpty()) {
             Category category = new Category();
             category.name = request.category;
             categoryRepository.insert(category);
@@ -117,7 +117,7 @@ public class BOBookService {
             throw new BadRequestException("tag must be not null");
         }
         List<Tag> select = tagRepository.select("name = ?", request.tag);
-        if (select.size() == 0) {
+        if (select.isEmpty()) {
             Tag tag = new Tag();
             tag.name = request.tag;
             tagRepository.insert(tag);
@@ -133,7 +133,7 @@ public class BOBookService {
             throw new BadRequestException("author must be not null");
         }
         List<Author> select = authorRepository.select("name = ?", request.author);
-        if (select.size() == 0) {
+        if (select.isEmpty()) {
             Author author = new Author();
             author.name = request.author;
             authorRepository.insert(author);
@@ -165,7 +165,7 @@ public class BOBookService {
         return response;
     }
 
-    private void where(BOSearchBookRequest request, Query query) {
+    private void where(BOSearchBookRequest request, Query<Book> query) {
         if (!Strings.isBlank(request.name)) {
             query.where("name like ?", Strings.format("%{}%", request.name));
         }

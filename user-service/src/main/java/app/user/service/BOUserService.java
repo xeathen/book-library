@@ -22,11 +22,11 @@ public class BOUserService {
     public BOCreateUserResponse create(BOCreateUserRequest request) {
         BOCreateUserResponse response = new BOCreateUserResponse();
         List<User> selectUserName = userRepository.select("user_name = ? ", request.userName);
-        if (selectUserName.size() > 0) {
+        if (!selectUserName.isEmpty()) {
             throw new BadRequestException("find duplicate username");
         }
         List<User> selectUserEmail = userRepository.select("user_email = ?", request.userEmail);
-        if (selectUserEmail.size() > 0) {
+        if (!selectUserEmail.isEmpty()) {
             throw new BadRequestException("find duplicate email");
         }
         response.id = userRepository.insert(convert(request)).orElseThrow();

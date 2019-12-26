@@ -145,7 +145,7 @@ public class BookService {
         return response;
     }
 
-    private void where(SearchBookRequest request, Query query) {
+    private void where(SearchBookRequest request, Query<Book> query) {
         if (!Strings.isBlank(request.name)) {
             query.where("name like ?", Strings.format("%{}%", request.name));
         }
@@ -168,7 +168,7 @@ public class BookService {
 
     private Boolean isReturned(Long userId, Long bookId) {
         List<BorrowedRecord> borrowedRecordList = getNotReturnedRecordList(userId, bookId);
-        if (borrowedRecordList.size() > 0) {
+        if (!borrowedRecordList.isEmpty()) {
             return false;
         }
         return true;

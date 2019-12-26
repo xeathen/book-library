@@ -25,7 +25,7 @@ public class NotifyJob implements Job {
 
     @Override
 
-    public void execute(JobContext context) throws Exception {
+    public void execute(JobContext context) {
         reservationRepository.select().fetch().forEach(reservation -> {
             Optional<Book> bookOptional = bookRepository.get(reservation.bookId);
             if (bookOptional.isEmpty()) {
