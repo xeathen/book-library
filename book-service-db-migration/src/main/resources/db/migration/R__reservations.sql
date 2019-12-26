@@ -7,8 +7,8 @@ SET FOREIGN_KEY_CHECKS = 0;
 DROP TABLE IF EXISTS `reservations`;
 CREATE TABLE `reservations`  (
   `id`          int(11)         NOT NULL    AUTO_INCREMENT,
-  `user_id`     bigint(11)      NULL        DEFAULT NULL,
-  `book_id`     bigint(11)      NULL        DEFAULT NULL,
+  `user_id`     bigint(11)      NOT NULL,
+  `book_id`     bigint(11)      NOT NULL,
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB;
 

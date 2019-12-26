@@ -7,7 +7,7 @@ SET FOREIGN_KEY_CHECKS = 0;
 DROP TABLE IF EXISTS `authors`;
 CREATE TABLE `authors`  (
   `id`      int(11)         NOT NULL    AUTO_INCREMENT,
-  `name`    varchar(255)    NULL        DEFAULT NULL,
+  `name`    varchar(100)    NULL        DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB
 
