@@ -11,4 +11,6 @@ include 'user-service-db-migration'
 include 'book-mongo-migration'
 include 'book-site'
 include 'book-site-interface'
+include 'library-site-interface'
+include 'library-site'
 

@@ -76,6 +76,15 @@ configure([project(':back-office'),
     }
 }
 
+configure([project(':library-site'),
+           project(':library-site-interface')]) {
+    apply from: file("${rootDir}/gradle/app.gradle")
+    dependencies {
+        implementation "core.framework:core-ng:${coreNGVersion}"
+        testImplementation "core.framework:core-ng-test:${coreNGVersion}"
+    }
+}
+
 project(':user-service') {
     dependencies {
         runtimeOnly 'mysql:mysql-connector-java:8.0.17'
@@ -99,9 +108,11 @@ project(':notification-service') {
     }
 }
 
-project(':back-office') {
+
+
+project(':library-site') {
     dependencies {
-        implementation project(':back-office-interface')
+        implementation project(':library-site-interface')
         implementation project(':book-service-interface')
         implementation project(':user-service-interface')
     }
