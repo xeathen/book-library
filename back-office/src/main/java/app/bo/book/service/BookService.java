@@ -9,6 +9,4 @@ import core.framework.inject.Inject;
 public class BookService {
     @Inject
     BOBookWebService bookWebService;
-
-
 }

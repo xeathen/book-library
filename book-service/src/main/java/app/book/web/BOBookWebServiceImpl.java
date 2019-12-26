@@ -9,7 +9,7 @@ import app.book.api.book.BOGetCategoryResponse;
 import app.book.api.book.BOGetTagResponse;
 import app.book.api.book.BOSearchBookRequest;
 import app.book.api.book.BOSearchBookResponse;
-import app.book.api.book.BOSearchHistoryResponse;
+import app.book.api.book.BOSearchRecordByBookIdResponse;
 import app.book.api.book.BOUpdateBookRequest;
 import app.book.api.book.BOUpdateBookResponse;
 import app.book.service.BOBookService;
@@ -87,8 +87,8 @@ public class BOBookWebServiceImpl implements BOBookWebService {
     }
 
     @Override
-    public BOSearchHistoryResponse searchBorrowedHistory(Long bookId) {
+    public BOSearchRecordByBookIdResponse searchRecordByBookId(Long bookId) {
         ActionLogContext.put("book_id", bookId);
-        return boBookService.getBorrowedHistory(bookId);
+        return boBookService.searchRecordByBookId(bookId);
     }
 }

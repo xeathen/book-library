@@ -31,7 +31,7 @@ public class BOUserWebServiceImpl implements BOUserWebService {
 
     @Override
     public BODeleteUserResponse delete(Long id) {
-        ActionLogContext.put("userId", id);
+        ActionLogContext.put("user_id", id);
         return boUserService.delete(id);
     }
 }

@@ -1,5 +1,6 @@
 package app;
 
+import app.bo.api.BookAJAXWebService;
 import app.bo.api.UserAJAXWebService;
 import app.bo.book.service.BookService;
 import app.bo.book.web.BookAJAXWebServiceImpl;
@@ -22,6 +23,6 @@ public class BackOfficeModule extends Module {
         bind(BookService.class);
 
         api().service(UserAJAXWebService.class, bind(UserAJAXWebServiceImpl.class));
-        api().service(BookAJAXWebServiceImpl.class, bind(BookAJAXWebServiceImpl.class));
+        api().service(BookAJAXWebService.class, bind(BookAJAXWebServiceImpl.class));
     }
 }

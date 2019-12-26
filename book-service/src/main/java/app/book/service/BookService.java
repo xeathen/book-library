@@ -10,7 +10,7 @@ import app.book.api.book.ReturnBookRequest;
 import app.book.api.book.ReturnBookResponse;
 import app.book.api.book.SearchBookRequest;
 import app.book.api.book.SearchBookResponse;
-import app.book.api.book.SearchHistoryResponse;
+import app.book.api.book.SearchRecordByUserIdResponse;
 import app.book.domain.Book;
 import app.book.domain.BorrowedRecord;
 import app.book.domain.Reservation;
@@ -26,6 +26,7 @@ import core.framework.web.exception.BadRequestException;
 import core.framework.web.exception.NotFoundException;
 
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -63,8 +64,8 @@ public class BookService {
         return response;
     }
 
-    public SearchHistoryResponse searchBorrowedHistory(Long userId) {
-        SearchHistoryResponse response = new SearchHistoryResponse();
+    public SearchRecordByUserIdResponse searchRecordByUserId(Long userId) {
+        SearchRecordByUserIdResponse response = new SearchRecordByUserIdResponse();
         core.framework.mongo.Query query = new core.framework.mongo.Query();
         query.filter = Filters.eq("user_id", userId);
         query.readPreference = ReadPreference.secondaryPreferred();
@@ -135,6 +136,13 @@ public class BookService {
     }
 
     public CreateReservationResponse reserve(CreateReservationRequest request) {
+        Query<Reservation> query = reservationRepository.select();
+        query.where("user_id = ?", request.userId);
+        query.where("book_id = ?", request.bookId);
+        List<Reservation> collect = new ArrayList<>(query.fetch());
+        if (!collect.isEmpty()) {
+            throw new BadRequestException("you have reserved this book already");
+        }
         CreateReservationResponse response = new CreateReservationResponse();
         Reservation reservation = new Reservation();
         reservation.userId = request.userId;

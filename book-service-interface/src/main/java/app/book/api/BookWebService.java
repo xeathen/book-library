@@ -9,7 +9,7 @@ import app.book.api.book.ReturnBookRequest;
 import app.book.api.book.ReturnBookResponse;
 import app.book.api.book.SearchBookRequest;
 import app.book.api.book.SearchBookResponse;
-import app.book.api.book.SearchHistoryResponse;
+import app.book.api.book.SearchRecordByUserIdResponse;
 import core.framework.api.web.service.GET;
 import core.framework.api.web.service.POST;
 import core.framework.api.web.service.Path;
@@ -29,7 +29,7 @@ public interface BookWebService {
 
     @GET
     @Path("/borrowed-record/:id")
-    SearchHistoryResponse searchBorrowedHistory(@PathParam("id") Long userId);
+    SearchRecordByUserIdResponse searchRecordByUserId(@PathParam("id") Long userId);
 
     @POST
     @Path("/borrowed-record/borrow-book")

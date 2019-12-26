@@ -15,7 +15,7 @@ public class UserWebServiceImpl implements UserWebService {
 
     @Override
     public GetUserResponse get(Long id) {
-        ActionLogContext.put("userId", id);
+        ActionLogContext.put("user_id", id);
         return userService.get(id);
     }
 }

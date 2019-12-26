@@ -8,7 +8,7 @@ import app.book.api.book.BOGetCategoryResponse;
 import app.book.api.book.BOGetTagResponse;
 import app.book.api.book.BOSearchBookRequest;
 import app.book.api.book.BOSearchBookResponse;
-import app.book.api.book.BOSearchHistoryResponse;
+import app.book.api.book.BOSearchRecordByBookIdResponse;
 import app.book.api.book.BOUpdateBookRequest;
 import app.book.api.book.BOUpdateBookResponse;
 import core.framework.api.web.service.GET;
@@ -64,5 +64,5 @@ public interface BOBookWebService {
 
     @GET
     @Path("/bo/borrowed-record/:id")
-    BOSearchHistoryResponse searchBorrowedHistory(@PathParam("id") Long bookId);
+    BOSearchRecordByBookIdResponse searchRecordByBookId(@PathParam("id") Long bookId);
 }

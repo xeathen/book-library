@@ -8,7 +8,7 @@ import app.book.api.book.BOGetCategoryResponse;
 import app.book.api.book.BOGetTagResponse;
 import app.book.api.book.BOSearchBookRequest;
 import app.book.api.book.BOSearchBookResponse;
-import app.book.api.book.BOSearchHistoryResponse;
+import app.book.api.book.BOSearchRecordByBookIdResponse;
 import app.book.api.book.BOUpdateBookRequest;
 import app.book.api.book.BOUpdateBookResponse;
 import app.book.api.book.GetBorrowedRecordResponse;
@@ -154,8 +154,8 @@ public class BOBookService {
         return response;
     }
 
-    public BOSearchHistoryResponse getBorrowedHistory(Long bookId) {
-        BOSearchHistoryResponse response = new BOSearchHistoryResponse();
+    public BOSearchRecordByBookIdResponse searchRecordByBookId(Long bookId) {
+        BOSearchRecordByBookIdResponse response = new BOSearchRecordByBookIdResponse();
         core.framework.mongo.Query query = new core.framework.mongo.Query();
         query.filter = Filters.eq("book_id", bookId);
         query.readPreference = ReadPreference.secondaryPreferred();
