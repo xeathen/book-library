@@ -19,10 +19,7 @@ public class  NotificationModule extends Module {
 
     private void configureKafka() {
         kafka().uri("localhost:9092");
-        String reservationTopic = "reservation";
-        String expireTopic = "expire";
-        kafka().subscribe(expireTopic, ExpireMessage.class, bind(ExpireMassageHandler.class));
-        kafka().subscribe(reservationTopic, ReservationMessage.class, bind(ReservationMessageHandler.class));
-        kafka().poolSize(4);
+        kafka().subscribe("reservation", ReservationMessage.class, bind(ReservationMessageHandler.class));
+        kafka().subscribe("expire", ExpireMessage.class, bind(ExpireMassageHandler.class));
     }
 }

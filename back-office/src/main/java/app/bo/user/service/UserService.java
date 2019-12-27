@@ -28,14 +28,14 @@ public class UserService {
         return response;
     }
 
-    public DeleteUserAJAXResponse delete(@PathParam("id") Long id) {
+    public DeleteUserAJAXResponse delete(Long id) {
         DeleteUserAJAXResponse response = new DeleteUserAJAXResponse();
         boUserWebService.delete(id);
         response.id = id;
         return response;
     }
 
-    public UpdateUserAJAXResponse update(@PathParam("id") Long id, UpdateUserAJAXRequest request) {
+    public UpdateUserAJAXResponse update(Long id, UpdateUserAJAXRequest request) {
         UpdateUserAJAXResponse response = new UpdateUserAJAXResponse();
         BOUpdateUserRequest boRequest = new BOUpdateUserRequest();
         convert(request, boRequest);

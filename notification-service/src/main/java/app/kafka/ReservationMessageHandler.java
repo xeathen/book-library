@@ -5,6 +5,7 @@ import app.user.api.UserWebService;
 import app.user.api.user.GetUserResponse;
 import core.framework.inject.Inject;
 import core.framework.kafka.MessageHandler;
+import core.framework.log.ActionLogContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,6 +19,7 @@ public class ReservationMessageHandler implements MessageHandler<ReservationMess
 
     @Override
     public void handle(String key, ReservationMessage value) {
+//        ActionLogContext.put();
         GetUserResponse user = userWebService.get(value.userId);
         logger.info("sending email, userName={},userEmail={}", user.userName, user.userEmail);
     }

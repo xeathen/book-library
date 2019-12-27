@@ -65,6 +65,7 @@ public class BOBookService {
         return response;
     }
 
+    //list
     public BOGetCategoryResponse getCategories() {
         BOGetCategoryResponse response = new BOGetCategoryResponse();
         Query<Category> query = categoryRepository.select();
@@ -186,6 +187,7 @@ public class BOBookService {
         }
     }
 
+    //TODO: id
     private Book convert(BOCreateBookRequest request) {
         Book book = new Book();
         book.name = request.name;
@@ -237,7 +239,9 @@ public class BOBookService {
         GetBorrowedRecordResponse response = new GetBorrowedRecordResponse();
         response.id = borrowedRecord.id;
         response.userId = borrowedRecord.userId;
+        response.userName = borrowedRecord.userName;
         response.bookId = borrowedRecord.bookId;
+        response.bookName = borrowedRecord.bookName;
         response.borrowTime = borrowedRecord.borrowTime;
         response.returnTime = borrowedRecord.returnTime;
         response.isReturned = borrowedRecord.isReturned;

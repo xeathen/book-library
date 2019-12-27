@@ -83,7 +83,9 @@ public class BookService {
 
     private void convert(ReturnBookResponse response, ReturnBookAJAXResponse ajaxResponse) {
         ajaxResponse.userId = response.userId;
+        ajaxResponse.userName = response.userName;
         ajaxResponse.bookId = response.bookId;
+        ajaxResponse.bookName = response.bookName;
         ajaxResponse.returnTime = response.returnTime;
     }
 
@@ -94,7 +96,9 @@ public class BookService {
 
     private void convert(BorrowBookResponse response, BorrowBookAJAXResponse ajaxResponse) {
         ajaxResponse.userId = response.userId;
+        ajaxResponse.userName = response.userName;
         ajaxResponse.bookId = response.bookId;
+        ajaxResponse.bookName = response.bookName;
         ajaxResponse.borrowTime = response.borrowTime;
         ajaxResponse.returnTime = response.returnTime;
     }
@@ -153,7 +157,9 @@ public class BookService {
         GetBorrowedRecordAJAXResponse ajaxResponse = new GetBorrowedRecordAJAXResponse();
         ajaxResponse.id = response.id;
         ajaxResponse.userId = response.userId;
+        ajaxResponse.userName = response.userName;
         ajaxResponse.bookId = response.bookId;
+        ajaxResponse.bookName = response.bookName;
         ajaxResponse.borrowTime = response.borrowTime;
         ajaxResponse.returnTime = response.returnTime;
         ajaxResponse.isReturned = response.isReturned;

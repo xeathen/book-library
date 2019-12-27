@@ -16,17 +16,17 @@ public class Book {
     @Column(name = "name")
     public String name;
 
-    @Column(name = "author")
-    public String author;
+    @Column(name = "author_id")
+    public Integer authorId;
 
-    @Column(name = "pub")
-    public String pub;
+    @Column(name = "pub_id")
+    public Integer pubId;
 
-    @Column(name = "category")
-    public String category;
+    @Column(name = "category_id")
+    public Integer categoryId;
 
-    @Column(name = "tag")
-    public String tag;
+    @Column(name = "tag_id")
+    public Integer tagId;
 
     @Column(name = "description")
     public String description;

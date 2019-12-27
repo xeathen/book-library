@@ -20,11 +20,7 @@ public class ReservationModule extends Module {
     }
 
     private void configureKafka() {
-        kafka().uri("localhost:9092");
-        String reservationTopic = "reservation";
-        String expireTopic = "expire";
-        kafka().poolSize(2);
-        kafka().publish(reservationTopic, ReservationMessage.class);
-        kafka().publish(expireTopic, ExpireMessage.class);
+        kafka().publish("reservation", ReservationMessage.class);
+        kafka().publish("expire", ExpireMessage.class);
     }
 }

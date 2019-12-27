@@ -18,6 +18,7 @@ public class ExpireMassageHandler implements MessageHandler<ExpireMessage> {
 
     @Override
     public void handle(String key, ExpireMessage value) throws Exception {
+        //TODO:ActionLog
         GetUserResponse user = userWebService.get(value.userId);
         logger.info("sending email, userName={},userEmail={}", user.userName, user.userEmail);
     }

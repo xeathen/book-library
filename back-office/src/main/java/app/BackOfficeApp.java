@@ -13,6 +13,8 @@ public class BackOfficeApp extends App {
         loadProperties("app.properties");
         http().gzip();
 //        http().access().denyFromFile("deny-ip-list.txt");
+        //TODO:loginController
+        http().route();
 
         load(new BackOfficeModule());
     }

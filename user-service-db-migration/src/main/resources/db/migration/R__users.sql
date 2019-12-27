@@ -1,12 +1,4 @@
-SET NAMES utf8mb4;
-SET FOREIGN_KEY_CHECKS = 0;
-
--- ----------------------------
--- Table structure for users
--- ----------------------------
-DROP TABLE IF EXISTS `users`;
-CREATE TABLE `users`
-(
+CREATE TABLE IF NOT EXISTS `users`(
     `id`         bigint(11)     NOT NULL        AUTO_INCREMENT,
     `user_name`  varchar(50)    NOT NULL,
     `password`   varchar(50)    NOT NULL,
@@ -14,8 +6,11 @@ CREATE TABLE `users`
     `status`     bit(1)         NOT NULL DEFAULT b'1',
     PRIMARY KEY (`id`) USING BTREE,
     UNIQUE INDEX `user_name` (`user_name`, `user_email`) USING BTREE
-) ENGINE = InnoDB
-  DEFAULT CHARACTER SET = utf8;
+)
+    ENGINE = InnoDB
+    DEFAULT CHARACTER SET = utf8;
 
-SET FOREIGN_KEY_CHECKS = 1;
+--insert into `users` values();
+
+
 

@@ -36,6 +36,7 @@ public interface BOBookWebService {
 
     @GET
     @Path("/bo/book/tag")
+    //TODO:list
     BOGetTagResponse getTags();
 
     @GET

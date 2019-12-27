@@ -6,6 +6,7 @@ import app.book.domain.Reservation;
 import core.framework.db.Repository;
 import core.framework.inject.Inject;
 import core.framework.kafka.MessagePublisher;
+import core.framework.log.ActionLogContext;
 import core.framework.scheduler.Job;
 import core.framework.scheduler.JobContext;
 import core.framework.web.exception.NotFoundException;
@@ -26,6 +27,7 @@ public class AvailabilityNotifyJob implements Job {
 
     @Override
     public void execute(JobContext context) {
+//        ActionLogContext.put();
         reservationRepository.select().fetch().forEach(reservation -> {
             Optional<Book> bookOptional = bookRepository.get(reservation.bookId);
             if (bookOptional.isEmpty()) {

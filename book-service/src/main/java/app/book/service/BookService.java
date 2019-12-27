@@ -71,13 +71,13 @@ public class BookService {
         query.filter = Filters.eq("user_id", userId);
         query.readPreference = ReadPreference.secondaryPreferred();
         List<BorrowedRecord> borrowedRecordList = mongoCollection.find(query);
-        response.borrowedRecords = borrowedRecordList.stream().map(this::recordConvert).collect(Collectors.toList());
+        response.borrowedRecords = borrowedRecordList.stream().map(this::convert).collect(Collectors.toList());
         response.total = borrowedRecordList.size();
         return response;
     }
 
     public BorrowBookResponse borrowBook(BorrowBookRequest request) {
-        BorrowBookResponse response;
+        BorrowBookResponse response = new BorrowBookResponse();
         Optional<Book> book = bookRepository.get(request.bookId);
         GetUserResponse getUserResponse = userWebService.get(request.userId);
         if (getUserResponse == null) {
@@ -100,8 +100,10 @@ public class BookService {
         }
         BorrowedRecord borrowedRecord = new BorrowedRecord();
         borrowedRecord.id = UUID.randomUUID().toString();
-        borrowedRecord.bookId = request.bookId;
         borrowedRecord.userId = request.userId;
+        borrowedRecord.userName = getUserResponse.userName;
+        borrowedRecord.bookId = request.bookId;
+        borrowedRecord.bookName = book.get().name;
         borrowedRecord.borrowTime = ZonedDateTime.now();
         borrowedRecord.returnTime = request.returnTime;
         borrowedRecord.isReturned = false;
@@ -112,8 +114,7 @@ public class BookService {
         borrowedBook.id = request.bookId;
         borrowedBook.num = num - 1;
         bookRepository.partialUpdate(borrowedBook);
-
-        response = convert(borrowedRecord);
+        convert(borrowedRecord, response);
         return response;
     }
 
@@ -127,8 +128,10 @@ public class BookService {
         record.returnTime = ZonedDateTime.now();
         record.isReturned = true;
         mongoCollection.replace(record);
-        response.bookId = request.bookId;
         response.userId = request.userId;
+        response.userName = record.userName;
+        response.bookId = request.bookId;
+        response.bookName = record.bookName;
         response.returnTime = ZonedDateTime.now();
 
         Integer num = bookRepository.get(request.bookId).get().num;
@@ -209,18 +212,16 @@ public class BookService {
         return response;
     }
 
-    private BorrowBookResponse convert(BorrowedRecord borrowedRecord) {
-        BorrowBookResponse response = new BorrowBookResponse();
+    private void convert(BorrowedRecord borrowedRecord, BorrowBookResponse response) {
         response.userId = borrowedRecord.userId;
         response.userName = borrowedRecord.userName;
         response.bookId = borrowedRecord.bookId;
         response.bookName = borrowedRecord.bookName;
         response.borrowTime = borrowedRecord.borrowTime;
         response.returnTime = borrowedRecord.returnTime;
-        return response;
     }
 
-    private GetBorrowedRecordResponse recordConvert(BorrowedRecord borrowedRecord) {
+    private GetBorrowedRecordResponse convert(BorrowedRecord borrowedRecord) {
         GetBorrowedRecordResponse response = new GetBorrowedRecordResponse();
         response.id = borrowedRecord.id;
         response.userId = borrowedRecord.userId;

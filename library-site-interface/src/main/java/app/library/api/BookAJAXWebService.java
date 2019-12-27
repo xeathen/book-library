@@ -20,7 +20,7 @@ import core.framework.api.web.service.PathParam;
  */
 public interface BookAJAXWebService {
     @GET
-    @Path("/book/:id")
+    @Path("/ajax/book/:id")
     GetBookAJAXResponse get(@PathParam("id") Long id);
 
     @GET

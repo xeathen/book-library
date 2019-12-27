@@ -23,5 +23,6 @@ public class User {
     public String userEmail;
 
     @Column(name = "status")
+    //TODO:enum
     public Boolean status;
 }

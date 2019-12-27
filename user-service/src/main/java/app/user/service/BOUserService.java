@@ -8,7 +8,9 @@ import app.user.api.user.BOUpdateUserResponse;
 import app.user.domain.User;
 import core.framework.db.Repository;
 import core.framework.inject.Inject;
+import core.framework.log.ErrorCode;
 import core.framework.web.exception.BadRequestException;
+import core.framework.web.exception.ConflictException;
 
 import java.util.List;
 
@@ -23,7 +25,8 @@ public class BOUserService {
         BOCreateUserResponse response = new BOCreateUserResponse();
         List<User> selectUserName = userRepository.select("user_name = ? ", request.userName);
         if (!selectUserName.isEmpty()) {
-            throw new BadRequestException("find duplicate username");
+            //TODO:add errorCode
+            throw new ConflictException("find duplicate username", ErrorCode)
         }
         List<User> selectUserEmail = userRepository.select("user_email = ?", request.userEmail);
         if (!selectUserEmail.isEmpty()) {
