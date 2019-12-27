@@ -3,8 +3,8 @@ CREATE TABLE IF NOT EXISTS `reservations`  (
   `user_id`         bigint(11)      NOT NULL,
   `book_id`         bigint(11)      NOT NULL,
   `reserve_time`    timestamp(6)    NOT NULL,
-  PRIMARY KEY (`id`) USING BTREE
+  PRIMARY KEY (`id`)
 )
-    ENGINE = InnoDB;
+    ENGINE = InnoDB
     DEFAULT CHARACTER SET = utf8;
 

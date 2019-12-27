@@ -98,14 +98,8 @@ public class BOBookService {
     }
 
     public BOCreateBookResponse createInCategory(BOCreateBookRequest request) {
-        if (Strings.isBlank(request.category)) {
+        if (request.categoryId != null) {
             throw new BadRequestException("category must be not null");
-        }
-        List<Category> select = categoryRepository.select("name = ?", request.category);
-        if (select.isEmpty()) {
-            Category category = new Category();
-            category.name = request.category;
-            categoryRepository.insert(category);
         }
         BOCreateBookResponse response = new BOCreateBookResponse();
         response.id = bookRepository.insert(convert(request)).orElseThrow();
@@ -114,14 +108,8 @@ public class BOBookService {
     }
 
     public BOCreateBookResponse createInTag(BOCreateBookRequest request) {
-        if (Strings.isBlank(request.tag)) {
+        if (request.tagId != null) {
             throw new BadRequestException("tag must be not null");
-        }
-        List<Tag> select = tagRepository.select("name = ?", request.tag);
-        if (select.isEmpty()) {
-            Tag tag = new Tag();
-            tag.name = request.tag;
-            tagRepository.insert(tag);
         }
         BOCreateBookResponse response = new BOCreateBookResponse();
         response.id = bookRepository.insert(convert(request)).orElseThrow();
@@ -130,14 +118,8 @@ public class BOBookService {
     }
 
     public BOCreateBookResponse createInAuthor(BOCreateBookRequest request) {
-        if (Strings.isBlank(request.author)) {
+        if (request.authorId != null) {
             throw new BadRequestException("author must be not null");
-        }
-        List<Author> select = authorRepository.select("name = ?", request.author);
-        if (select.isEmpty()) {
-            Author author = new Author();
-            author.name = request.author;
-            authorRepository.insert(author);
         }
         BOCreateBookResponse response = new BOCreateBookResponse();
         response.id = bookRepository.insert(convert(request)).orElseThrow();
@@ -187,14 +169,13 @@ public class BOBookService {
         }
     }
 
-    //TODO: id
     private Book convert(BOCreateBookRequest request) {
         Book book = new Book();
         book.name = request.name;
-        book.author = request.author;
+        book.authorId = request.authorId;
+        book.categoryId = request.categoryId;
+        book.tagId = request.tagId;
         book.pub = request.pub;
-        book.category = request.category;
-        book.tag = request.tag;
         book.description = request.description;
         book.num = request.num;
         return book;
@@ -203,10 +184,10 @@ public class BOBookService {
     private Book convert(BOUpdateBookRequest request) {
         Book book = new Book();
         book.name = request.name;
-        book.author = request.author;
+        book.authorId = request.authorId;
+        book.categoryId = request.categoryId;
+        book.tagId = request.tagId;
         book.pub = request.pub;
-        book.category = request.category;
-        book.tag = request.tag;
         book.description = request.description;
         book.num = request.num;
         return book;
@@ -214,10 +195,10 @@ public class BOBookService {
 
     private void convert(BOUpdateBookRequest request, BOUpdateBookResponse response) {
         response.name = request.name;
-        response.author = request.author;
+        response.authorId = request.authorId;
+        response.categoryId = request.categoryId;
+        response.tagId = request.tagId;
         response.pub = request.pub;
-        response.category = request.category;
-        response.tag = request.tag;
         response.description = request.description;
         response.num = request.num;
     }
@@ -226,10 +207,10 @@ public class BOBookService {
         BOGetBookResponse response = new BOGetBookResponse();
         response.id = book.id;
         response.name = book.name;
-        response.author = book.author;
+        response.authorId = book.authorId;
         response.pub = book.pub;
-        response.category = book.category;
-        response.tag = book.tag;
+        response.categoryId = book.categoryId;
+        response.tagId = book.tagId;
         response.description = book.description;
         response.num = book.num;
         return response;

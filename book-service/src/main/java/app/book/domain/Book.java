@@ -19,14 +19,15 @@ public class Book {
     @Column(name = "author_id")
     public Integer authorId;
 
-    @Column(name = "pub_id")
-    public Integer pubId;
 
     @Column(name = "category_id")
     public Integer categoryId;
 
     @Column(name = "tag_id")
     public Integer tagId;
+
+    @Column(name = "pub")
+    public String pub;
 
     @Column(name = "description")
     public String description;

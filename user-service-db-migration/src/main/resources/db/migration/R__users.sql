@@ -10,7 +10,6 @@ CREATE TABLE IF NOT EXISTS `users`(
     ENGINE = InnoDB
     DEFAULT CHARACTER SET = utf8;
 
---insert into `users` values();
-
+INSERT INTO `users` VALUES (1, 'admin', 'admin', 'admin@gmail.com', b'1');
 
 

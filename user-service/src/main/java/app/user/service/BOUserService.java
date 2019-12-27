@@ -26,7 +26,7 @@ public class BOUserService {
         List<User> selectUserName = userRepository.select("user_name = ? ", request.userName);
         if (!selectUserName.isEmpty()) {
             //TODO:add errorCode
-            throw new ConflictException("find duplicate username", ErrorCode)
+//            throw new ConflictException("find duplicate username", ErrorCode)
         }
         List<User> selectUserEmail = userRepository.select("user_email = ?", request.userEmail);
         if (!selectUserEmail.isEmpty()) {

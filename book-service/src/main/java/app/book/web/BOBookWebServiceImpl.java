@@ -61,21 +61,21 @@ public class BOBookWebServiceImpl implements BOBookWebService {
     @Override
     public BOCreateBookResponse createInCategory(BOCreateBookRequest request) {
         ActionLogContext.put("book_name", request.name);
-        ActionLogContext.put("book_category", request.category);
+        ActionLogContext.put("book_category_id", request.categoryId);
         return boBookService.createInCategory(request);
     }
 
     @Override
     public BOCreateBookResponse createInTag(BOCreateBookRequest request) {
         ActionLogContext.put("book_name", request.name);
-        ActionLogContext.put("book_tag", request.tag);
+        ActionLogContext.put("book_tag_id", request.tagId);
         return boBookService.createInTag(request);
     }
 
     @Override
     public BOCreateBookResponse createInAuthor(BOCreateBookRequest request) {
         ActionLogContext.put("book_name", request.name);
-        ActionLogContext.put("book_author", request.author);
+        ActionLogContext.put("book_author_id", request.authorId);
         return boBookService.createInAuthor(request);
     }
 

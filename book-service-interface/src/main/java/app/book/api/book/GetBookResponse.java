@@ -12,17 +12,18 @@ public class GetBookResponse {
     @Property(name = "name")
     public String name;
 
-    @Property(name = "author")
-    public String author;
+    @Property(name = "author_id")
+    public Integer authorId;
+
+
+    @Property(name = "category_id")
+    public Integer categoryId;
+
+    @Property(name = "tag_id")
+    public Integer tagId;
 
     @Property(name = "pub")
     public String pub;
-
-    @Property(name = "category")
-    public String category;
-
-    @Property(name = "tag")
-    public String tag;
 
     @Property(name = "description")
     public String description;

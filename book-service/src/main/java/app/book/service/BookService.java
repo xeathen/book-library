@@ -203,10 +203,10 @@ public class BookService {
         GetBookResponse response = new GetBookResponse();
         response.id = book.id;
         response.name = book.name;
-        response.author = book.author;
+        response.authorId = book.authorId;
+        response.categoryId = book.categoryId;
+        response.tagId = book.tagId;
         response.pub = book.pub;
-        response.category = book.category;
-        response.tag = book.tag;
         response.description = book.description;
         response.num = book.num;
         return response;

@@ -13,19 +13,23 @@ public class BOCreateBookRequest {
     @Property(name = "name")
     public String name;
 
-    @Property(name = "author")
-    public String author;
+    @NotNull
+    @Property(name = "author_id")
+    public Integer authorId;
+
+
+    @NotNull
+    @Property(name = "category_id")
+    public Integer categoryId;
+
+    @NotNull
+    @Property(name = "tag_id")
+    public Integer tagId;
 
     @NotNull
     @NotBlank
     @Property(name = "pub")
     public String pub;
-
-    @Property(name = "category")
-    public String category;
-
-    @Property(name = "tag")
-    public String tag;
 
     @Property(name = "description")
     public String description;

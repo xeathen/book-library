@@ -15,7 +15,7 @@ public interface UserAJAXWebService {
     GetUserAJAXResponse get(@PathParam("id") Long id);
 
     //TODO:login
-    @POST
-    @Path()
-    UserLoginResponse login()
+//    @POST
+//    @Path()
+//    UserLoginResponse login()
 }
