@@ -5,6 +5,8 @@ import core.framework.db.Column;
 import core.framework.db.PrimaryKey;
 import core.framework.db.Table;
 
+import java.time.ZonedDateTime;
+
 /**
  * @author Ethan
  */
@@ -21,4 +23,8 @@ public class Reservation {
     @NotNull
     @Column(name = "book_id")
     public Long bookId;
+
+    @NotNull
+    @Column(name = "reserve_time")
+    public ZonedDateTime reserveTime;
 }

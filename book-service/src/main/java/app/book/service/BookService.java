@@ -83,7 +83,7 @@ public class BookService {
         if (getUserResponse == null) {
             throw new NotFoundException("user not found, id=" + request.userId);
         }
-        if (!getUserResponse.status){
+        if (!getUserResponse.status) {
             throw new BadRequestException("you are banned!");
         }
         if (bookRepository.get(request.bookId).isEmpty()) {
@@ -212,7 +212,9 @@ public class BookService {
     private BorrowBookResponse convert(BorrowedRecord borrowedRecord) {
         BorrowBookResponse response = new BorrowBookResponse();
         response.userId = borrowedRecord.userId;
+        response.userName = borrowedRecord.userName;
         response.bookId = borrowedRecord.bookId;
+        response.bookName = borrowedRecord.bookName;
         response.borrowTime = borrowedRecord.borrowTime;
         response.returnTime = borrowedRecord.returnTime;
         return response;
@@ -222,7 +224,9 @@ public class BookService {
         GetBorrowedRecordResponse response = new GetBorrowedRecordResponse();
         response.id = borrowedRecord.id;
         response.userId = borrowedRecord.userId;
+        response.userName = borrowedRecord.userName;
         response.bookId = borrowedRecord.bookId;
+        response.bookName = borrowedRecord.bookName;
         response.borrowTime = borrowedRecord.borrowTime;
         response.returnTime = borrowedRecord.returnTime;
         response.isReturned = borrowedRecord.isReturned;

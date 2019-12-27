@@ -10,12 +10,13 @@ import core.framework.scheduler.Job;
 import core.framework.scheduler.JobContext;
 import core.framework.web.exception.NotFoundException;
 
+import java.time.ZonedDateTime;
 import java.util.Optional;
 
 /**
  * @author Ethan
  */
-public class NotifyJob implements Job {
+public class AvailabilityNotifyJob implements Job {
     @Inject
     Repository<Reservation> reservationRepository;
     @Inject
@@ -24,12 +25,15 @@ public class NotifyJob implements Job {
     MessagePublisher<ReservationMessage> publisher;
 
     @Override
-
     public void execute(JobContext context) {
         reservationRepository.select().fetch().forEach(reservation -> {
             Optional<Book> bookOptional = bookRepository.get(reservation.bookId);
             if (bookOptional.isEmpty()) {
                 throw new NotFoundException("book not found.");
+            }
+            if (ZonedDateTime.now().isAfter(reservation.reserveTime.plusDays(7))){
+                reservationRepository.delete(reservation.id);
+                return;
             }
             Book book = bookOptional.get();
             if (book.num > 0) {

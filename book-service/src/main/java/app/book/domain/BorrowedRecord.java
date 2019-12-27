@@ -20,8 +20,16 @@ public class BorrowedRecord {
     public Long userId;
 
     @NotNull
+    @Field(name = "user_name")
+    public String userName;
+
+    @NotNull
     @Field(name = "book_id")
     public Long bookId;
+
+    @NotNull
+    @Field(name = "book_name")
+    public String bookName;
 
     @NotNull
     @Field(name = "borrow_time")

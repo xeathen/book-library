@@ -1,7 +1,9 @@
 package app;
 
+import app.book.api.kafka.ExpireMessage;
 import app.book.api.kafka.ReservationMessage;
-import app.job.NotifyJob;
+import app.job.AvailabilityNotifyJob;
+import app.job.ExpireNotifyJob;
 import core.framework.module.Module;
 
 import java.time.Duration;
@@ -13,13 +15,16 @@ public class ReservationModule extends Module {
     @Override
     protected void initialize() {
         configureKafka();
-        schedule().fixedRate("notify-job", bind(NotifyJob.class), Duration.ofDays(1));
+        schedule().fixedRate("availability-notify-job", bind(AvailabilityNotifyJob.class), Duration.ofSeconds(30));
+        schedule().fixedRate("expire-notify-job", bind(ExpireNotifyJob.class), Duration.ofSeconds(30));
     }
 
     private void configureKafka() {
         kafka().uri("localhost:9092");
-        String topic = "reservation";
+        String reservationTopic = "reservation";
+        String expireTopic = "expire";
         kafka().poolSize(2);
-        kafka().publish(topic, ReservationMessage.class);
+        kafka().publish(reservationTopic, ReservationMessage.class);
+        kafka().publish(expireTopic, ExpireMessage.class);
     }
 }
