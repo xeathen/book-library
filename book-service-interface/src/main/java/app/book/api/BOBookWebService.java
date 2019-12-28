@@ -8,10 +8,10 @@ import app.book.api.book.BOCreateCategoryRequest;
 import app.book.api.book.BOCreateCategoryResponse;
 import app.book.api.book.BOCreateTagRequest;
 import app.book.api.book.BOCreateTagResponse;
-import app.book.api.book.BOGetAuthorResponse;
+import app.book.api.book.BOListAuthorResponse;
 import app.book.api.book.BOGetBookResponse;
-import app.book.api.book.BOGetCategoryResponse;
-import app.book.api.book.BOGetTagResponse;
+import app.book.api.book.BOListCategoryResponse;
+import app.book.api.book.BOListTagResponse;
 import app.book.api.book.BOSearchBookRequest;
 import app.book.api.book.BOSearchBookResponse;
 import app.book.api.book.BOSearchRecordByBookIdResponse;
@@ -38,16 +38,15 @@ public interface BOBookWebService {
 
     @GET
     @Path("/bo/book/category")
-    BOGetCategoryResponse getCategories();
+    BOListCategoryResponse listCategory();
 
     @GET
     @Path("/bo/book/tag")
-        //TODO:list
-    BOGetTagResponse getTags();
+    BOListTagResponse listTag();
 
     @GET
     @Path("/bo/book/author")
-    BOGetAuthorResponse getAuthors();
+    BOListAuthorResponse listAuthor();
 
     @POST
     @Path("/bo/book")

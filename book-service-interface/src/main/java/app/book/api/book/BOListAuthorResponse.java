@@ -7,10 +7,10 @@ import java.util.List;
 /**
  * @author Ethan
  */
-public class BOGetCategoryResponse {
+public class BOListAuthorResponse {
     @Property(name = "total")
     public Integer total;
 
-    @Property(name = "categories")
-    public List<String> categories;
+    @Property(name = "authors")
+    public List<String> authors;
 }

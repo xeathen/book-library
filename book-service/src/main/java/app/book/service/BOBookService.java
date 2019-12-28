@@ -8,10 +8,10 @@ import app.book.api.book.BOCreateCategoryRequest;
 import app.book.api.book.BOCreateCategoryResponse;
 import app.book.api.book.BOCreateTagRequest;
 import app.book.api.book.BOCreateTagResponse;
-import app.book.api.book.BOGetAuthorResponse;
+import app.book.api.book.BOListAuthorResponse;
 import app.book.api.book.BOGetBookResponse;
-import app.book.api.book.BOGetCategoryResponse;
-import app.book.api.book.BOGetTagResponse;
+import app.book.api.book.BOListCategoryResponse;
+import app.book.api.book.BOListTagResponse;
 import app.book.api.book.BOSearchBookRequest;
 import app.book.api.book.BOSearchBookResponse;
 import app.book.api.book.BOSearchRecordByBookIdResponse;
@@ -72,24 +72,24 @@ public class BOBookService {
     }
 
     //list
-    public BOGetCategoryResponse getCategories() {
-        BOGetCategoryResponse response = new BOGetCategoryResponse();
+    public BOListCategoryResponse listCategory() {
+        BOListCategoryResponse response = new BOListCategoryResponse();
         Query<Category> query = categoryRepository.select();
         response.categories = query.fetch().stream().map(category -> category.name).collect(Collectors.toList());
         response.total = query.count();
         return response;
     }
 
-    public BOGetTagResponse getTags() {
-        BOGetTagResponse response = new BOGetTagResponse();
+    public BOListTagResponse listTag() {
+        BOListTagResponse response = new BOListTagResponse();
         Query<Tag> query = tagRepository.select();
         response.tags = query.fetch().stream().map(tag -> tag.name).collect(Collectors.toList());
         response.total = query.count();
         return response;
     }
 
-    public BOGetAuthorResponse getAuthors() {
-        BOGetAuthorResponse response = new BOGetAuthorResponse();
+    public BOListAuthorResponse listAuthor() {
+        BOListAuthorResponse response = new BOListAuthorResponse();
         Query<Author> query = authorRepository.select();
         response.authors = query.fetch().stream().map(author -> author.name).collect(Collectors.toList());
         response.total = query.count();

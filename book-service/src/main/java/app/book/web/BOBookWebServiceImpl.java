@@ -9,10 +9,10 @@ import app.book.api.book.BOCreateCategoryRequest;
 import app.book.api.book.BOCreateCategoryResponse;
 import app.book.api.book.BOCreateTagRequest;
 import app.book.api.book.BOCreateTagResponse;
-import app.book.api.book.BOGetAuthorResponse;
+import app.book.api.book.BOListAuthorResponse;
 import app.book.api.book.BOGetBookResponse;
-import app.book.api.book.BOGetCategoryResponse;
-import app.book.api.book.BOGetTagResponse;
+import app.book.api.book.BOListCategoryResponse;
+import app.book.api.book.BOListTagResponse;
 import app.book.api.book.BOSearchBookRequest;
 import app.book.api.book.BOSearchBookResponse;
 import app.book.api.book.BOSearchRecordByBookIdResponse;
@@ -44,18 +44,18 @@ public class BOBookWebServiceImpl implements BOBookWebService {
     }
 
     @Override
-    public BOGetCategoryResponse getCategories() {
-        return boBookService.getCategories();
+    public BOListCategoryResponse listCategory() {
+        return boBookService.listCategory();
     }
 
     @Override
-    public BOGetTagResponse getTags() {
-        return boBookService.getTags();
+    public BOListTagResponse listTag() {
+        return boBookService.listTag();
     }
 
     @Override
-    public BOGetAuthorResponse getAuthors() {
-        return boBookService.getAuthors();
+    public BOListAuthorResponse listAuthor() {
+        return boBookService.listAuthor();
     }
 
     @Override

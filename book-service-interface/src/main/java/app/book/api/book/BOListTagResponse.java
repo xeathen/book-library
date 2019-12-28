@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * @author Ethan
  */
-public class BOGetTagResponse {
+public class BOListTagResponse {
     @Property(name = "total")
     public Integer total;
 
