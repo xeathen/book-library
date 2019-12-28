@@ -19,7 +19,8 @@ public class ReservationMessageHandler implements MessageHandler<ReservationMess
 
     @Override
     public void handle(String key, ReservationMessage value) {
-//        ActionLogContext.put();
+        ActionLogContext.put("user_id", value.userId);
+        ActionLogContext.put("book_id", value.bookId);
         GetUserResponse user = userWebService.get(value.userId);
         logger.info("sending email, userName={},userEmail={}", user.userName, user.userEmail);
     }

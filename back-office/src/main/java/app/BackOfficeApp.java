@@ -14,7 +14,7 @@ public class BackOfficeApp extends App {
         http().gzip();
 //        http().access().denyFromFile("deny-ip-list.txt");
         //TODO:loginController
-        http().route();
+//        http().route();
 
         load(new BackOfficeModule());
     }

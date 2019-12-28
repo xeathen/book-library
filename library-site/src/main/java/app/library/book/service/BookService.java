@@ -144,10 +144,10 @@ public class BookService {
         GetBookAJAXResponse ajaxResponse = new GetBookAJAXResponse();
         ajaxResponse.id = response.id;
         ajaxResponse.name = response.name;
+        ajaxResponse.categoryId = response.categoryId;
+        ajaxResponse.tagId = response.tagId;
+        ajaxResponse.authorId = response.authorId;
         ajaxResponse.pub = response.pub;
-        ajaxResponse.category = response.category;
-        ajaxResponse.tag = response.tag;
-        ajaxResponse.author = response.author;
         ajaxResponse.description = response.description;
         ajaxResponse.num = response.num;
         return ajaxResponse;

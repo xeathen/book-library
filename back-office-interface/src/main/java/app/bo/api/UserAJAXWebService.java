@@ -26,4 +26,7 @@ public interface UserAJAXWebService {
     @PUT
     @Path("/ajax/user/:id")
     UpdateUserAJAXResponse update(@PathParam("id") Long id, UpdateUserAJAXRequest request);
+
+    //TODO:resetPassword
+    //TODO:active/inactive
 }

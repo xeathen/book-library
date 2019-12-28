@@ -1,7 +1,13 @@
 package app.book.service;
 
+import app.book.api.book.BOCreateAuthorRequest;
+import app.book.api.book.BOCreateAuthorResponse;
 import app.book.api.book.BOCreateBookRequest;
 import app.book.api.book.BOCreateBookResponse;
+import app.book.api.book.BOCreateCategoryRequest;
+import app.book.api.book.BOCreateCategoryResponse;
+import app.book.api.book.BOCreateTagRequest;
+import app.book.api.book.BOCreateTagResponse;
 import app.book.api.book.BOGetAuthorResponse;
 import app.book.api.book.BOGetBookResponse;
 import app.book.api.book.BOGetCategoryResponse;
@@ -97,33 +103,39 @@ public class BOBookService {
         return response;
     }
 
-    public BOCreateBookResponse createInCategory(BOCreateBookRequest request) {
-        if (request.categoryId != null) {
-            throw new BadRequestException("category must be not null");
+    public BOCreateCategoryResponse createCategory(BOCreateCategoryRequest request) {
+        if (Strings.isBlank(request.categoryName)) {
+            throw new BadRequestException("category name must be not null");
         }
-        BOCreateBookResponse response = new BOCreateBookResponse();
-        response.id = bookRepository.insert(convert(request)).orElseThrow();
-        response.name = request.name;
+        BOCreateCategoryResponse response = new BOCreateCategoryResponse();
+        Category category = new Category();
+        category.name = request.categoryName;
+        response.id = (int) categoryRepository.insert(category).orElseThrow();
+        response.categoryName = request.categoryName;
         return response;
     }
 
-    public BOCreateBookResponse createInTag(BOCreateBookRequest request) {
-        if (request.tagId != null) {
-            throw new BadRequestException("tag must be not null");
+    public BOCreateTagResponse createTag(BOCreateTagRequest request) {
+        if (Strings.isBlank(request.tagName)) {
+            throw new BadRequestException("tag name must be not null");
         }
-        BOCreateBookResponse response = new BOCreateBookResponse();
-        response.id = bookRepository.insert(convert(request)).orElseThrow();
-        response.name = request.name;
+        BOCreateTagResponse response = new BOCreateTagResponse();
+        Tag tag = new Tag();
+        tag.name = request.tagName;
+        response.id = (int) tagRepository.insert(tag).orElseThrow();
+        response.tagName = request.tagName;
         return response;
     }
 
-    public BOCreateBookResponse createInAuthor(BOCreateBookRequest request) {
-        if (request.authorId != null) {
-            throw new BadRequestException("author must be not null");
+    public BOCreateAuthorResponse createAuthor(BOCreateAuthorRequest request) {
+        if (Strings.isBlank(request.authorName)) {
+            throw new BadRequestException("author name must be not null");
         }
-        BOCreateBookResponse response = new BOCreateBookResponse();
-        response.id = bookRepository.insert(convert(request)).orElseThrow();
-        response.name = request.name;
+        BOCreateAuthorResponse response = new BOCreateAuthorResponse();
+        Author author = new Author();
+        author.name = request.authorName;
+        response.id = (int) authorRepository.insert(author).orElseThrow();
+        response.authorName = request.authorName;
         return response;
     }
 

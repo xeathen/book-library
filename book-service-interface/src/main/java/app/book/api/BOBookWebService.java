@@ -1,7 +1,13 @@
 package app.book.api;
 
+import app.book.api.book.BOCreateAuthorRequest;
+import app.book.api.book.BOCreateAuthorResponse;
+import app.book.api.book.BOCreateCategoryRequest;
 import app.book.api.book.BOCreateBookRequest;
 import app.book.api.book.BOCreateBookResponse;
+import app.book.api.book.BOCreateCategoryResponse;
+import app.book.api.book.BOCreateTagRequest;
+import app.book.api.book.BOCreateTagResponse;
 import app.book.api.book.BOGetAuthorResponse;
 import app.book.api.book.BOGetBookResponse;
 import app.book.api.book.BOGetCategoryResponse;
@@ -49,15 +55,15 @@ public interface BOBookWebService {
 
     @POST
     @Path("/bo/book/category")
-    BOCreateBookResponse createInCategory(BOCreateBookRequest request);
+    BOCreateCategoryResponse createCategory(BOCreateCategoryRequest request);
 
     @POST
     @Path("/bo/book/tag")
-    BOCreateBookResponse createInTag(BOCreateBookRequest request);
+    BOCreateTagResponse createTag(BOCreateTagRequest request);
 
     @POST
     @Path("/bo/book/author")
-    BOCreateBookResponse createInAuthor(BOCreateBookRequest request);
+    BOCreateAuthorResponse createAuthor(BOCreateAuthorRequest request);
 
     @PUT
     @Path("/bo/book/:id")

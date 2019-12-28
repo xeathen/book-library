@@ -1,8 +1,14 @@
 package app.book.web;
 
 import app.book.api.BOBookWebService;
+import app.book.api.book.BOCreateAuthorRequest;
+import app.book.api.book.BOCreateAuthorResponse;
 import app.book.api.book.BOCreateBookRequest;
 import app.book.api.book.BOCreateBookResponse;
+import app.book.api.book.BOCreateCategoryRequest;
+import app.book.api.book.BOCreateCategoryResponse;
+import app.book.api.book.BOCreateTagRequest;
+import app.book.api.book.BOCreateTagResponse;
 import app.book.api.book.BOGetAuthorResponse;
 import app.book.api.book.BOGetBookResponse;
 import app.book.api.book.BOGetCategoryResponse;
@@ -59,24 +65,21 @@ public class BOBookWebServiceImpl implements BOBookWebService {
     }
 
     @Override
-    public BOCreateBookResponse createInCategory(BOCreateBookRequest request) {
-        ActionLogContext.put("book_name", request.name);
-        ActionLogContext.put("book_category_id", request.categoryId);
-        return boBookService.createInCategory(request);
+    public BOCreateCategoryResponse createCategory(BOCreateCategoryRequest request) {
+        ActionLogContext.put("category_name", request.categoryName);
+        return boBookService.createCategory(request);
     }
 
     @Override
-    public BOCreateBookResponse createInTag(BOCreateBookRequest request) {
-        ActionLogContext.put("book_name", request.name);
-        ActionLogContext.put("book_tag_id", request.tagId);
-        return boBookService.createInTag(request);
+    public BOCreateTagResponse createTag(BOCreateTagRequest request) {
+        ActionLogContext.put("tag_name", request.tagName);
+        return boBookService.createTag(request);
     }
 
     @Override
-    public BOCreateBookResponse createInAuthor(BOCreateBookRequest request) {
-        ActionLogContext.put("book_name", request.name);
-        ActionLogContext.put("book_author_id", request.authorId);
-        return boBookService.createInAuthor(request);
+    public BOCreateAuthorResponse createAuthor(BOCreateAuthorRequest request) {
+        ActionLogContext.put("author_name", request.authorName);
+        return boBookService.createAuthor(request);
     }
 
     @Override
