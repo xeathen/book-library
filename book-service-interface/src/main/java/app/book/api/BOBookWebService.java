@@ -2,9 +2,9 @@ package app.book.api;
 
 import app.book.api.book.BOCreateAuthorRequest;
 import app.book.api.book.BOCreateAuthorResponse;
-import app.book.api.book.BOCreateCategoryRequest;
 import app.book.api.book.BOCreateBookRequest;
 import app.book.api.book.BOCreateBookResponse;
+import app.book.api.book.BOCreateCategoryRequest;
 import app.book.api.book.BOCreateCategoryResponse;
 import app.book.api.book.BOCreateTagRequest;
 import app.book.api.book.BOCreateTagResponse;
@@ -42,7 +42,7 @@ public interface BOBookWebService {
 
     @GET
     @Path("/bo/book/tag")
-    //TODO:list
+        //TODO:list
     BOGetTagResponse getTags();
 
     @GET

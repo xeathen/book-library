@@ -8,9 +8,7 @@ import app.user.api.user.BOUpdateUserResponse;
 import app.user.domain.User;
 import core.framework.db.Repository;
 import core.framework.inject.Inject;
-import core.framework.log.ErrorCode;
 import core.framework.web.exception.BadRequestException;
-import core.framework.web.exception.ConflictException;
 
 import java.util.List;
 

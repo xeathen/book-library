@@ -1,9 +1,8 @@
 import com.mongodb.client.model.IndexOptions;
-import com.mongodb.client.model.Indexes;
 import core.framework.mongo.MongoMigration;
 import org.bson.Document;
 
-import static com.mongodb.client.model.Indexes.*;
+import static com.mongodb.client.model.Indexes.ascending;
 
 /**
  * @author Ethan

@@ -30,5 +30,4 @@ public interface BookAJAXWebService {
     @POST
     @Path("/ajax/book/author")
     CreateAuthorAJAXResponse createAuthor(CreateAuthorAJAXRequest request);
-
 }

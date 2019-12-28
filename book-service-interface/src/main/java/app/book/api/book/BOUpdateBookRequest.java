@@ -12,7 +12,6 @@ public class BOUpdateBookRequest {
     @Property(name = "author_id")
     public Integer authorId;
 
-
     @Property(name = "category_id")
     public Integer categoryId;
 

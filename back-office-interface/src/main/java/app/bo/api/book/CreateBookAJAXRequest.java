@@ -17,7 +17,6 @@ public class CreateBookAJAXRequest {
     @Property(name = "author_id")
     public Integer authorId;
 
-
     @NotNull
     @Property(name = "category_id")
     public Integer categoryId;

@@ -6,7 +6,6 @@ import app.book.domain.Reservation;
 import core.framework.db.Repository;
 import core.framework.inject.Inject;
 import core.framework.kafka.MessagePublisher;
-import core.framework.log.ActionLogContext;
 import core.framework.scheduler.Job;
 import core.framework.scheduler.JobContext;
 import core.framework.web.exception.NotFoundException;
@@ -33,7 +32,7 @@ public class AvailabilityNotifyJob implements Job {
             if (bookOptional.isEmpty()) {
                 throw new NotFoundException("book not found.");
             }
-            if (ZonedDateTime.now().isAfter(reservation.reserveTime.plusDays(7))){
+            if (ZonedDateTime.now().isAfter(reservation.reserveTime.plusDays(7))) {
                 reservationRepository.delete(reservation.id);
                 return;
             }

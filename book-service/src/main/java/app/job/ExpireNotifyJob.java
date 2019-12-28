@@ -29,7 +29,7 @@ public class ExpireNotifyJob implements Job {
         //        ActionLogContext.put();
         reservationRepository.select().fetch().forEach(reservation -> {
             Optional<Book> bookOptional = bookRepository.get(reservation.bookId);
-            if (bookOptional.isEmpty()){
+            if (bookOptional.isEmpty()) {
                 throw new NotFoundException("book not found.");
             }
             if (reservation.reserveTime.plusDays(6).getDayOfMonth() == ZonedDateTime.now().getDayOfMonth()) {

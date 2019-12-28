@@ -1,7 +1,12 @@
 package app;
 
+import app.bo.ajax.AdminLoginController;
+import app.bo.ajax.interceptor.AdminLoginInterceptor;
+import core.framework.http.HTTPMethod;
 import core.framework.module.App;
 import core.framework.module.SystemModule;
+
+import java.time.Duration;
 
 /**
  * @author Ethan
@@ -11,11 +16,11 @@ public class BackOfficeApp extends App {
     protected void initialize() {
         load(new SystemModule("sys.properties"));
         loadProperties("app.properties");
+        load(new BackOfficeModule());
         http().gzip();
 //        http().access().denyFromFile("deny-ip-list.txt");
-        //TODO:loginController
-//        http().route();
-
-        load(new BackOfficeModule());
+        http().route(HTTPMethod.POST, "/admin/login", new AdminLoginController());
+        http().intercept(bind(AdminLoginInterceptor.class));
+        site().session().timeout(Duration.ofHours(1));
     }
 }

@@ -1,7 +1,6 @@
 package app.library.api.book;
 
 import core.framework.api.json.Property;
-import core.framework.util.Strings;
 
 /**
  * @author Ethan

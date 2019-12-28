@@ -1,7 +1,6 @@
 package app.bo.api.user;
 
 import core.framework.api.json.Property;
-import core.framework.api.validate.NotNull;
 
 /**
  * @author Ethan

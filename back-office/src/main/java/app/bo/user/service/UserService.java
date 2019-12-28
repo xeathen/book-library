@@ -10,7 +10,6 @@ import app.user.api.user.BOCreateUserRequest;
 import app.user.api.user.BOCreateUserResponse;
 import app.user.api.user.BOUpdateUserRequest;
 import app.user.api.user.BOUpdateUserResponse;
-import core.framework.api.web.service.PathParam;
 import core.framework.inject.Inject;
 
 /**

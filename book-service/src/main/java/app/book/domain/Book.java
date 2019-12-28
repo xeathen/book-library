@@ -19,7 +19,6 @@ public class Book {
     @Column(name = "author_id")
     public Integer authorId;
 
-
     @Column(name = "category_id")
     public Integer categoryId;
 

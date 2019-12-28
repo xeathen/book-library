@@ -10,7 +10,7 @@ import core.framework.module.Module;
 /**
  * @author Ethan
  */
-public class  NotificationModule extends Module {
+public class NotificationModule extends Module {
     @Override
     protected void initialize() {
         api().client(UserWebService.class, requiredProperty("app.userWebService.URL"));
