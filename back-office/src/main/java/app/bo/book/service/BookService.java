@@ -2,6 +2,7 @@ package app.bo.book.service;
 
 import app.bo.api.book.AuthorView;
 import app.bo.api.book.BookView;
+import app.bo.api.book.BorrowedRecordView;
 import app.bo.api.book.CategoryView;
 import app.bo.api.book.CreateAuthorAJAXRequest;
 import app.bo.api.book.CreateAuthorAJAXResponse;
@@ -16,6 +17,7 @@ import app.bo.api.book.ListCategoryAJAXResponse;
 import app.bo.api.book.ListTagAJAXResponse;
 import app.bo.api.book.SearchBookAJAXRequest;
 import app.bo.api.book.SearchBookAJAXResponse;
+import app.bo.api.book.SearchRecordAJAXResponse;
 import app.bo.api.book.TagView;
 import app.book.api.BOBookWebService;
 import app.book.api.book.BOCreateAuthorRequest;
@@ -31,6 +33,7 @@ import app.book.api.book.BOListCategoryResponse;
 import app.book.api.book.BOListTagResponse;
 import app.book.api.book.BOSearchBookRequest;
 import app.book.api.book.BOSearchBookResponse;
+import app.book.api.book.BOSearchRecordResponse;
 import core.framework.inject.Inject;
 
 import java.util.stream.Collectors;
@@ -52,9 +55,21 @@ public class BookService {
 
     public SearchBookAJAXResponse search(SearchBookAJAXRequest ajaxRequest) {
         BOSearchBookRequest boSearchBookRequest = new BOSearchBookRequest();
+        convert(ajaxRequest, boSearchBookRequest);
         SearchBookAJAXResponse ajaxResponse = new SearchBookAJAXResponse();
         convert(bookWebService.search(boSearchBookRequest), ajaxResponse);
         return ajaxResponse;
+    }
+
+    private void convert(SearchBookAJAXRequest ajaxRequest, BOSearchBookRequest boSearchBookRequest) {
+        boSearchBookRequest.skip = ajaxRequest.skip;
+        boSearchBookRequest.limit = ajaxRequest.limit;
+        boSearchBookRequest.name = ajaxRequest.name;
+        boSearchBookRequest.category = ajaxRequest.category;
+        boSearchBookRequest.tag = ajaxRequest.tag;
+        boSearchBookRequest.author = ajaxRequest.author;
+        boSearchBookRequest.description = ajaxRequest.description;
+        boSearchBookRequest.pub = ajaxRequest.pub;
     }
 
     public CreateCategoryAJAXResponse createCategory(CreateCategoryAJAXRequest ajaxRequest) {
@@ -117,6 +132,25 @@ public class BookService {
             return authorView;
         }).collect(Collectors.toList());
         ajaxResponse.total = boListAuthorResponse.total;
+        return ajaxResponse;
+    }
+
+    public SearchRecordAJAXResponse searchRecordByBookId(Long bookId) {
+        SearchRecordAJAXResponse ajaxResponse = new SearchRecordAJAXResponse();
+        BOSearchRecordResponse boSearchRecordResponse = bookWebService.searchRecordByBookId(bookId);
+        ajaxResponse.borrowedRecords = boSearchRecordResponse.borrowedRecords.stream().map(boBorrowedRecordView -> {
+            BorrowedRecordView borrowedRecordView = new BorrowedRecordView();
+            borrowedRecordView.id = boBorrowedRecordView.id;
+            borrowedRecordView.bookId = boBorrowedRecordView.bookId;
+            borrowedRecordView.bookName = boBorrowedRecordView.bookName;
+            borrowedRecordView.userId = boBorrowedRecordView.userId;
+            borrowedRecordView.userName = boBorrowedRecordView.userName;
+            borrowedRecordView.borrowTime =boBorrowedRecordView.borrowTime;
+            borrowedRecordView.returnTime = boBorrowedRecordView.returnTime;
+            borrowedRecordView.isReturned = boBorrowedRecordView.isReturned;
+            return borrowedRecordView;
+        }).collect(Collectors.toList());
+        ajaxResponse.total = boSearchRecordResponse.total;
         return ajaxResponse;
     }
 

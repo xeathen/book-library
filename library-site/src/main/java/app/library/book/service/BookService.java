@@ -6,12 +6,12 @@ import app.book.api.book.BorrowBookResponse;
 import app.book.api.book.CreateReservationRequest;
 import app.book.api.book.CreateReservationResponse;
 import app.book.api.book.GetBookResponse;
-import app.book.api.book.GetBorrowedRecordResponse;
+import app.book.api.book.BorrowedRecordView;
 import app.book.api.book.ReturnBookRequest;
 import app.book.api.book.ReturnBookResponse;
 import app.book.api.book.SearchBookRequest;
 import app.book.api.book.SearchBookResponse;
-import app.book.api.book.SearchRecordByUserIdResponse;
+import app.book.api.book.SearchRecordResponse;
 import app.library.api.book.BorrowBookAJAXRequest;
 import app.library.api.book.BorrowBookAJAXResponse;
 import app.library.api.book.CreateReservationAJAXRequest;
@@ -57,7 +57,7 @@ public class BookService {
     }
 
     public SearchRecordByUserIdAJAXResponse searchRecordByUserId(Long userId) {
-        SearchRecordByUserIdResponse response = bookWebService.searchRecordByUserId(userId);
+        SearchRecordResponse response = bookWebService.searchRecordByUserId(userId);
         SearchRecordByUserIdAJAXResponse ajaxResponse = new SearchRecordByUserIdAJAXResponse();
         convert(response, ajaxResponse);
         return ajaxResponse;
@@ -109,7 +109,7 @@ public class BookService {
         request.returnTime = ajaxRequest.returnTime;
     }
 
-    private void convert(SearchRecordByUserIdResponse response, SearchRecordByUserIdAJAXResponse ajaxResponse) {
+    private void convert(SearchRecordResponse response, SearchRecordByUserIdAJAXResponse ajaxResponse) {
         ajaxResponse.borrowedRecords = response.borrowedRecords.stream().map(this::convert).collect(Collectors.toList());
         ajaxResponse.total = response.total;
     }
@@ -153,7 +153,7 @@ public class BookService {
         return ajaxResponse;
     }
 
-    private GetBorrowedRecordAJAXResponse convert(GetBorrowedRecordResponse response) {
+    private GetBorrowedRecordAJAXResponse convert(BorrowedRecordView response) {
         GetBorrowedRecordAJAXResponse ajaxResponse = new GetBorrowedRecordAJAXResponse();
         ajaxResponse.id = response.id;
         ajaxResponse.userId = response.userId;

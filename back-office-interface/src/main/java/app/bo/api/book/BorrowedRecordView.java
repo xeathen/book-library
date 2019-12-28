@@ -1,4 +1,4 @@
-package app.book.api.book;
+package app.bo.api.book;
 
 import core.framework.api.json.Property;
 
@@ -7,7 +7,7 @@ import java.time.ZonedDateTime;
 /**
  * @author Ethan
  */
-public class GetBorrowedRecordResponse {
+public class BorrowedRecordView {
     @Property(name = "id")
     public String id;
 

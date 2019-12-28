@@ -15,11 +15,11 @@ import app.book.api.book.BOListCategoryResponse;
 import app.book.api.book.BOListTagResponse;
 import app.book.api.book.BOSearchBookRequest;
 import app.book.api.book.BOSearchBookResponse;
-import app.book.api.book.BOSearchRecordByBookIdResponse;
+import app.book.api.book.BOSearchRecordResponse;
 import app.book.api.book.BOUpdateBookRequest;
 import app.book.api.book.BOUpdateBookResponse;
 import app.book.api.book.CategoryView;
-import app.book.api.book.GetBorrowedRecordResponse;
+import app.book.api.book.BorrowedRecordView;
 import app.book.api.book.TagView;
 import app.book.domain.Author;
 import app.book.domain.Book;
@@ -166,8 +166,8 @@ public class BOBookService {
         return response;
     }
 
-    public BOSearchRecordByBookIdResponse searchRecordByBookId(Long bookId) {
-        BOSearchRecordByBookIdResponse response = new BOSearchRecordByBookIdResponse();
+    public BOSearchRecordResponse searchRecordByBookId(Long bookId) {
+        BOSearchRecordResponse response = new BOSearchRecordResponse();
         core.framework.mongo.Query query = new core.framework.mongo.Query();
         query.filter = Filters.eq("book_id", bookId);
         query.readPreference = ReadPreference.secondaryPreferred();
@@ -245,8 +245,8 @@ public class BOBookService {
         return response;
     }
 
-    private GetBorrowedRecordResponse convert(BorrowedRecord borrowedRecord) {
-        GetBorrowedRecordResponse response = new GetBorrowedRecordResponse();
+    private BorrowedRecordView convert(BorrowedRecord borrowedRecord) {
+        BorrowedRecordView response = new BorrowedRecordView();
         response.id = borrowedRecord.id;
         response.userId = borrowedRecord.userId;
         response.userName = borrowedRecord.userName;

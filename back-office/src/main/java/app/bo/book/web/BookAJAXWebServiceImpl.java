@@ -14,9 +14,9 @@ import app.bo.api.book.ListCategoryAJAXResponse;
 import app.bo.api.book.ListTagAJAXResponse;
 import app.bo.api.book.SearchBookAJAXRequest;
 import app.bo.api.book.SearchBookAJAXResponse;
+import app.bo.api.book.SearchRecordAJAXResponse;
 import app.bo.book.service.BookService;
 import core.framework.inject.Inject;
-import core.framework.log.ActionLogContext;
 
 /**
  * @author Ethan
@@ -64,5 +64,10 @@ public class BookAJAXWebServiceImpl implements BookAJAXWebService {
     @Override
     public ListAuthorAJAXResponse listAuthor() {
         return bookService.listAuthor();
+    }
+
+    @Override
+    public SearchRecordAJAXResponse searchRecordByBookId(Long bookId) {
+        return bookService.searchRecordByBookId(bookId);
     }
 }

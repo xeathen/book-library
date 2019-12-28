@@ -14,7 +14,7 @@ import app.book.api.book.BOListCategoryResponse;
 import app.book.api.book.BOListTagResponse;
 import app.book.api.book.BOSearchBookRequest;
 import app.book.api.book.BOSearchBookResponse;
-import app.book.api.book.BOSearchRecordByBookIdResponse;
+import app.book.api.book.BOSearchRecordResponse;
 import app.book.api.book.BOUpdateBookRequest;
 import app.book.api.book.BOUpdateBookResponse;
 import core.framework.api.web.service.GET;
@@ -70,5 +70,5 @@ public interface BOBookWebService {
 
     @GET
     @Path("/bo/borrowed-record/:id")
-    BOSearchRecordByBookIdResponse searchRecordByBookId(@PathParam("id") Long bookId);
+    BOSearchRecordResponse searchRecordByBookId(@PathParam("id") Long bookId);
 }

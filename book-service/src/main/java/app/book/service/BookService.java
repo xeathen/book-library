@@ -5,12 +5,12 @@ import app.book.api.book.BorrowBookResponse;
 import app.book.api.book.CreateReservationRequest;
 import app.book.api.book.CreateReservationResponse;
 import app.book.api.book.GetBookResponse;
-import app.book.api.book.GetBorrowedRecordResponse;
+import app.book.api.book.BorrowedRecordView;
 import app.book.api.book.ReturnBookRequest;
 import app.book.api.book.ReturnBookResponse;
 import app.book.api.book.SearchBookRequest;
 import app.book.api.book.SearchBookResponse;
-import app.book.api.book.SearchRecordByUserIdResponse;
+import app.book.api.book.SearchRecordResponse;
 import app.book.domain.Book;
 import app.book.domain.BorrowedRecord;
 import app.book.domain.Reservation;
@@ -65,8 +65,8 @@ public class BookService {
         return response;
     }
 
-    public SearchRecordByUserIdResponse searchRecordByUserId(Long userId) {
-        SearchRecordByUserIdResponse response = new SearchRecordByUserIdResponse();
+    public SearchRecordResponse searchRecordByUserId(Long userId) {
+        SearchRecordResponse response = new SearchRecordResponse();
         core.framework.mongo.Query query = new core.framework.mongo.Query();
         query.filter = Filters.eq("user_id", userId);
         query.readPreference = ReadPreference.secondaryPreferred();
@@ -221,8 +221,8 @@ public class BookService {
         response.returnTime = borrowedRecord.returnTime;
     }
 
-    private GetBorrowedRecordResponse convert(BorrowedRecord borrowedRecord) {
-        GetBorrowedRecordResponse response = new GetBorrowedRecordResponse();
+    private BorrowedRecordView convert(BorrowedRecord borrowedRecord) {
+        BorrowedRecordView response = new BorrowedRecordView();
         response.id = borrowedRecord.id;
         response.userId = borrowedRecord.userId;
         response.userName = borrowedRecord.userName;
