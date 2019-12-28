@@ -15,6 +15,8 @@ import app.bo.api.book.ListTagAJAXResponse;
 import app.bo.api.book.SearchBookAJAXRequest;
 import app.bo.api.book.SearchBookAJAXResponse;
 import app.bo.api.book.SearchRecordAJAXResponse;
+import app.bo.api.book.UpdateBookAJAXRequest;
+import app.bo.api.book.UpdateBookAJAXResponse;
 import app.bo.book.service.BookService;
 import core.framework.inject.Inject;
 
@@ -64,6 +66,11 @@ public class BookAJAXWebServiceImpl implements BookAJAXWebService {
     @Override
     public ListAuthorAJAXResponse listAuthor() {
         return bookService.listAuthor();
+    }
+
+    @Override
+    public UpdateBookAJAXResponse update(Long id, UpdateBookAJAXRequest request) {
+        return bookService.update(id, request);
     }
 
     @Override

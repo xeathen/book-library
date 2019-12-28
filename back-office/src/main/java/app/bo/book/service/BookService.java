@@ -19,6 +19,8 @@ import app.bo.api.book.SearchBookAJAXRequest;
 import app.bo.api.book.SearchBookAJAXResponse;
 import app.bo.api.book.SearchRecordAJAXResponse;
 import app.bo.api.book.TagView;
+import app.bo.api.book.UpdateBookAJAXRequest;
+import app.bo.api.book.UpdateBookAJAXResponse;
 import app.book.api.BOBookWebService;
 import app.book.api.book.BOCreateAuthorRequest;
 import app.book.api.book.BOCreateAuthorResponse;
@@ -34,6 +36,8 @@ import app.book.api.book.BOListTagResponse;
 import app.book.api.book.BOSearchBookRequest;
 import app.book.api.book.BOSearchBookResponse;
 import app.book.api.book.BOSearchRecordResponse;
+import app.book.api.book.BOUpdateBookRequest;
+import app.book.api.book.BOUpdateBookResponse;
 import core.framework.inject.Inject;
 
 import java.util.stream.Collectors;
@@ -145,13 +149,42 @@ public class BookService {
             borrowedRecordView.bookName = boBorrowedRecordView.bookName;
             borrowedRecordView.userId = boBorrowedRecordView.userId;
             borrowedRecordView.userName = boBorrowedRecordView.userName;
-            borrowedRecordView.borrowTime =boBorrowedRecordView.borrowTime;
+            borrowedRecordView.borrowTime = boBorrowedRecordView.borrowTime;
             borrowedRecordView.returnTime = boBorrowedRecordView.returnTime;
             borrowedRecordView.isReturned = boBorrowedRecordView.isReturned;
             return borrowedRecordView;
         }).collect(Collectors.toList());
         ajaxResponse.total = boSearchRecordResponse.total;
         return ajaxResponse;
+    }
+
+    public UpdateBookAJAXResponse update(Long id, UpdateBookAJAXRequest ajaxRequest) {
+        BOUpdateBookRequest boRequest = new BOUpdateBookRequest();
+        convert(ajaxRequest, boRequest);
+        UpdateBookAJAXResponse ajaxResponse = new UpdateBookAJAXResponse();
+        convert(bookWebService.update(id, boRequest), ajaxResponse);
+        return ajaxResponse;
+    }
+
+    private void convert(BOUpdateBookResponse boResponse, UpdateBookAJAXResponse ajaxResponse) {
+        ajaxResponse.id = boResponse.id;
+        ajaxResponse.name = boResponse.name;
+        ajaxResponse.categoryId = boResponse.categoryId;
+        ajaxResponse.tagId = boResponse.tagId;
+        ajaxResponse.authorId = boResponse.authorId;
+        ajaxResponse.pub = boResponse.pub;
+        ajaxResponse.description = boResponse.description;
+        ajaxResponse.num = boResponse.num;
+    }
+
+    private void convert(UpdateBookAJAXRequest ajaxRequest, BOUpdateBookRequest boRequest) {
+        boRequest.name = ajaxRequest.name;
+        boRequest.authorId = ajaxRequest.authorId;
+        boRequest.tagId = ajaxRequest.tagId;
+        boRequest.categoryId = ajaxRequest.categoryId;
+        boRequest.pub = ajaxRequest.pub;
+        boRequest.description = ajaxRequest.description;
+        boRequest.num = ajaxRequest.num;
     }
 
     private void convert(BOSearchBookResponse boResponse, SearchBookAJAXResponse ajaxResponse) {

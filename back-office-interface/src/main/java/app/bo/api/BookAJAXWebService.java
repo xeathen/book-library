@@ -14,8 +14,11 @@ import app.bo.api.book.ListTagAJAXResponse;
 import app.bo.api.book.SearchBookAJAXRequest;
 import app.bo.api.book.SearchBookAJAXResponse;
 import app.bo.api.book.SearchRecordAJAXResponse;
+import app.bo.api.book.UpdateBookAJAXRequest;
+import app.bo.api.book.UpdateBookAJAXResponse;
 import core.framework.api.web.service.GET;
 import core.framework.api.web.service.POST;
+import core.framework.api.web.service.PUT;
 import core.framework.api.web.service.Path;
 import core.framework.api.web.service.PathParam;
 
@@ -54,6 +57,10 @@ public interface BookAJAXWebService {
     @GET
     @Path("/ajax/book/author")
     ListAuthorAJAXResponse listAuthor();
+
+    @PUT
+    @Path("/ajax/book/:id")
+    UpdateBookAJAXResponse update(@PathParam("id") Long id, UpdateBookAJAXRequest request);
 
     @GET
     @Path("/ajax/borrowed-record/:id")
