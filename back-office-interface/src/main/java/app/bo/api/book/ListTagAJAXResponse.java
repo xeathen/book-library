@@ -1,4 +1,4 @@
-package app.book.api.book;
+package app.bo.api.book;
 
 import core.framework.api.json.Property;
 
@@ -7,10 +7,10 @@ import java.util.List;
 /**
  * @author Ethan
  */
-public class BOListAuthorResponse {
+public class ListTagAJAXResponse {
     @Property(name = "total")
     public Integer total;
 
-    @Property(name = "authors")
-    public List<AuthorView> authors;
+    @Property(name = "tags")
+    public List<TagView> tags;
 }

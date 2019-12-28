@@ -12,5 +12,5 @@ public class BOListTagResponse {
     public Integer total;
 
     @Property(name = "tags")
-    public List<String> tags;
+    public List<TagView> tags;
 }

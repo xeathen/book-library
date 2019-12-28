@@ -9,6 +9,9 @@ import app.bo.api.book.CreateCategoryAJAXRequest;
 import app.bo.api.book.CreateCategoryAJAXResponse;
 import app.bo.api.book.CreateTagAJAXRequest;
 import app.bo.api.book.CreateTagAJAXResponse;
+import app.bo.api.book.ListAuthorAJAXResponse;
+import app.bo.api.book.ListCategoryAJAXResponse;
+import app.bo.api.book.ListTagAJAXResponse;
 import app.bo.book.service.BookService;
 import core.framework.inject.Inject;
 
@@ -37,5 +40,20 @@ public class BookAJAXWebServiceImpl implements BookAJAXWebService {
     @Override
     public CreateAuthorAJAXResponse createAuthor(CreateAuthorAJAXRequest request) {
         return bookService.createAuthor(request);
+    }
+
+    @Override
+    public ListCategoryAJAXResponse listCategory() {
+        return bookService.listCategory();
+    }
+
+    @Override
+    public ListTagAJAXResponse listTag() {
+        return bookService.listTag();
+    }
+
+    @Override
+    public ListAuthorAJAXResponse listAuthor() {
+        return bookService.listAuthor();
     }
 }

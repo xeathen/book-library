@@ -1,5 +1,6 @@
 package app.book.service;
 
+import app.book.api.book.AuthorView;
 import app.book.api.book.BOCreateAuthorRequest;
 import app.book.api.book.BOCreateAuthorResponse;
 import app.book.api.book.BOCreateBookRequest;
@@ -8,8 +9,8 @@ import app.book.api.book.BOCreateCategoryRequest;
 import app.book.api.book.BOCreateCategoryResponse;
 import app.book.api.book.BOCreateTagRequest;
 import app.book.api.book.BOCreateTagResponse;
-import app.book.api.book.BOListAuthorResponse;
 import app.book.api.book.BOGetBookResponse;
+import app.book.api.book.BOListAuthorResponse;
 import app.book.api.book.BOListCategoryResponse;
 import app.book.api.book.BOListTagResponse;
 import app.book.api.book.BOSearchBookRequest;
@@ -17,7 +18,9 @@ import app.book.api.book.BOSearchBookResponse;
 import app.book.api.book.BOSearchRecordByBookIdResponse;
 import app.book.api.book.BOUpdateBookRequest;
 import app.book.api.book.BOUpdateBookResponse;
+import app.book.api.book.CategoryView;
 import app.book.api.book.GetBorrowedRecordResponse;
+import app.book.api.book.TagView;
 import app.book.domain.Author;
 import app.book.domain.Book;
 import app.book.domain.BorrowedRecord;
@@ -71,11 +74,15 @@ public class BOBookService {
         return response;
     }
 
-    //list
     public BOListCategoryResponse listCategory() {
         BOListCategoryResponse response = new BOListCategoryResponse();
         Query<Category> query = categoryRepository.select();
-        response.categories = query.fetch().stream().map(category -> category.name).collect(Collectors.toList());
+        response.categories = query.fetch().stream().map(category -> {
+            CategoryView categoryView = new CategoryView();
+            categoryView.categoryId = category.id;
+            categoryView.categoryName = category.name;
+            return categoryView;
+        }).collect(Collectors.toList());
         response.total = query.count();
         return response;
     }
@@ -83,7 +90,12 @@ public class BOBookService {
     public BOListTagResponse listTag() {
         BOListTagResponse response = new BOListTagResponse();
         Query<Tag> query = tagRepository.select();
-        response.tags = query.fetch().stream().map(tag -> tag.name).collect(Collectors.toList());
+        response.tags = query.fetch().stream().map(tag -> {
+            TagView tagView = new TagView();
+            tagView.tagId = tag.id;
+            tagView.tagName = tag.name;
+            return tagView;
+        }).collect(Collectors.toList());
         response.total = query.count();
         return response;
     }
@@ -91,7 +103,12 @@ public class BOBookService {
     public BOListAuthorResponse listAuthor() {
         BOListAuthorResponse response = new BOListAuthorResponse();
         Query<Author> query = authorRepository.select();
-        response.authors = query.fetch().stream().map(author -> author.name).collect(Collectors.toList());
+        response.authors = query.fetch().stream().map(author -> {
+            AuthorView authorView = new AuthorView();
+            authorView.authorId = author.id;
+            authorView.authorName = author.name;
+            return authorView;
+        }).collect(Collectors.toList());
         response.total = query.count();
         return response;
     }

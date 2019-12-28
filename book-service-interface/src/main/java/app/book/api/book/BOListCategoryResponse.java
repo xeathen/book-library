@@ -12,5 +12,5 @@ public class BOListCategoryResponse {
     public Integer total;
 
     @Property(name = "categories")
-    public List<String> categories;
+    public List<CategoryView> categories;
 }
