@@ -1,6 +1,7 @@
 package app.bo.book.service;
 
 import app.bo.api.book.AuthorView;
+import app.bo.api.book.BookView;
 import app.bo.api.book.CategoryView;
 import app.bo.api.book.CreateAuthorAJAXRequest;
 import app.bo.api.book.CreateAuthorAJAXResponse;
@@ -13,6 +14,8 @@ import app.bo.api.book.CreateTagAJAXResponse;
 import app.bo.api.book.ListAuthorAJAXResponse;
 import app.bo.api.book.ListCategoryAJAXResponse;
 import app.bo.api.book.ListTagAJAXResponse;
+import app.bo.api.book.SearchBookAJAXRequest;
+import app.bo.api.book.SearchBookAJAXResponse;
 import app.bo.api.book.TagView;
 import app.book.api.BOBookWebService;
 import app.book.api.book.BOCreateAuthorRequest;
@@ -26,6 +29,8 @@ import app.book.api.book.BOCreateTagResponse;
 import app.book.api.book.BOListAuthorResponse;
 import app.book.api.book.BOListCategoryResponse;
 import app.book.api.book.BOListTagResponse;
+import app.book.api.book.BOSearchBookRequest;
+import app.book.api.book.BOSearchBookResponse;
 import core.framework.inject.Inject;
 
 import java.util.stream.Collectors;
@@ -45,9 +50,11 @@ public class BookService {
         return ajaxResponse;
     }
 
-    private void convert(BOCreateBookResponse boCreateBookResponse, CreateBookAJAXResponse ajaxResponse) {
-        ajaxResponse.id = boCreateBookResponse.id;
-        ajaxResponse.name = boCreateBookResponse.name;
+    public SearchBookAJAXResponse search(SearchBookAJAXRequest ajaxRequest) {
+        BOSearchBookRequest boSearchBookRequest = new BOSearchBookRequest();
+        SearchBookAJAXResponse ajaxResponse = new SearchBookAJAXResponse();
+        convert(bookWebService.search(boSearchBookRequest), ajaxResponse);
+        return ajaxResponse;
     }
 
     public CreateCategoryAJAXResponse createCategory(CreateCategoryAJAXRequest ajaxRequest) {
@@ -113,6 +120,22 @@ public class BookService {
         return ajaxResponse;
     }
 
+    private void convert(BOSearchBookResponse boResponse, SearchBookAJAXResponse ajaxResponse) {
+        ajaxResponse.books = boResponse.books.stream().map(boBookView -> {
+            BookView bookView = new BookView();
+            bookView.id = boBookView.id;
+            bookView.name = boBookView.name;
+            bookView.categoryId = boBookView.categoryId;
+            bookView.authorId = boBookView.authorId;
+            bookView.tagId = boBookView.tagId;
+            bookView.description = boBookView.description;
+            bookView.pub = boBookView.pub;
+            bookView.num = boBookView.num;
+            return bookView;
+        }).collect(Collectors.toList());
+        ajaxResponse.total = boResponse.total;
+    }
+
     private void convert(CreateBookAJAXRequest ajaxRequest, BOCreateBookRequest boCreateBookRequest) {
         boCreateBookRequest.name = ajaxRequest.name;
         boCreateBookRequest.categoryId = ajaxRequest.categoryId;
@@ -131,6 +154,11 @@ public class BookService {
     private void convert(BOCreateTagResponse boResponse, CreateTagAJAXResponse ajaxResponse) {
         ajaxResponse.id = boResponse.id;
         ajaxResponse.tagName = boResponse.tagName;
+    }
+
+    private void convert(BOCreateBookResponse boCreateBookResponse, CreateBookAJAXResponse ajaxResponse) {
+        ajaxResponse.id = boCreateBookResponse.id;
+        ajaxResponse.name = boCreateBookResponse.name;
     }
 
     public void convert(BOCreateCategoryResponse boResponse, CreateCategoryAJAXResponse ajaxResponse) {

@@ -5,7 +5,7 @@ import core.framework.api.json.Property;
 /**
  * @author Ethan
  */
-public class BOGetBookResponse {
+public class BookView {
     @Property(name = "id")
     public Long id;
 

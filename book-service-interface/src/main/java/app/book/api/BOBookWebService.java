@@ -8,7 +8,7 @@ import app.book.api.book.BOCreateCategoryRequest;
 import app.book.api.book.BOCreateCategoryResponse;
 import app.book.api.book.BOCreateTagRequest;
 import app.book.api.book.BOCreateTagResponse;
-import app.book.api.book.BOGetBookResponse;
+import app.book.api.book.BookView;
 import app.book.api.book.BOListAuthorResponse;
 import app.book.api.book.BOListCategoryResponse;
 import app.book.api.book.BOListTagResponse;
@@ -30,7 +30,7 @@ public interface BOBookWebService {
 
     @GET
     @Path("/bo/book/:id")
-    BOGetBookResponse get(@PathParam("id") Long id);
+    BookView get(@PathParam("id") Long id);
 
     @GET
     @Path("/bo/book")

@@ -9,7 +9,7 @@ import app.book.api.book.BOCreateCategoryRequest;
 import app.book.api.book.BOCreateCategoryResponse;
 import app.book.api.book.BOCreateTagRequest;
 import app.book.api.book.BOCreateTagResponse;
-import app.book.api.book.BOGetBookResponse;
+import app.book.api.book.BookView;
 import app.book.api.book.BOListAuthorResponse;
 import app.book.api.book.BOListCategoryResponse;
 import app.book.api.book.BOListTagResponse;
@@ -55,7 +55,7 @@ public class BOBookService {
     @Inject
     MongoCollection<BorrowedRecord> collection;
 
-    public BOGetBookResponse get(Long bookId) {
+    public BookView get(Long bookId) {
         Optional<Book> book = bookRepository.get(bookId);
         if (book.isEmpty()) {
             throw new NotFoundException("book not found");
@@ -232,8 +232,8 @@ public class BOBookService {
         response.num = request.num;
     }
 
-    private BOGetBookResponse convert(Book book) {
-        BOGetBookResponse response = new BOGetBookResponse();
+    private BookView convert(Book book) {
+        BookView response = new BookView();
         response.id = book.id;
         response.name = book.name;
         response.authorId = book.authorId;
