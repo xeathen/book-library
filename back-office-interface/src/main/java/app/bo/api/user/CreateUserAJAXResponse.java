@@ -19,5 +19,5 @@ public class CreateUserAJAXResponse {
     public String userEmail;
 
     @Property(name = "status")
-    public Boolean status;
+    public UserStatusAJAXView status;
 }

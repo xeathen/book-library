@@ -10,5 +10,5 @@ public class UpdateUserAJAXResponse {
     public Long id;
 
     @Property(name = "status")
-    public Boolean status;
+    public UserStatusAJAXView status;
 }

@@ -1,9 +1,10 @@
 package app.bo.api;
 
-import app.bo.api.user.ResetPasswordAJAXResponse;
+import app.bo.api.user.ChangeStatusAJAXResponse;
 import app.bo.api.user.CreateUserAJAXRequest;
 import app.bo.api.user.CreateUserAJAXResponse;
 import app.bo.api.user.DeleteUserAJAXResponse;
+import app.bo.api.user.ResetPasswordAJAXResponse;
 import app.bo.api.user.UpdateUserAJAXRequest;
 import app.bo.api.user.UpdateUserAJAXResponse;
 import core.framework.api.web.service.DELETE;
@@ -32,5 +33,7 @@ public interface UserAJAXWebService {
     @Path("/ajax/user/password/:id")
     ResetPasswordAJAXResponse resetPassword(@PathParam("id") Long id);
 
-    //TODO:active/inactive
+    @PUT
+    @Path("/ajax/user/status/:id")
+    ChangeStatusAJAXResponse changeStatus(@PathParam("id") Long id);
 }

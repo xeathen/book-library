@@ -3,8 +3,10 @@ package app;
 import app.book.api.BookWebService;
 import app.library.api.BookAJAXWebService;
 import app.library.api.UserAJAXWebService;
+import app.library.api.UserBorrowAJAXWebService;
 import app.library.book.service.BookService;
 import app.library.book.web.BookAJAXWebServiceImpl;
+import app.library.book.web.UserBorrowAJAXWebServiceImpl;
 import app.library.user.service.UserService;
 import app.library.user.web.UserAJAXWebServiceImpl;
 import app.user.api.UserWebService;
@@ -26,6 +28,7 @@ public class LibraryModule extends Module {
 
         api.service(UserAJAXWebService.class, bind(UserAJAXWebServiceImpl.class));
         api.service(BookAJAXWebService.class, bind(BookAJAXWebServiceImpl.class));
+        api.service(UserBorrowAJAXWebService.class, bind(UserBorrowAJAXWebServiceImpl.class));
 
 //        http().intercept(bind(UserLoginInterceptor.class));
 //        site().session().timeout(Duration.ofHours(1));

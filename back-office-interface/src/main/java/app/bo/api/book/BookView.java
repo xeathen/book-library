@@ -12,14 +12,15 @@ public class BookView {
     @Property(name = "name")
     public String name;
 
-    @Property(name = "author_id")
-    public Integer authorId;
+    //TODO:name
+    @Property(name = "author_name")
+    public String authorName;
 
-    @Property(name = "category_id")
-    public Integer categoryId;
+    @Property(name = "category_name")
+    public String categoryName;
 
     @Property(name = "tag_id")
-    public Integer tagId;
+    public String tagName;
 
     @Property(name = "pub")
     public String pub;

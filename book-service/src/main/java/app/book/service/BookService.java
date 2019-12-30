@@ -17,6 +17,7 @@ import app.book.domain.BorrowedRecord;
 import app.book.domain.Reservation;
 import app.user.api.UserWebService;
 import app.user.api.user.GetUserResponse;
+import app.user.api.user.UserStatusView;
 import com.mongodb.ReadPreference;
 import com.mongodb.client.model.Filters;
 import core.framework.db.Query;
@@ -84,7 +85,7 @@ public class BookService {
         if (getUserResponse == null) {
             throw new NotFoundException("user not found, id=" + request.userId);
         }
-        if (!getUserResponse.status) {
+        if (getUserResponse.status == UserStatusView.INACTIVE) {
             throw new BadRequestException("you are banned!");
         }
         if (bookRepository.get(request.bookId).isEmpty()) {
@@ -104,7 +105,7 @@ public class BookService {
         borrowedRecord.userId = request.userId;
         borrowedRecord.userName = getUserResponse.userName;
         borrowedRecord.bookId = request.bookId;
-        borrowedRecord.bookName = book.get().name;
+        borrowedRecord.bookName = book.orElseThrow(() -> new NotFoundException("book not found", ErrorCodes.BOOK_NOT_FOUND)).name;
         borrowedRecord.borrowTime = ZonedDateTime.now();
         borrowedRecord.returnTime = request.returnTime;
         borrowedRecord.isReturned = false;
@@ -135,7 +136,7 @@ public class BookService {
         response.bookName = record.bookName;
         response.returnTime = ZonedDateTime.now();
 
-        Integer num = bookRepository.get(request.bookId).get().num;
+        Integer num = bookRepository.get(request.bookId).orElseThrow(() -> new NotFoundException("book not found", ErrorCodes.BOOK_NOT_FOUND)).num;
         Book borrowedBook = new Book();
         borrowedBook.id = request.bookId;
         borrowedBook.num = num + 1;

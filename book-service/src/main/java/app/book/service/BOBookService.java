@@ -237,10 +237,13 @@ public class BOBookService {
         BookView response = new BookView();
         response.id = book.id;
         response.name = book.name;
-        response.authorId = book.authorId;
+        response.categoryName = categoryRepository.get(book.categoryId).orElseThrow(() ->
+            new NotFoundException("category not found", ErrorCodes.CATEGORY_NOT_FOUND)).name;
+        response.tagName = tagRepository.get(book.tagId).orElseThrow(() ->
+            new NotFoundException("tag not found", ErrorCodes.TAG_NOT_FOUND)).name;
+        response.authorName = authorRepository.get(book.authorId).orElseThrow(() ->
+            new NotFoundException("author not found", ErrorCodes.AUTHOR_NOT_FOUND)).name;
         response.pub = book.pub;
-        response.categoryId = book.categoryId;
-        response.tagId = book.tagId;
         response.description = book.description;
         response.num = book.num;
         return response;

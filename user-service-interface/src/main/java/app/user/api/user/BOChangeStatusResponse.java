@@ -5,9 +5,12 @@ import core.framework.api.json.Property;
 /**
  * @author Ethan
  */
-public class BOUpdateUserResponse {
-    @Property(name = "id")
-    public Long id;
+public class BOChangeStatusResponse {
+    @Property(name = "user_id")
+    public Long userId;
+
+    @Property(name = "user_name")
+    public String userName;
 
     @Property(name = "status")
     public UserStatusView status;

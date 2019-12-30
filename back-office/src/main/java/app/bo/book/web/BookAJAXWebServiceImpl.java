@@ -29,6 +29,7 @@ public class BookAJAXWebServiceImpl implements BookAJAXWebService {
 
     @Override
     public CreateBookAJAXResponse create(CreateBookAJAXRequest request) {
+        //TODO:log
 //        ActionLogContext.put();
         return bookService.create(request);
     }

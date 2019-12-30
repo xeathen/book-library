@@ -2,6 +2,7 @@ package app.user.service;
 
 import app.user.ErrorCodes;
 import app.user.api.user.GetUserResponse;
+import app.user.api.user.UserStatusView;
 import app.user.domain.User;
 import core.framework.db.Repository;
 import core.framework.inject.Inject;
@@ -24,7 +25,7 @@ public class UserService {
         response.id = user.id;
         response.userName = user.userName;
         response.userEmail = user.userEmail;
-        response.status = user.status;
+        response.status = user.status == null ? null : UserStatusView.valueOf(user.status.name());
         return response;
     }
 }

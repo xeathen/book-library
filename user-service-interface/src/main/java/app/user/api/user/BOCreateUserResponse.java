@@ -19,5 +19,5 @@ public class BOCreateUserResponse {
     public String userEmail;
 
     @Property(name = "status")
-    public Boolean status;
+    public UserStatusView status;
 }

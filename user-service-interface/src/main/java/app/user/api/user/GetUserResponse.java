@@ -16,5 +16,5 @@ public class GetUserResponse {
     public String userEmail;
 
     @Property(name = "status")
-    public Boolean status;
+    public UserStatusView status;
 }

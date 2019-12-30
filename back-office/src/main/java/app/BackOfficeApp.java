@@ -1,10 +1,7 @@
 package app;
 
-import app.bo.ajax.interceptor.AdminLoginInterceptor;
 import core.framework.module.App;
 import core.framework.module.SystemModule;
-
-import java.time.Duration;
 
 /**
  * @author Ethan

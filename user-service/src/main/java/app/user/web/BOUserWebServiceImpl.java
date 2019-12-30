@@ -1,6 +1,7 @@
 package app.user.web;
 
 import app.user.api.BOUserWebService;
+import app.user.api.user.BOChangeStatusResponse;
 import app.user.api.user.BOCreateUserRequest;
 import app.user.api.user.BOCreateUserResponse;
 import app.user.api.user.BODeleteUserResponse;
@@ -39,5 +40,10 @@ public class BOUserWebServiceImpl implements BOUserWebService {
     @Override
     public BOResetPasswordResponse resetPassword(Long id) {
         return boUserService.resetPassword(id);
+    }
+
+    @Override
+    public BOChangeStatusResponse changeStatus(Long id) {
+        return boUserService.changeStatus(id);
     }
 }

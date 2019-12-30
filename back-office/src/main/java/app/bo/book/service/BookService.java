@@ -192,9 +192,9 @@ public class BookService {
             BookView bookView = new BookView();
             bookView.id = boBookView.id;
             bookView.name = boBookView.name;
-            bookView.categoryId = boBookView.categoryId;
-            bookView.authorId = boBookView.authorId;
-            bookView.tagId = boBookView.tagId;
+            bookView.categoryName = boBookView.categoryName;
+            bookView.authorName = boBookView.authorName;
+            bookView.tagName = boBookView.tagName;
             bookView.description = boBookView.description;
             bookView.pub = boBookView.pub;
             bookView.num = boBookView.num;

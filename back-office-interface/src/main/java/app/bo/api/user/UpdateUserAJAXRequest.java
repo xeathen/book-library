@@ -10,5 +10,5 @@ public class UpdateUserAJAXRequest {
     public String password;
 
     @Property(name = "status")
-    public Boolean status;
+    public UserStatusAJAXView status;
 }

@@ -1,6 +1,7 @@
 package app.library.user.service;
 
 import app.library.api.user.GetUserAJAXResponse;
+import app.library.api.user.UserStatusAJAXView;
 import app.user.api.UserWebService;
 import app.user.api.user.GetUserResponse;
 import core.framework.api.web.service.PathParam;
@@ -23,6 +24,6 @@ public class UserService {
         ajaxResponse.id = response.id;
         ajaxResponse.userName = response.userName;
         ajaxResponse.userEmail = response.userEmail;
-        ajaxResponse.status = response.status;
+        ajaxResponse.status = response.status == null ? null : UserStatusAJAXView.valueOf(response.status.name());
     }
 }

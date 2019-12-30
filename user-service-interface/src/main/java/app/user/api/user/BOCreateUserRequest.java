@@ -25,5 +25,5 @@ public class BOCreateUserRequest {
 
     @NotNull
     @Property(name = "status")
-    public Boolean status;
+    public UserStatusView status;
 }

@@ -1,13 +1,16 @@
 package app.user.service;
 
 import app.user.ErrorCodes;
+import app.user.api.user.BOChangeStatusResponse;
 import app.user.api.user.BOCreateUserRequest;
 import app.user.api.user.BOCreateUserResponse;
 import app.user.api.user.BODeleteUserResponse;
 import app.user.api.user.BOResetPasswordResponse;
 import app.user.api.user.BOUpdateUserRequest;
 import app.user.api.user.BOUpdateUserResponse;
+import app.user.api.user.UserStatusView;
 import app.user.domain.User;
+import app.user.domain.UserStatus;
 import core.framework.db.Repository;
 import core.framework.inject.Inject;
 import core.framework.web.exception.ConflictException;
@@ -59,28 +62,45 @@ public class BOUserService {
 
     public BOResetPasswordResponse resetPassword(Long id) {
         BOResetPasswordResponse response = new BOResetPasswordResponse();
-        Optional<User> userOptional = checkUser(id);
-        User user = new User();
-        user.id = id;
-        user.password = "123456";
-        userRepository.partialUpdate(user);
+        User user = checkUser(id);
+        User temp = new User();
+        temp.id = id;
+        temp.password = "123456";
+        userRepository.partialUpdate(temp);
         response.userId = id;
-        response.userName = userOptional.get().userName;
+        response.userName = user.userName;
         return response;
     }
 
-    private Optional<User> checkUser(Long id){
+    public BOChangeStatusResponse changeStatus(Long id) {
+        BOChangeStatusResponse response = new BOChangeStatusResponse();
+        User user = checkUser(id);
+        User temp = new User();
+        temp.id = id;
+        if (user.status == UserStatus.ACTIVE) {
+            temp.status = UserStatus.INACTIVE;
+        } else {
+            temp.status = UserStatus.ACTIVE;
+        }
+        userRepository.partialUpdate(temp);
+        response.userId = id;
+        response.userName = user.userName;
+        response.status = user.status == null ? null : UserStatusView.valueOf(temp.status.name());
+        return response;
+    }
+
+    private User checkUser(Long id) {
         Optional<User> userOptional = userRepository.get(id);
         if (userOptional.isEmpty()) {
             throw new NotFoundException("user not found", ErrorCodes.USER_NOT_FOUND);
         }
-        return userOptional;
+        return userOptional.get();
     }
 
     private User convert(BOUpdateUserRequest request) {
         User user = new User();
         user.password = request.password;
-        user.status = request.status;
+        user.status = request.status == null ? null : UserStatus.valueOf(request.status.name());
         return user;
     }
 
@@ -89,7 +109,7 @@ public class BOUserService {
         user.userName = request.userName;
         user.password = request.password;
         user.userEmail = request.userEmail;
-        user.status = request.status;
+        user.status = UserStatus.valueOf(request.status.name());
         return user;
     }
 

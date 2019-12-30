@@ -10,5 +10,5 @@ public class BOUpdateUserRequest {
     public String password;
 
     @Property(name = "status")
-    public Boolean status;
+    public UserStatusView status;
 }

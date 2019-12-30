@@ -1,17 +1,21 @@
 package app.bo.user.service;
 
+import app.bo.api.user.ChangeStatusAJAXResponse;
 import app.bo.api.user.CreateUserAJAXRequest;
 import app.bo.api.user.CreateUserAJAXResponse;
 import app.bo.api.user.DeleteUserAJAXResponse;
 import app.bo.api.user.ResetPasswordAJAXResponse;
 import app.bo.api.user.UpdateUserAJAXRequest;
 import app.bo.api.user.UpdateUserAJAXResponse;
+import app.bo.api.user.UserStatusAJAXView;
 import app.user.api.BOUserWebService;
+import app.user.api.user.BOChangeStatusResponse;
 import app.user.api.user.BOCreateUserRequest;
 import app.user.api.user.BOCreateUserResponse;
 import app.user.api.user.BOResetPasswordResponse;
 import app.user.api.user.BOUpdateUserRequest;
 import app.user.api.user.BOUpdateUserResponse;
+import app.user.api.user.UserStatusView;
 import core.framework.inject.Inject;
 
 /**
@@ -50,6 +54,18 @@ public class UserService {
         return response;
     }
 
+    public ChangeStatusAJAXResponse changeStatus(Long id) {
+        ChangeStatusAJAXResponse response = new ChangeStatusAJAXResponse();
+        convert(boUserWebService.changeStatus(id), response);
+        return response;
+    }
+
+    private void convert(BOChangeStatusResponse boResponse, ChangeStatusAJAXResponse response) {
+        response.userId = boResponse.userId;
+        response.userName = boResponse.userName;
+        response.status = boResponse.status == null ? null : UserStatusAJAXView.valueOf(boResponse.status.name());
+    }
+
     private void convert(BOResetPasswordResponse boResponse, ResetPasswordAJAXResponse response) {
         response.userId = boResponse.userId;
         response.userName = boResponse.userName;
@@ -59,7 +75,7 @@ public class UserService {
         boRequest.userName = ajaxRequest.userName;
         boRequest.password = ajaxRequest.password;
         boRequest.userEmail = ajaxRequest.userEmail;
-        boRequest.status = ajaxRequest.status;
+        boRequest.status = ajaxRequest.status == null ? null : UserStatusView.valueOf(ajaxRequest.status.name());
     }
 
     private void convert(BOCreateUserResponse boResponse, CreateUserAJAXResponse ajaxResponse) {
@@ -67,16 +83,16 @@ public class UserService {
         ajaxResponse.userName = boResponse.userName;
         ajaxResponse.password = boResponse.password;
         ajaxResponse.userEmail = boResponse.userEmail;
-        ajaxResponse.status = boResponse.status;
+        ajaxResponse.status = boResponse.status == null ? null : UserStatusAJAXView.valueOf(boResponse.status.name());
     }
 
     private void convert(UpdateUserAJAXRequest ajaxRequest, BOUpdateUserRequest boRequest) {
         boRequest.password = ajaxRequest.password;
-        boRequest.status = ajaxRequest.status;
+        boRequest.status = ajaxRequest.status == null ? null : UserStatusView.valueOf(boRequest.status.name());
     }
 
     private void convert(BOUpdateUserResponse boResponse, UpdateUserAJAXResponse ajaxResponse) {
         ajaxResponse.id = boResponse.id;
-        ajaxResponse.status = boResponse.status;
+        ajaxResponse.status = boResponse.status == null ? null : UserStatusAJAXView.valueOf(boResponse.status.name());
     }
 }
