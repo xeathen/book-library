@@ -1,5 +1,6 @@
 package app.user.service;
 
+import app.user.ErrorCodes;
 import app.user.api.user.GetUserResponse;
 import app.user.domain.User;
 import core.framework.db.Repository;
@@ -14,7 +15,7 @@ public class UserService {
     Repository<User> userRepository;
 
     public GetUserResponse get(Long id) {
-        User user = userRepository.get(id).orElseThrow(() -> new NotFoundException("user not found, id=" + id));
+        User user = userRepository.get(id).orElseThrow(() -> new NotFoundException("user not found, id=" + id, ErrorCodes.USER_NOT_FOUND));
         return convert(user);
     }
 

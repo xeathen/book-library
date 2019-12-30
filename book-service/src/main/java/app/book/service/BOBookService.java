@@ -1,5 +1,6 @@
 package app.book.service;
 
+import app.ErrorCodes;
 import app.book.api.book.AuthorView;
 import app.book.api.book.BOCreateAuthorRequest;
 import app.book.api.book.BOCreateAuthorResponse;
@@ -58,7 +59,7 @@ public class BOBookService {
     public BookView get(Long bookId) {
         Optional<Book> book = bookRepository.get(bookId);
         if (book.isEmpty()) {
-            throw new NotFoundException("book not found");
+            throw new NotFoundException("book not found", ErrorCodes.BOOK_NOT_FOUND);
         }
         return convert(book.get());
     }
@@ -122,7 +123,7 @@ public class BOBookService {
 
     public BOCreateCategoryResponse createCategory(BOCreateCategoryRequest request) {
         if (Strings.isBlank(request.categoryName)) {
-            throw new BadRequestException("category name must be not null");
+            throw new BadRequestException("category name must be not null", ErrorCodes.NULL_CATEGORY);
         }
         BOCreateCategoryResponse response = new BOCreateCategoryResponse();
         Category category = new Category();
@@ -134,7 +135,7 @@ public class BOBookService {
 
     public BOCreateTagResponse createTag(BOCreateTagRequest request) {
         if (Strings.isBlank(request.tagName)) {
-            throw new BadRequestException("tag name must be not null");
+            throw new BadRequestException("tag name must be not null", ErrorCodes.NULL_TAG);
         }
         BOCreateTagResponse response = new BOCreateTagResponse();
         Tag tag = new Tag();
@@ -146,7 +147,7 @@ public class BOBookService {
 
     public BOCreateAuthorResponse createAuthor(BOCreateAuthorRequest request) {
         if (Strings.isBlank(request.authorName)) {
-            throw new BadRequestException("author name must be not null");
+            throw new BadRequestException("author name must be not null", ErrorCodes.NULL_AUTHOR);
         }
         BOCreateAuthorResponse response = new BOCreateAuthorResponse();
         Author author = new Author();

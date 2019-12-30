@@ -1,5 +1,6 @@
 package app.book.service;
 
+import app.ErrorCodes;
 import app.book.api.book.BorrowBookRequest;
 import app.book.api.book.BorrowBookResponse;
 import app.book.api.book.BorrowedRecordView;
@@ -49,7 +50,7 @@ public class BookService {
     public GetBookResponse get(Long id) {
         Optional<Book> book = bookRepository.get(id);
         if (book.isEmpty()) {
-            throw new NotFoundException("book not found");
+            throw new NotFoundException("book not found", ErrorCodes.BOOK_NOT_FOUND);
         }
         return convert(book.get());
     }
@@ -121,7 +122,7 @@ public class BookService {
     public ReturnBookResponse returnBook(ReturnBookRequest request) {
         ReturnBookResponse response = new ReturnBookResponse();
         if (isReturned(request.userId, request.bookId)) {
-            throw new NotFoundException("no record");
+            throw new NotFoundException("record not found", ErrorCodes.RECORD_NOT_FOUND);
         }
         List<BorrowedRecord> borrowedRecordList = getNotReturnedRecordList(request.userId, request.bookId);
         BorrowedRecord record = borrowedRecordList.get(0);
@@ -149,7 +150,7 @@ public class BookService {
         query.where("book_id = ?", request.bookId);
         List<Reservation> collect = new ArrayList<>(query.fetch());
         if (!collect.isEmpty()) {
-            throw new BadRequestException("you have reserved this book already");
+            throw new BadRequestException("you have reserved this book already", ErrorCodes.ALREADY_RESERVED);
         }
         CreateReservationResponse response = new CreateReservationResponse();
         Reservation reservation = new Reservation();

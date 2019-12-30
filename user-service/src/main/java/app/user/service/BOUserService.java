@@ -1,5 +1,6 @@
 package app.user.service;
 
+import app.user.ErrorCodes;
 import app.user.api.user.BOCreateUserRequest;
 import app.user.api.user.BOCreateUserResponse;
 import app.user.api.user.BODeleteUserResponse;
@@ -8,7 +9,7 @@ import app.user.api.user.BOUpdateUserResponse;
 import app.user.domain.User;
 import core.framework.db.Repository;
 import core.framework.inject.Inject;
-import core.framework.web.exception.BadRequestException;
+import core.framework.web.exception.ConflictException;
 
 import java.util.List;
 
@@ -23,12 +24,11 @@ public class BOUserService {
         BOCreateUserResponse response = new BOCreateUserResponse();
         List<User> selectUserName = userRepository.select("user_name = ? ", request.userName);
         if (!selectUserName.isEmpty()) {
-            //TODO:add errorCode
-//            throw new ConflictException("find duplicate username", ErrorCode)
+            throw new ConflictException("find duplicate username", ErrorCodes.DUPLICATE_USERNAME);
         }
         List<User> selectUserEmail = userRepository.select("user_email = ?", request.userEmail);
         if (!selectUserEmail.isEmpty()) {
-            throw new BadRequestException("find duplicate email");
+            throw new ConflictException("find duplicate email", ErrorCodes.DUPLICATE_EMAIL);
         }
         response.id = userRepository.insert(convert(request)).orElseThrow();
         convert(request, response);
