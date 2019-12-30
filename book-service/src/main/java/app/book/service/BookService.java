@@ -194,16 +194,12 @@ public class BookService {
         if (!Strings.isBlank(request.description)) {
             where("books.description like ?", Strings.format("%{}%", request.description), whereClause, params);
         }
-        StringBuilder sql = new StringBuilder();
-        sql.append("SELECT `books`.`id` as `id`, `books`.`name` as `name`, `authors`.`name` as `author_name`,");
-        sql.append("`categories`.`name` as `category_name`, tags.`name` as `tag_name`, books.`pub`, books.`description` , books.`num`");
-        sql.append("FROM `books` join `categories` join tags join `authors`");
-        sql.append("on books.category_id = categories.id ");
-        sql.append("and tags.id = books.tag_id ");
-        sql.append("and `authors`.id = books.author_id ");
-        sql.append("where ");
-        sql.append(whereClause);
-        return database.select(sql.toString(), BookView.class, params.toArray());
+        String sql = "SELECT `books`.`id` as `id`, `books`.`name` as `name`, `authors`.`name` as `author_name`,"
+            + "`categories`.`name` as `category_name`, tags.`name` as `tag_name`, books.`pub`, books.`description` , books.`num`"
+            + "FROM `books` join `categories` join tags join `authors`"
+            + "on books.category_id = categories.id and tags.id = books.tag_id and `authors`.id = books.author_id "
+            + "where " + whereClause;
+        return database.select(sql, BookView.class, params.toArray());
     }
 
     private void where(String condition, String param, StringBuilder whereClause, List<String> params) {

@@ -26,8 +26,7 @@ public class ExpireNotifyJob implements Job {
     Repository<Book> bookRepository;
 
     @Override
-    public void execute(JobContext context) throws NotFoundException {
-
+    public void execute(JobContext context) throws Exception {
         reservationRepository.select().fetch().forEach(reservation -> {
             ActionLogContext.put("reservation_id", reservation.id);
             ActionLogContext.put("user_id", reservation.userId);

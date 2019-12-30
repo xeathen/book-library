@@ -72,17 +72,6 @@ public class BookService {
         return ajaxResponse;
     }
 
-    private void convert(SearchBookAJAXRequest ajaxRequest, BOSearchBookRequest boSearchBookRequest) {
-        boSearchBookRequest.skip = ajaxRequest.skip;
-        boSearchBookRequest.limit = ajaxRequest.limit;
-        boSearchBookRequest.name = ajaxRequest.name;
-        boSearchBookRequest.category = ajaxRequest.category;
-        boSearchBookRequest.tag = ajaxRequest.tag;
-        boSearchBookRequest.author = ajaxRequest.author;
-        boSearchBookRequest.description = ajaxRequest.description;
-        boSearchBookRequest.pub = ajaxRequest.pub;
-    }
-
     public CreateCategoryAJAXResponse createCategory(CreateCategoryAJAXRequest ajaxRequest) {
         BOCreateCategoryRequest boRequest = new BOCreateCategoryRequest();
         boRequest.categoryName = ajaxRequest.categoryName;
@@ -182,7 +171,17 @@ public class BookService {
         ajaxView.description = bookView.description;
         ajaxView.pub = bookView.pub;
         ajaxView.num = bookView.num;
+    }
 
+    private void convert(SearchBookAJAXRequest ajaxRequest, BOSearchBookRequest boSearchBookRequest) {
+        boSearchBookRequest.skip = ajaxRequest.skip;
+        boSearchBookRequest.limit = ajaxRequest.limit;
+        boSearchBookRequest.name = ajaxRequest.name;
+        boSearchBookRequest.category = ajaxRequest.category;
+        boSearchBookRequest.tag = ajaxRequest.tag;
+        boSearchBookRequest.author = ajaxRequest.author;
+        boSearchBookRequest.description = ajaxRequest.description;
+        boSearchBookRequest.pub = ajaxRequest.pub;
     }
 
     private void convert(BOUpdateBookResponse boResponse, UpdateBookAJAXResponse ajaxResponse) {
