@@ -36,7 +36,6 @@ public class UserAJAXWebServiceImpl implements UserAJAXWebService {
     @Override
     public UpdateUserAJAXResponse update(Long userId, UpdateUserAJAXRequest request) {
         ActionLogContext.put("user_id", userId);
-        //TODO:更新
         return userService.update(userId, request);
     }
 

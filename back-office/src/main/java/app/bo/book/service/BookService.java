@@ -38,6 +38,7 @@ import app.book.api.book.BOSearchBookResponse;
 import app.book.api.book.BOSearchRecordResponse;
 import app.book.api.book.BOUpdateBookRequest;
 import app.book.api.book.BOUpdateBookResponse;
+import app.book.api.book.BookView;
 import core.framework.inject.Inject;
 
 import java.util.stream.Collectors;
@@ -48,6 +49,12 @@ import java.util.stream.Collectors;
 public class BookService {
     @Inject
     BOBookWebService bookWebService;
+
+    public BookAJAXView get(Long id) {
+        BookAJAXView ajaxView = new BookAJAXView();
+        convert(bookWebService.get(id), ajaxView);
+        return ajaxView;
+    }
 
     public CreateBookAJAXResponse create(CreateBookAJAXRequest ajaxRequest) {
         BOCreateBookRequest boCreateBookRequest = new BOCreateBookRequest();
@@ -164,6 +171,18 @@ public class BookService {
         UpdateBookAJAXResponse ajaxResponse = new UpdateBookAJAXResponse();
         convert(bookWebService.update(id, boRequest), ajaxResponse);
         return ajaxResponse;
+    }
+
+    private void convert(BookView bookView, BookAJAXView ajaxView) {
+        ajaxView.id = bookView.id;
+        ajaxView.name = bookView.name;
+        ajaxView.categoryName = bookView.categoryName;
+        ajaxView.authorName = bookView.authorName;
+        ajaxView.tagName = bookView.tagName;
+        ajaxView.description = bookView.description;
+        ajaxView.pub = bookView.pub;
+        ajaxView.num = bookView.num;
+
     }
 
     private void convert(BOUpdateBookResponse boResponse, UpdateBookAJAXResponse ajaxResponse) {

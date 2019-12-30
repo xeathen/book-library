@@ -1,6 +1,7 @@
 package app.bo.book.web;
 
 import app.bo.api.BookAJAXWebService;
+import app.bo.api.book.BookAJAXView;
 import app.bo.api.book.CreateAuthorAJAXRequest;
 import app.bo.api.book.CreateAuthorAJAXResponse;
 import app.bo.api.book.CreateBookAJAXRequest;
@@ -28,6 +29,11 @@ import core.framework.util.Strings;
 public class BookAJAXWebServiceImpl implements BookAJAXWebService {
     @Inject
     BookService bookService;
+
+    @Override
+    public BookAJAXView get(Long id) {
+        return bookService.get(id);
+    }
 
     @Override
     public CreateBookAJAXResponse create(CreateBookAJAXRequest request) {

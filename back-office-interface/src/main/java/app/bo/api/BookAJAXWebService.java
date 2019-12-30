@@ -1,5 +1,6 @@
 package app.bo.api;
 
+import app.bo.api.book.BookAJAXView;
 import app.bo.api.book.CreateAuthorAJAXRequest;
 import app.bo.api.book.CreateAuthorAJAXResponse;
 import app.bo.api.book.CreateBookAJAXRequest;
@@ -26,7 +27,9 @@ import core.framework.api.web.service.PathParam;
  * @author Ethan
  */
 public interface BookAJAXWebService {
-    //TODO:get
+    @GET
+    @Path("/ajax/book/:id")
+    BookAJAXView get(@PathParam("id") Long id);
 
     @POST
     @Path("/ajax/book")
