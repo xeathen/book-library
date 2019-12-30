@@ -29,6 +29,7 @@ import app.book.domain.Category;
 import app.book.domain.Tag;
 import com.mongodb.ReadPreference;
 import com.mongodb.client.model.Filters;
+import core.framework.db.Database;
 import core.framework.db.Query;
 import core.framework.db.Repository;
 import core.framework.inject.Inject;
@@ -36,7 +37,10 @@ import core.framework.mongo.MongoCollection;
 import core.framework.util.Strings;
 import core.framework.web.exception.BadRequestException;
 import core.framework.web.exception.NotFoundException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -45,6 +49,7 @@ import java.util.stream.Collectors;
  * @author Ethan
  */
 public class BOBookService {
+    private final Logger logger = LoggerFactory.getLogger(BOBookService.class);
     @Inject
     Repository<Book> bookRepository;
     @Inject
@@ -55,6 +60,8 @@ public class BOBookService {
     Repository<Author> authorRepository;
     @Inject
     MongoCollection<BorrowedRecord> collection;
+    @Inject
+    Database database;
 
     public BookView get(Long bookId) {
         Optional<Book> book = bookRepository.get(bookId);
@@ -66,12 +73,8 @@ public class BOBookService {
 
     public BOSearchBookResponse search(BOSearchBookRequest request) {
         BOSearchBookResponse response = new BOSearchBookResponse();
-        Query<Book> query = bookRepository.select();
-        query.skip(request.skip);
-        query.limit(request.limit);
-        where(request, query);
-        response.books = query.fetch().stream().map(this::convert).collect(Collectors.toList());
-        response.total = query.count();
+        response.books = select(request);
+        response.total = response.books.size();
         return response;
     }
 
@@ -178,25 +181,45 @@ public class BOBookService {
         return response;
     }
 
-    private void where(BOSearchBookRequest request, Query<Book> query) {
+    private List<BookView> select(BOSearchBookRequest request) {
+        StringBuilder whereClause = new StringBuilder();
+        List<String> params = new ArrayList<>();
         if (!Strings.isBlank(request.name)) {
-            query.where("name like ?", Strings.format("%{}%", request.name));
+            where("books.name like ?", Strings.format("%{}%", request.name), whereClause, params);
         }
         if (!Strings.isBlank(request.author)) {
-            query.where("author like ?", Strings.format("%{}%", request.author));
-        }
-        if (!Strings.isBlank(request.pub)) {
-            query.where("pub like ?", Strings.format("%{}%", request.pub));
+            where("authors.name like ?", Strings.format("%{}%", request.author), whereClause, params);
         }
         if (!Strings.isBlank(request.category)) {
-            query.where("category like ?", Strings.format("%{}%", request.category));
+            where("categories.name like ?", Strings.format("%{}%", request.category), whereClause, params);
         }
         if (!Strings.isBlank(request.tag)) {
-            query.where("tag like ?", Strings.format("%{}%", request.tag));
+            where("tags.name like ?", Strings.format("%{}%", request.tag), whereClause, params);
+        }
+        if (!Strings.isBlank(request.pub)) {
+            where("books.pub like ?", Strings.format("%{}%", request.pub), whereClause, params);
         }
         if (!Strings.isBlank(request.description)) {
-            query.where("description like ?", Strings.format("%{}%", request.description));
+            where("books.description like ?", Strings.format("%{}%", request.description), whereClause, params);
         }
+        StringBuilder sql = new StringBuilder();
+        sql.append("SELECT `books`.`id` as `id`, `books`.`name` as `name`, `authors`.`name` as `author_name`,");
+        sql.append("`categories`.`name` as `category_name`, tags.`name` as `tag_name`, books.`pub`, books.`description` , books.`num`");
+        sql.append("FROM `books` join `categories` join tags join `authors`");
+        sql.append("on books.category_id = categories.id ");
+        sql.append("and tags.id = books.tag_id ");
+        sql.append("and `authors`.id = books.author_id ");
+        sql.append("where ");
+        sql.append(whereClause);
+        logger.debug("sql={}, params={}", sql.toString(), params.toArray());
+        return database.select(sql.toString(), BookView.class, params.toArray());
+    }
+
+    private void where(String condition, String param, StringBuilder whereClause, List<String> params) {
+        if (Strings.isBlank(condition)) throw new Error("condition must not be blank");
+        if (whereClause.length() > 0) whereClause.append(" AND ");
+        whereClause.append(condition);
+        params.add(param);
     }
 
     private Book convert(BOCreateBookRequest request) {

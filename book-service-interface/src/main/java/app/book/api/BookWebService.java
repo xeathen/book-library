@@ -21,7 +21,7 @@ import core.framework.api.web.service.PathParam;
 public interface BookWebService {
     @GET
     @Path("/book/:id")
-    GetBookResponse get(@PathParam("id") Long id);
+    GetBookResponse get(@PathParam("id") Long bookId);
 
     @GET
     @Path("/book")

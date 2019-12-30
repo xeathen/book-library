@@ -39,11 +39,13 @@ public class BOUserWebServiceImpl implements BOUserWebService {
 
     @Override
     public BOResetPasswordResponse resetPassword(Long id) {
+        ActionLogContext.put("user_id", id);
         return boUserService.resetPassword(id);
     }
 
     @Override
     public BOChangeStatusResponse changeStatus(Long id) {
+        ActionLogContext.put("user_id", id);
         return boUserService.changeStatus(id);
     }
 }

@@ -1,6 +1,5 @@
 package app.book.api.book;
 
-import core.framework.api.validate.Length;
 import core.framework.api.validate.NotNull;
 import core.framework.api.web.service.QueryParam;
 
@@ -20,7 +19,6 @@ public class BOSearchBookRequest {
     public String name;
 
     @QueryParam(name = "author")
-    @Length(max = 50)
     public String author;
 
     @QueryParam(name = "pub")

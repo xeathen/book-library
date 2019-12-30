@@ -10,6 +10,7 @@ import app.bo.api.user.UpdateUserAJAXRequest;
 import app.bo.api.user.UpdateUserAJAXResponse;
 import app.bo.user.service.UserService;
 import core.framework.inject.Inject;
+import core.framework.log.ActionLogContext;
 
 /**
  * @author Ethan
@@ -20,17 +21,23 @@ public class UserAJAXWebServiceImpl implements UserAJAXWebService {
 
     @Override
     public CreateUserAJAXResponse create(CreateUserAJAXRequest request) {
+        ActionLogContext.put("user_name", request.userName);
+        ActionLogContext.put("user_email", request.userEmail);
         return userService.create(request);
     }
 
     @Override
-    public DeleteUserAJAXResponse delete(Long id) {
-        return userService.delete(id);
+    public DeleteUserAJAXResponse delete(Long userId) {
+        ActionLogContext.put("user_id", userId);
+
+        return userService.delete(userId);
     }
 
     @Override
-    public UpdateUserAJAXResponse update(Long id, UpdateUserAJAXRequest request) {
-        return userService.update(id, request);
+    public UpdateUserAJAXResponse update(Long userId, UpdateUserAJAXRequest request) {
+        ActionLogContext.put("user_id", userId);
+        //TODO:更新
+        return userService.update(userId, request);
     }
 
     @Override

@@ -24,8 +24,8 @@ public class BookWebServiceImpl implements BookWebService {
     BookService bookService;
 
     @Override
-    public GetBookResponse get(Long id) {
-        return bookService.get(id);
+    public GetBookResponse get(Long bookId) {
+        return bookService.get(bookId);
     }
 
     @Override

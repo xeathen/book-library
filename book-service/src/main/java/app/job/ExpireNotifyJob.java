@@ -6,6 +6,7 @@ import app.book.domain.Reservation;
 import core.framework.db.Repository;
 import core.framework.inject.Inject;
 import core.framework.kafka.MessagePublisher;
+import core.framework.log.ActionLogContext;
 import core.framework.scheduler.Job;
 import core.framework.scheduler.JobContext;
 import core.framework.web.exception.NotFoundException;
@@ -26,14 +27,16 @@ public class ExpireNotifyJob implements Job {
 
     @Override
     public void execute(JobContext context) throws NotFoundException {
-        //        ActionLogContext.put();
+
         reservationRepository.select().fetch().forEach(reservation -> {
+            ActionLogContext.put("reservation_id", reservation.id);
+            ActionLogContext.put("user_id", reservation.userId);
+            ActionLogContext.put("book_id", reservation.bookId);
             Optional<Book> bookOptional = bookRepository.get(reservation.bookId);
             if (bookOptional.isEmpty()) {
                 throw new NotFoundException("book not found.");
             }
             if (reservation.reserveTime.plusDays(6).getDayOfMonth() == ZonedDateTime.now().getDayOfMonth()) {
-                System.out.println("I'm in");
                 ExpireMessage message = new ExpireMessage();
                 message.bookId = reservation.bookId;
                 message.userId = reservation.userId;

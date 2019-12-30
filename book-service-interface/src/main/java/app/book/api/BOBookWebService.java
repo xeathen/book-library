@@ -30,7 +30,7 @@ public interface BOBookWebService {
 
     @GET
     @Path("/bo/book/:id")
-    BookView get(@PathParam("id") Long id);
+    BookView get(@PathParam("id") Long bookId);
 
     @GET
     @Path("/bo/book")
@@ -66,7 +66,7 @@ public interface BOBookWebService {
 
     @PUT
     @Path("/bo/book/:id")
-    BOUpdateBookResponse update(@PathParam("id") Long id, BOUpdateBookRequest request);
+    BOUpdateBookResponse update(@PathParam("id") Long bookId, BOUpdateBookRequest request);
 
     @GET
     @Path("/bo/borrowed-record/:id")

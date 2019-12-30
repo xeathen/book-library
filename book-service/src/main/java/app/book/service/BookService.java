@@ -48,8 +48,8 @@ public class BookService {
     @Inject
     UserWebService userWebService;
 
-    public GetBookResponse get(Long id) {
-        Optional<Book> book = bookRepository.get(id);
+    public GetBookResponse get(Long bookId) {
+        Optional<Book> book = bookRepository.get(bookId);
         if (book.isEmpty()) {
             throw new NotFoundException("book not found", ErrorCodes.BOOK_NOT_FOUND);
         }
