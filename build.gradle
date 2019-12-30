@@ -76,8 +76,8 @@ configure([project(':back-office'),
     }
 }
 
-configure([project(':library-site'),
-           project(':library-site-interface')]) {
+configure([project(':website'),
+           project(':website-interface')]) {
     apply from: file("${rootDir}/gradle/app.gradle")
     dependencies {
         implementation "core.framework:core-ng:${coreNGVersion}"
@@ -117,9 +117,9 @@ project(':back-office') {
 }
 
 
-project(':library-site') {
+project(':website') {
     dependencies {
-        implementation project(':library-site-interface')
+        implementation project(':website-interface')
         implementation project(':book-service-interface')
         implementation project(':user-service-interface')
     }
