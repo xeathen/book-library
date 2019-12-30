@@ -50,9 +50,9 @@ public class BookService {
     @Inject
     BOBookWebService bookWebService;
 
-    public BookAJAXView get(Long id) {
+    public BookAJAXView get(Long bookId) {
         BookAJAXView ajaxView = new BookAJAXView();
-        convert(bookWebService.get(id), ajaxView);
+        convert(bookWebService.get(bookId), ajaxView);
         return ajaxView;
     }
 

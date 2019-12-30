@@ -31,8 +31,9 @@ public class BookAJAXWebServiceImpl implements BookAJAXWebService {
     BookService bookService;
 
     @Override
-    public BookAJAXView get(Long id) {
-        return bookService.get(id);
+    public BookAJAXView get(Long bookId) {
+        ActionLogContext.put("book_id", bookId);
+        return bookService.get(bookId);
     }
 
     @Override
@@ -52,14 +53,12 @@ public class BookAJAXWebServiceImpl implements BookAJAXWebService {
     @Override
     public CreateCategoryAJAXResponse createCategory(CreateCategoryAJAXRequest request) {
         ActionLogContext.put("category_name", request.categoryName);
-
         return bookService.createCategory(request);
     }
 
     @Override
     public CreateTagAJAXResponse createTag(CreateTagAJAXRequest request) {
         ActionLogContext.put("tag_name", request.tagName);
-
         return bookService.createTag(request);
     }
 
