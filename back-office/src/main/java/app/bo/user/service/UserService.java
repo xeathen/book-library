@@ -3,11 +3,13 @@ package app.bo.user.service;
 import app.bo.api.user.CreateUserAJAXRequest;
 import app.bo.api.user.CreateUserAJAXResponse;
 import app.bo.api.user.DeleteUserAJAXResponse;
+import app.bo.api.user.ResetPasswordAJAXResponse;
 import app.bo.api.user.UpdateUserAJAXRequest;
 import app.bo.api.user.UpdateUserAJAXResponse;
 import app.user.api.BOUserWebService;
 import app.user.api.user.BOCreateUserRequest;
 import app.user.api.user.BOCreateUserResponse;
+import app.user.api.user.BOResetPasswordResponse;
 import app.user.api.user.BOUpdateUserRequest;
 import app.user.api.user.BOUpdateUserResponse;
 import core.framework.inject.Inject;
@@ -40,6 +42,17 @@ public class UserService {
         convert(request, boRequest);
         convert(boUserWebService.update(id, boRequest), response);
         return response;
+    }
+
+    public ResetPasswordAJAXResponse resetPassword(Long id) {
+        ResetPasswordAJAXResponse response = new ResetPasswordAJAXResponse();
+        convert(boUserWebService.resetPassword(id), response);
+        return response;
+    }
+
+    private void convert(BOResetPasswordResponse boResponse, ResetPasswordAJAXResponse response) {
+        response.userId = boResponse.userId;
+        response.userName = boResponse.userName;
     }
 
     private void convert(CreateUserAJAXRequest ajaxRequest, BOCreateUserRequest boRequest) {

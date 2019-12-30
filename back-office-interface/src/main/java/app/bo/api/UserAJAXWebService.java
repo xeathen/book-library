@@ -1,5 +1,6 @@
 package app.bo.api;
 
+import app.bo.api.user.ResetPasswordAJAXResponse;
 import app.bo.api.user.CreateUserAJAXRequest;
 import app.bo.api.user.CreateUserAJAXResponse;
 import app.bo.api.user.DeleteUserAJAXResponse;
@@ -27,6 +28,9 @@ public interface UserAJAXWebService {
     @Path("/ajax/user/:id")
     UpdateUserAJAXResponse update(@PathParam("id") Long id, UpdateUserAJAXRequest request);
 
-    //TODO:resetPassword
+    @PUT
+    @Path("/ajax/user/password/:id")
+    ResetPasswordAJAXResponse resetPassword(@PathParam("id") Long id);
+
     //TODO:active/inactive
 }

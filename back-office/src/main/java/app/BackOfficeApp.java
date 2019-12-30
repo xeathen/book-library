@@ -18,7 +18,7 @@ public class BackOfficeApp extends App {
         http().gzip();
 //        http().access().denyFromFile("deny-ip-list.txt");
 //        http().route(HTTPMethod.POST, "/admin/login", new AdminLoginController());
-        http().intercept(bind(AdminLoginInterceptor.class));
-        site().session().timeout(Duration.ofHours(1));
+//        http().intercept(bind(AdminLoginInterceptor.class));
+//        site().session().timeout(Duration.ofHours(1));
     }
 }

@@ -4,6 +4,7 @@ import app.user.api.BOUserWebService;
 import app.user.api.user.BOCreateUserRequest;
 import app.user.api.user.BOCreateUserResponse;
 import app.user.api.user.BODeleteUserResponse;
+import app.user.api.user.BOResetPasswordResponse;
 import app.user.api.user.BOUpdateUserRequest;
 import app.user.api.user.BOUpdateUserResponse;
 import app.user.service.BOUserService;
@@ -33,5 +34,10 @@ public class BOUserWebServiceImpl implements BOUserWebService {
     public BODeleteUserResponse delete(Long id) {
         ActionLogContext.put("user_id", id);
         return boUserService.delete(id);
+    }
+
+    @Override
+    public BOResetPasswordResponse resetPassword(Long id) {
+        return boUserService.resetPassword(id);
     }
 }

@@ -19,7 +19,7 @@ public class UserService {
         return convert(user);
     }
 
-    public GetUserResponse convert(User user) {
+    private GetUserResponse convert(User user) {
         GetUserResponse response = new GetUserResponse();
         response.id = user.id;
         response.userName = user.userName;

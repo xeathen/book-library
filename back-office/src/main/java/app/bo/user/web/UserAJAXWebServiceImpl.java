@@ -1,6 +1,7 @@
 package app.bo.user.web;
 
 import app.bo.api.UserAJAXWebService;
+import app.bo.api.user.ResetPasswordAJAXResponse;
 import app.bo.api.user.CreateUserAJAXRequest;
 import app.bo.api.user.CreateUserAJAXResponse;
 import app.bo.api.user.DeleteUserAJAXResponse;
@@ -29,5 +30,10 @@ public class UserAJAXWebServiceImpl implements UserAJAXWebService {
     @Override
     public UpdateUserAJAXResponse update(Long id, UpdateUserAJAXRequest request) {
         return userService.update(id, request);
+    }
+
+    @Override
+    public ResetPasswordAJAXResponse resetPassword(Long id) {
+        return userService.resetPassword(id);
     }
 }

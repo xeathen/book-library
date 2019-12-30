@@ -3,6 +3,7 @@ package app.user.api;
 import app.user.api.user.BOCreateUserRequest;
 import app.user.api.user.BOCreateUserResponse;
 import app.user.api.user.BODeleteUserResponse;
+import app.user.api.user.BOResetPasswordResponse;
 import app.user.api.user.BOUpdateUserRequest;
 import app.user.api.user.BOUpdateUserResponse;
 import core.framework.api.web.service.DELETE;
@@ -26,4 +27,8 @@ public interface BOUserWebService {
     @PUT
     @Path("/bo/user/:id")
     BOUpdateUserResponse update(@PathParam("id") Long id, BOUpdateUserRequest request);
+
+    @PUT
+    @Path("/bo/user/password/:id")
+    BOResetPasswordResponse resetPassword(@PathParam("id") Long id);
 }
