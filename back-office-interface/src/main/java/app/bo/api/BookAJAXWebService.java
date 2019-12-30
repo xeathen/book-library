@@ -26,6 +26,8 @@ import core.framework.api.web.service.PathParam;
  * @author Ethan
  */
 public interface BookAJAXWebService {
+    //TODO:get
+
     @POST
     @Path("/ajax/book")
     CreateBookAJAXResponse create(CreateBookAJAXRequest request);

@@ -87,12 +87,13 @@ public class UserService {
     }
 
     private void convert(UpdateUserAJAXRequest ajaxRequest, BOUpdateUserRequest boRequest) {
-        boRequest.password = ajaxRequest.password;
-        boRequest.status = ajaxRequest.status == null ? null : UserStatusView.valueOf(boRequest.status.name());
+        boRequest.userName = ajaxRequest.userName;
+        boRequest.userEmail = ajaxRequest.userEmail;
     }
 
     private void convert(BOUpdateUserResponse boResponse, UpdateUserAJAXResponse ajaxResponse) {
         ajaxResponse.id = boResponse.id;
-        ajaxResponse.status = boResponse.status == null ? null : UserStatusAJAXView.valueOf(boResponse.status.name());
+        ajaxResponse.userName = boResponse.userName;
+        ajaxResponse.userEmail = boResponse.userEmail;
     }
 }

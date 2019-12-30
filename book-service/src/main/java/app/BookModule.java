@@ -41,8 +41,8 @@ public class BookModule extends Module {
         APIConfig api = api();
         api.client(UserWebService.class, requiredProperty("app.userWebService.URL"));
 
-        bind(BOBookService.class);
         bind(BookService.class);
+        bind(BOBookService.class);
         api.service(BookWebService.class, bind(BookWebServiceImpl.class));
         api.service(BOBookWebService.class, bind(BOBookWebServiceImpl.class));
     }

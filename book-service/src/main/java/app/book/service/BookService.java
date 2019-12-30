@@ -1,25 +1,29 @@
 package app.book.service;
 
 import app.ErrorCodes;
+import app.book.api.book.BookView;
 import app.book.api.book.BorrowBookRequest;
 import app.book.api.book.BorrowBookResponse;
 import app.book.api.book.BorrowedRecordView;
 import app.book.api.book.CreateReservationRequest;
 import app.book.api.book.CreateReservationResponse;
-import app.book.api.book.GetBookResponse;
 import app.book.api.book.ReturnBookRequest;
 import app.book.api.book.ReturnBookResponse;
 import app.book.api.book.SearchBookRequest;
 import app.book.api.book.SearchBookResponse;
 import app.book.api.book.SearchRecordResponse;
+import app.book.domain.Author;
 import app.book.domain.Book;
 import app.book.domain.BorrowedRecord;
+import app.book.domain.Category;
 import app.book.domain.Reservation;
+import app.book.domain.Tag;
 import app.user.api.UserWebService;
 import app.user.api.user.GetUserResponse;
 import app.user.api.user.UserStatusView;
 import com.mongodb.ReadPreference;
 import com.mongodb.client.model.Filters;
+import core.framework.db.Database;
 import core.framework.db.Query;
 import core.framework.db.Repository;
 import core.framework.inject.Inject;
@@ -42,13 +46,21 @@ public class BookService {
     @Inject
     Repository<Book> bookRepository;
     @Inject
+    Repository<Category> categoryRepository;
+    @Inject
+    Repository<Tag> tagRepository;
+    @Inject
+    Repository<Author> authorRepository;
+    @Inject
     Repository<Reservation> reservationRepository;
     @Inject
     MongoCollection<BorrowedRecord> mongoCollection;
     @Inject
     UserWebService userWebService;
+    @Inject
+    Database database;
 
-    public GetBookResponse get(Long bookId) {
+    public BookView get(Long bookId) {
         Optional<Book> book = bookRepository.get(bookId);
         if (book.isEmpty()) {
             throw new NotFoundException("book not found", ErrorCodes.BOOK_NOT_FOUND);
@@ -58,12 +70,8 @@ public class BookService {
 
     public SearchBookResponse search(SearchBookRequest request) {
         SearchBookResponse response = new SearchBookResponse();
-        Query<Book> query = bookRepository.select();
-        query.skip(request.skip);
-        query.limit(request.limit);
-        where(request, query);
-        response.books = query.fetch().stream().map(this::convert).collect(Collectors.toList());
-        response.total = query.count();
+        response.books = select(request);
+        response.total = response.books.size();
         return response;
     }
 
@@ -98,7 +106,7 @@ public class BookService {
             throw new BadRequestException("no book rest.");
         }
         if (ZonedDateTime.now().isAfter(request.returnTime)) {
-            throw new BadRequestException("returnTime is after than now");
+            throw new BadRequestException("returnTime is past");
         }
         BorrowedRecord borrowedRecord = new BorrowedRecord();
         borrowedRecord.id = UUID.randomUUID().toString();
@@ -141,7 +149,6 @@ public class BookService {
         borrowedBook.id = request.bookId;
         borrowedBook.num = num + 1;
         bookRepository.partialUpdate(borrowedBook);
-
         return response;
     }
 
@@ -157,31 +164,53 @@ public class BookService {
         Reservation reservation = new Reservation();
         reservation.userId = request.userId;
         reservation.bookId = request.bookId;
+        reservation.reserveTime = ZonedDateTime.now();
         reservationRepository.insert(reservation);
         response.userId = request.userId;
+        response.userName = userWebService.get(request.userId).userName;
         response.bookId = request.bookId;
+        response.bookName = bookRepository.get(request.bookId).orElseThrow().name;
         return response;
     }
 
-    private void where(SearchBookRequest request, Query<Book> query) {
+    private List<BookView> select(SearchBookRequest request) {
+        StringBuilder whereClause = new StringBuilder();
+        List<String> params = new ArrayList<>();
         if (!Strings.isBlank(request.name)) {
-            query.where("name like ?", Strings.format("%{}%", request.name));
+            where("books.name like ?", Strings.format("%{}%", request.name), whereClause, params);
         }
         if (!Strings.isBlank(request.author)) {
-            query.where("author like ?", Strings.format("%{}%", request.author));
-        }
-        if (!Strings.isBlank(request.pub)) {
-            query.where("pub like ?", Strings.format("%{}%", request.pub));
+            where("authors.name like ?", Strings.format("%{}%", request.author), whereClause, params);
         }
         if (!Strings.isBlank(request.category)) {
-            query.where("category like ?", Strings.format("%{}%", request.category));
+            where("categories.name like ?", Strings.format("%{}%", request.category), whereClause, params);
         }
         if (!Strings.isBlank(request.tag)) {
-            query.where("tag like ?", Strings.format("%{}%", request.tag));
+            where("tags.name like ?", Strings.format("%{}%", request.tag), whereClause, params);
+        }
+        if (!Strings.isBlank(request.pub)) {
+            where("books.pub like ?", Strings.format("%{}%", request.pub), whereClause, params);
         }
         if (!Strings.isBlank(request.description)) {
-            query.where("description like ?", Strings.format("%{}%", request.description));
+            where("books.description like ?", Strings.format("%{}%", request.description), whereClause, params);
         }
+        StringBuilder sql = new StringBuilder();
+        sql.append("SELECT `books`.`id` as `id`, `books`.`name` as `name`, `authors`.`name` as `author_name`,");
+        sql.append("`categories`.`name` as `category_name`, tags.`name` as `tag_name`, books.`pub`, books.`description` , books.`num`");
+        sql.append("FROM `books` join `categories` join tags join `authors`");
+        sql.append("on books.category_id = categories.id ");
+        sql.append("and tags.id = books.tag_id ");
+        sql.append("and `authors`.id = books.author_id ");
+        sql.append("where ");
+        sql.append(whereClause);
+        return database.select(sql.toString(), BookView.class, params.toArray());
+    }
+
+    private void where(String condition, String param, StringBuilder whereClause, List<String> params) {
+        if (Strings.isBlank(condition)) throw new Error("condition must not be blank");
+        if (whereClause.length() > 0) whereClause.append(" AND ");
+        whereClause.append(condition);
+        params.add(param);
     }
 
     private Boolean isReturned(Long userId, Long bookId) {
@@ -201,13 +230,16 @@ public class BookService {
         return mongoCollection.find(query);
     }
 
-    private GetBookResponse convert(Book book) {
-        GetBookResponse response = new GetBookResponse();
+    private BookView convert(Book book) {
+        BookView response = new BookView();
         response.id = book.id;
         response.name = book.name;
-        response.authorId = book.authorId;
-        response.categoryId = book.categoryId;
-        response.tagId = book.tagId;
+        response.categoryName = categoryRepository.get(book.categoryId).orElseThrow(() ->
+            new NotFoundException("category not found", ErrorCodes.CATEGORY_NOT_FOUND)).name;
+        response.tagName = tagRepository.get(book.tagId).orElseThrow(() ->
+            new NotFoundException("tag not found", ErrorCodes.TAG_NOT_FOUND)).name;
+        response.authorName = authorRepository.get(book.authorId).orElseThrow(() ->
+            new NotFoundException("author not found", ErrorCodes.AUTHOR_NOT_FOUND)).name;
         response.pub = book.pub;
         response.description = book.description;
         response.num = book.num;

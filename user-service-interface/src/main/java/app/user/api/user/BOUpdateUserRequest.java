@@ -6,9 +6,9 @@ import core.framework.api.json.Property;
  * @author Ethan
  */
 public class BOUpdateUserRequest {
-    @Property(name = "password")
-    public String password;
+    @Property(name = "user_name")
+    public String userName;
 
-    @Property(name = "status")
-    public UserStatusView status;
+    @Property(name = "user_email")
+    public String userEmail;
 }

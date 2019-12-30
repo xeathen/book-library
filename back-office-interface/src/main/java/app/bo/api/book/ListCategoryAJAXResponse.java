@@ -12,5 +12,5 @@ public class ListCategoryAJAXResponse {
     public Integer total;
 
     @Property(name = "categories")
-    public List<CategoryView> categories;
+    public List<CategoryAJAXView> categories;
 }

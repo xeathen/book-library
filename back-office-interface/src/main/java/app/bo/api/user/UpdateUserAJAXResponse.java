@@ -9,6 +9,9 @@ public class UpdateUserAJAXResponse {
     @Property(name = "id")
     public Long id;
 
-    @Property(name = "status")
-    public UserStatusAJAXView status;
+    @Property(name = "user_name")
+    public String userName;
+
+    @Property(name = "user_email")
+    public String userEmail;
 }

@@ -2,7 +2,6 @@ import core.framework.mongo.MongoMigration;
 import org.bson.Document;
 
 import static com.mongodb.client.model.Indexes.ascending;
-import static com.mongodb.client.model.Indexes.compoundIndex;
 
 /**
  * @author Ethan
@@ -16,7 +15,8 @@ public class Main {
 
         migration = new MongoMigration("sys.properties");
         migration.migrate(mongo -> {
-            mongo.createIndex("borrowed_records", compoundIndex(ascending("user_id", "book_id")));
+            mongo.createIndex("borrowed_records", ascending("user_id"));
+            mongo.createIndex("borrowed_records", ascending("book_id"));
             mongo.createIndex("borrowed_records", ascending("user_name"));
             mongo.createIndex("borrowed_records", ascending("book_name"));
             mongo.createIndex("borrowed_records", ascending("user_name"));

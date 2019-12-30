@@ -12,5 +12,5 @@ public class SearchBookResponse {
     public Integer total;
 
     @Property(name = "books")
-    public List<GetBookResponse> books;
+    public List<BookView> books;
 }

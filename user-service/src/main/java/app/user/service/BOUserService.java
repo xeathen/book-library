@@ -42,13 +42,22 @@ public class BOUserService {
     }
 
     public BOUpdateUserResponse update(Long id, BOUpdateUserRequest request) {
-        checkUser(id);
+        User user = checkUser(id);
         BOUpdateUserResponse response = new BOUpdateUserResponse();
-        User user = convert(request);
-        user.id = id;
-        userRepository.partialUpdate(user);
+        User temp = convert(request);
+        temp.id = id;
+        userRepository.partialUpdate(temp);
         response.id = id;
-        response.status = request.status;
+        if (request.userName != null) {
+            response.userName = request.userName;
+        } else {
+            response.userName = user.userName;
+        }
+        if (request.userEmail != null) {
+            response.userEmail = request.userEmail;
+        } else {
+            response.userEmail = user.userEmail;
+        }
         return response;
     }
 
@@ -99,8 +108,8 @@ public class BOUserService {
 
     private User convert(BOUpdateUserRequest request) {
         User user = new User();
-        user.password = request.password;
-        user.status = request.status == null ? null : UserStatus.valueOf(request.status.name());
+        user.userName = request.userName;
+        user.userEmail = request.userEmail;
         return user;
     }
 

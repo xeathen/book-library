@@ -3,23 +3,23 @@ package app.library.api.book;
 import core.framework.api.json.Property;
 
 /**
- * @author Ethan
+ * @author xeathen
  */
-public class GetBookAJAXResponse {
+public class BookAJAXView {
     @Property(name = "id")
     public Long id;
 
     @Property(name = "name")
     public String name;
 
-    @Property(name = "author_id")
-    public Integer authorId;
+    @Property(name = "author_name")
+    public String authorName;
 
-    @Property(name = "category_id")
-    public Integer categoryId;
+    @Property(name = "category_name")
+    public String categoryName;
 
-    @Property(name = "tag")
-    public Integer tagId;
+    @Property(name = "tag_id")
+    public String tagName;
 
     @Property(name = "pub")
     public String pub;

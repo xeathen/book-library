@@ -5,7 +5,7 @@ import core.framework.api.json.Property;
 /**
  * @author xeathen
  */
-public class AuthorView {
+public class AuthorAJAXView {
     @Property(name = "author_id")
     public Integer authorId;
 

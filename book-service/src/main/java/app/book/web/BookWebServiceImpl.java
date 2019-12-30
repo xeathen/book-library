@@ -1,11 +1,11 @@
 package app.book.web;
 
 import app.book.api.BookWebService;
+import app.book.api.book.BookView;
 import app.book.api.book.BorrowBookRequest;
 import app.book.api.book.BorrowBookResponse;
 import app.book.api.book.CreateReservationRequest;
 import app.book.api.book.CreateReservationResponse;
-import app.book.api.book.GetBookResponse;
 import app.book.api.book.ReturnBookRequest;
 import app.book.api.book.ReturnBookResponse;
 import app.book.api.book.SearchBookRequest;
@@ -24,7 +24,7 @@ public class BookWebServiceImpl implements BookWebService {
     BookService bookService;
 
     @Override
-    public GetBookResponse get(Long bookId) {
+    public BookView get(Long bookId) {
         return bookService.get(bookId);
     }
 

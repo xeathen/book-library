@@ -12,5 +12,5 @@ public class ListTagAJAXResponse {
     public Integer total;
 
     @Property(name = "tags")
-    public List<TagView> tags;
+    public List<TagAJAXView> tags;
 }

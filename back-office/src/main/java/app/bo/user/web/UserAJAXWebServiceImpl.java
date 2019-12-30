@@ -41,12 +41,14 @@ public class UserAJAXWebServiceImpl implements UserAJAXWebService {
     }
 
     @Override
-    public ResetPasswordAJAXResponse resetPassword(Long id) {
-        return userService.resetPassword(id);
+    public ResetPasswordAJAXResponse resetPassword(Long userId) {
+        ActionLogContext.put("user_id", userId);
+        return userService.resetPassword(userId);
     }
 
     @Override
-    public ChangeStatusAJAXResponse changeStatus(Long id) {
-        return userService.changeStatus(id);
+    public ChangeStatusAJAXResponse changeStatus(Long userId) {
+        ActionLogContext.put("user_id", userId);
+        return userService.changeStatus(userId);
     }
 }

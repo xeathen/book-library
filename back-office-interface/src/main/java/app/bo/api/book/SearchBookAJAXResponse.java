@@ -12,5 +12,5 @@ public class SearchBookAJAXResponse {
     public Integer total;
 
     @Property(name = "books")
-    public List<BookView> books;
+    public List<BookAJAXView> books;
 }

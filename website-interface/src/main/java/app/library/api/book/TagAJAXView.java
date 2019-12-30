@@ -1,11 +1,11 @@
-package app.bo.api.book;
+package app.library.api.book;
 
 import core.framework.api.json.Property;
 
 /**
  * @author xeathen
  */
-public class TagView {
+public class TagAJAXView {
     @Property(name = "tag_id")
     public Integer tagId;
 

@@ -5,14 +5,13 @@ import core.framework.api.json.Property;
 /**
  * @author xeathen
  */
-public class BookView {
+public class BookAJAXView {
     @Property(name = "id")
     public Long id;
 
     @Property(name = "name")
     public String name;
 
-    //TODO:name
     @Property(name = "author_name")
     public String authorName;
 
