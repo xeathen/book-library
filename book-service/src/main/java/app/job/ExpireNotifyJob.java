@@ -38,6 +38,10 @@ public class ExpireNotifyJob implements Job {
             if (bookOptional.isEmpty()) {
                 throw new NotFoundException("book not found.");
             }
+            if (ZonedDateTime.now().isAfter(reservation.reserveTime.plusDays(7))) {
+                reservationRepository.delete(reservation.id);
+                return;
+            }
             if (reservation.reserveTime.plusDays(6).getDayOfMonth() == ZonedDateTime.now().getDayOfMonth()) {
                 logger.info("publish message, userId={}, bookId={}", reservation.userId, reservation.bookId);
                 ExpireMessage message = new ExpireMessage();

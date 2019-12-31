@@ -1,5 +1,6 @@
 package app.book.domain;
 
+import core.framework.api.validate.NotNull;
 import core.framework.db.Column;
 import core.framework.db.PrimaryKey;
 import core.framework.db.Table;
@@ -13,6 +14,7 @@ public class Category {
     @Column(name = "id")
     public Integer id;
 
+    @NotNull
     @Column(name = "name")
     public String name;
 }

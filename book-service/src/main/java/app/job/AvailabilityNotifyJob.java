@@ -13,7 +13,6 @@ import core.framework.web.exception.NotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.time.ZonedDateTime;
 import java.util.Optional;
 
 /**
@@ -37,10 +36,6 @@ public class AvailabilityNotifyJob implements Job {
             Optional<Book> bookOptional = bookRepository.get(reservation.bookId);
             if (bookOptional.isEmpty()) {
                 throw new NotFoundException("book not found.");
-            }
-            if (ZonedDateTime.now().isAfter(reservation.reserveTime.plusDays(7))) {
-                reservationRepository.delete(reservation.id);
-                return;
             }
             Book book = bookOptional.get();
             if (book.num > 0) {

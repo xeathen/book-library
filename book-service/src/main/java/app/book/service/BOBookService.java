@@ -27,7 +27,6 @@ import app.book.domain.Book;
 import app.book.domain.BorrowedRecord;
 import app.book.domain.Category;
 import app.book.domain.Tag;
-import com.mongodb.ReadPreference;
 import com.mongodb.client.model.Filters;
 import core.framework.db.Database;
 import core.framework.db.Query;
@@ -171,7 +170,6 @@ public class BOBookService {
         BOSearchRecordResponse response = new BOSearchRecordResponse();
         core.framework.mongo.Query query = new core.framework.mongo.Query();
         query.filter = Filters.eq("book_id", bookId);
-        query.readPreference = ReadPreference.secondaryPreferred();
         List<BorrowedRecord> borrowedRecordList = collection.find(query);
         response.borrowedRecords = borrowedRecordList.stream().map(this::convert).collect(Collectors.toList());
         response.total = borrowedRecordList.size();

@@ -20,14 +20,14 @@ public class UserService {
     Repository<User> userRepository;
 
     public UserView get(Long id) {
-        User user = userRepository.get(id).orElseThrow(() -> new NotFoundException("user not found, id=" + id, ErrorCodes.USER_NOT_FOUND));
+        User user = userRepository.get(id).orElseThrow(() -> new NotFoundException("User not found, id=" + id, ErrorCodes.USER_NOT_FOUND));
         return convert(user);
     }
 
     public UserLoginResponse login(UserLoginRequest request) {
         Query<User> query = userRepository.select();
         query.where("user_name = ?", request.userName);
-        User user = query.fetchOne().orElseThrow(() -> new NotFoundException("user not found", ErrorCodes.USER_NOT_FOUND));
+        User user = query.fetchOne().orElseThrow(() -> new NotFoundException("User not found", ErrorCodes.USER_NOT_FOUND));
         if (!user.password.equals(request.password)) {
             throw new ConflictException("Wrong password.", ErrorCodes.WRONG_PASSWORD);
         } else {
