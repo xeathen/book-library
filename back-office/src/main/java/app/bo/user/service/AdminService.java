@@ -14,7 +14,7 @@ public class AdminService {
         if (Strings.isBlank(request.userName)) {
             throw new BadRequestException("username can not be blank.");
         }
-        if (("admin").equals(request.userName) && "admin".equals(request.password)) {
+        if ("admin".equals(request.userName) && "admin".equals(request.password)) {
             AdminLoginResponse response = new AdminLoginResponse();
             response.userId = 1L;
             response.userName = "admin";

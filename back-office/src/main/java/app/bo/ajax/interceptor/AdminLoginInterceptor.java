@@ -17,7 +17,7 @@ public class AdminLoginInterceptor implements Interceptor {
     @Override
     public Response intercept(Invocation invocation) throws Exception {
         String path = invocation.context().request().path();
-        logger.warn("path:" + path);
+        logger.info("path:" + path);
         Optional<String> userIdOptional = invocation.context().request().session().get("adminId");
         if (!"/ajax/admin/login".equals(path) && userIdOptional.isEmpty()) {
             return Response.text("You should login first.");

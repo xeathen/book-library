@@ -116,7 +116,7 @@ public class BookService {
         borrowedRecord.bookName = book.orElseThrow(() -> new NotFoundException("book not found", ErrorCodes.BOOK_NOT_FOUND)).name;
         borrowedRecord.borrowTime = ZonedDateTime.now();
         borrowedRecord.returnTime = request.returnTime;
-        borrowedRecord.isReturned = false;
+        borrowedRecord.isReturned = Boolean.FALSE;
 
         mongoCollection.insert(borrowedRecord);
         Integer num = bookRepository.get(request.bookId).get().num;
@@ -136,7 +136,7 @@ public class BookService {
         List<BorrowedRecord> borrowedRecordList = getNotReturnedRecordList(request.userId, request.bookId);
         BorrowedRecord record = borrowedRecordList.get(0);
         record.returnTime = ZonedDateTime.now();
-        record.isReturned = true;
+        record.isReturned = Boolean.TRUE;
         mongoCollection.replace(record);
         response.userId = request.userId;
         response.userName = record.userName;
@@ -212,16 +212,16 @@ public class BookService {
     private Boolean isReturned(Long userId, Long bookId) {
         List<BorrowedRecord> borrowedRecordList = getNotReturnedRecordList(userId, bookId);
         if (!borrowedRecordList.isEmpty()) {
-            return false;
+            return Boolean.FALSE;
         }
-        return true;
+        return Boolean.TRUE;
     }
 
     private List<BorrowedRecord> getNotReturnedRecordList(Long userId, Long bookId) {
         core.framework.mongo.Query query = new core.framework.mongo.Query();
         query.filter = Filters.and(Filters.eq("book_id", bookId),
             Filters.eq("user_id", userId),
-            Filters.eq("is_returned", false));
+            Filters.eq("is_returned", Boolean.FALSE));
         query.readPreference = ReadPreference.secondaryPreferred();
         return mongoCollection.find(query);
     }
