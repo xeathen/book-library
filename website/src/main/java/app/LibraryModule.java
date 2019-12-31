@@ -29,8 +29,5 @@ public class LibraryModule extends Module {
         api.service(UserAJAXWebService.class, bind(UserAJAXWebServiceImpl.class));
         api.service(BookAJAXWebService.class, bind(BookAJAXWebServiceImpl.class));
         api.service(UserBorrowAJAXWebService.class, bind(UserBorrowAJAXWebServiceImpl.class));
-
-//        http().intercept(bind(UserLoginInterceptor.class));
-//        site().session().timeout(Duration.ofHours(1));
     }
 }

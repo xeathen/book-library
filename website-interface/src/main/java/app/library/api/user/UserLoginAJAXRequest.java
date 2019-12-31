@@ -1,13 +1,13 @@
-package app.bo.api.book;
+package app.library.api.user;
 
 import core.framework.api.json.Property;
 import core.framework.api.validate.NotBlank;
 import core.framework.api.validate.NotNull;
 
 /**
- * @author xeathen
+ * @author Ethan
  */
-public class AdminLoginRequest {
+public class UserLoginAJAXRequest {
     @NotNull
     @NotBlank
     @Property(name = "user_name")

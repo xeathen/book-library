@@ -10,6 +10,8 @@ import core.framework.log.ActionLogContext;
 import core.framework.scheduler.Job;
 import core.framework.scheduler.JobContext;
 import core.framework.web.exception.NotFoundException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.time.ZonedDateTime;
 import java.util.Optional;
@@ -18,6 +20,7 @@ import java.util.Optional;
  * @author Ethan
  */
 public class ExpireNotifyJob implements Job {
+    private final Logger logger = LoggerFactory.getLogger(ExpireNotifyJob.class);
     @Inject
     Repository<Reservation> reservationRepository;
     @Inject
@@ -36,6 +39,7 @@ public class ExpireNotifyJob implements Job {
                 throw new NotFoundException("book not found.");
             }
             if (reservation.reserveTime.plusDays(6).getDayOfMonth() == ZonedDateTime.now().getDayOfMonth()) {
+                logger.info("publish message, userId={}, bookId={}", reservation.userId, reservation.bookId);
                 ExpireMessage message = new ExpireMessage();
                 message.bookId = reservation.bookId;
                 message.userId = reservation.userId;

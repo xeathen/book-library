@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory;
  * @author Ethan
  */
 public class ExpireMassageHandler implements MessageHandler<ExpireMessage> {
-    private final Logger logger = LoggerFactory.getLogger(ReservationMessageHandler.class);
+    private final Logger logger = LoggerFactory.getLogger(ExpireMassageHandler.class);
     @Inject
     UserWebService userWebService;
 

@@ -17,12 +17,12 @@ public class AdminLoginController implements Controller {
 
     @Override
     public Response execute(Request request) throws Exception {
-        if (!request.session().get("adminId").isEmpty()) {
+        if (request.session().get("adminId").isPresent()) {
             return Response.text("you login already.");
         } else {
             AdminLoginRequest adminLoginRequest = request.bean(AdminLoginRequest.class);
             AdminLoginResponse adminLoginResponse = adminService.login(adminLoginRequest);
-            request.session().set("adminId", adminLoginResponse.userId);
+            request.session().set("adminId", adminLoginResponse.userId.toString());
             return Response.bean(adminLoginResponse);
         }
     }

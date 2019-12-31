@@ -10,6 +10,8 @@ import core.framework.log.ActionLogContext;
 import core.framework.scheduler.Job;
 import core.framework.scheduler.JobContext;
 import core.framework.web.exception.NotFoundException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.time.ZonedDateTime;
 import java.util.Optional;
@@ -18,6 +20,7 @@ import java.util.Optional;
  * @author Ethan
  */
 public class AvailabilityNotifyJob implements Job {
+    private final Logger logger = LoggerFactory.getLogger(AvailabilityNotifyJob.class);
     @Inject
     Repository<Reservation> reservationRepository;
     @Inject
@@ -41,6 +44,7 @@ public class AvailabilityNotifyJob implements Job {
             }
             Book book = bookOptional.get();
             if (book.num > 0) {
+                logger.info("publish message, userId={}, bookId={}", reservation.userId, reservation.bookId);
                 ReservationMessage message = new ReservationMessage();
                 message.userId = reservation.userId;
                 message.bookId = reservation.bookId;

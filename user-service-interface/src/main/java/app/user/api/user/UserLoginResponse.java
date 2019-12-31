@@ -1,12 +1,12 @@
-package app.bo.api.book;
+package app.user.api.user;
 
 import core.framework.api.json.Property;
 
 /**
- * @author xeathen
+ * @author Ethan
  */
-public class AdminLoginResponse {
-    @Property(name = "id")
+public class UserLoginResponse {
+    @Property(name = "user_id")
     public Long userId;
 
     @Property(name = "user_name")

@@ -1,7 +1,10 @@
 package app.library.api;
 
 import app.library.api.user.GetUserAJAXResponse;
+import app.library.api.user.UserLoginAJAXRequest;
+import app.library.api.user.UserLoginAJAXResponse;
 import core.framework.api.web.service.GET;
+import core.framework.api.web.service.POST;
 import core.framework.api.web.service.Path;
 import core.framework.api.web.service.PathParam;
 
@@ -14,7 +17,7 @@ public interface UserAJAXWebService {
     GetUserAJAXResponse get(@PathParam("id") Long id);
 
     //TODO:login
-//    @POST
-//    @Path()
-//    UserLoginResponse login()
+    @POST
+    @Path("/ajax/user/login")
+    UserLoginAJAXResponse login(UserLoginAJAXRequest request);
 }
