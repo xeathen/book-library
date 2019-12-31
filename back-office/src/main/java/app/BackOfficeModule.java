@@ -17,8 +17,8 @@ import core.framework.module.Module;
 public class BackOfficeModule extends Module {
     @Override
     protected void initialize() {
-        api().client(BOUserWebService.class, requiredProperty("app.userWebAJAXService.URL"));
-        api().client(BOBookWebService.class, requiredProperty("app.bookWebAJAXService.URL"));
+        api().client(BOUserWebService.class, requiredProperty("app.user.serviceURL"));
+        api().client(BOBookWebService.class, requiredProperty("app.book.serviceURL"));
 
         bind(UserService.class);
         bind(BookService.class);

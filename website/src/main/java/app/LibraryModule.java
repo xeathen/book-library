@@ -20,8 +20,8 @@ public class LibraryModule extends Module {
     @Override
     protected void initialize() {
         APIConfig api = api();
-        api.client(UserWebService.class, requiredProperty("app.userWebAJAXService.URL"));
-        api.client(BookWebService.class, requiredProperty("app.bookWebAJAXService.URL"));
+        api.client(UserWebService.class, requiredProperty("app.user.serviceURL"));
+        api.client(BookWebService.class, requiredProperty("app.book.serviceURL"));
 
         bind(UserService.class);
         bind(BookService.class);

@@ -23,7 +23,7 @@ public class BackOfficeApp extends App {
         http().bean(AdminLoginRequest.class);
         http().bean(AdminLoginResponse.class);
         site().session().local();
-        site().session().timeout(Duration.ofHours(5));
+        site().session().timeout(Duration.ofMinutes(5));
         http().route(HTTPMethod.POST, "/ajax/admin/login", bind(AdminLoginController.class));
         http().intercept(bind(AdminLoginInterceptor.class));
     }

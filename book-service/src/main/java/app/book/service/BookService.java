@@ -62,9 +62,7 @@ public class BookService {
 
     public BookView get(Long bookId) {
         Optional<Book> book = bookRepository.get(bookId);
-        if (book.isEmpty()) {
-            throw new NotFoundException("book not found", ErrorCodes.BOOK_NOT_FOUND);
-        }
+        book.orElseThrow(() -> new NotFoundException("book not found", ErrorCodes.BOOK_NOT_FOUND));
         return convert(book.get());
     }
 
