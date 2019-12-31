@@ -1,6 +1,6 @@
 package app;
 
-import app.library.interceptor.UserLoginInterceptor;
+import app.web.user.web.interceptor.UserLoginInterceptor;
 import core.framework.module.App;
 import core.framework.module.SystemModule;
 

@@ -9,6 +9,6 @@ public class BOCreateTagResponse {
     @Property(name = "id")
     public Integer id;
 
-    @Property(name = "name")
+    @Property(name = "tag_name")
     public String tagName;
 }

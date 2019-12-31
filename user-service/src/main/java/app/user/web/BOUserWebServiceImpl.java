@@ -5,6 +5,7 @@ import app.user.api.user.BOChangeStatusResponse;
 import app.user.api.user.BOCreateUserRequest;
 import app.user.api.user.BOCreateUserResponse;
 import app.user.api.user.BODeleteUserResponse;
+import app.user.api.user.BOListUserResponse;
 import app.user.api.user.BOResetPasswordResponse;
 import app.user.api.user.BOUpdateUserRequest;
 import app.user.api.user.BOUpdateUserResponse;
@@ -18,6 +19,11 @@ import core.framework.log.ActionLogContext;
 public class BOUserWebServiceImpl implements BOUserWebService {
     @Inject
     BOUserService boUserService;
+
+    @Override
+    public BOListUserResponse listUser() {
+        return boUserService.listUser();
+    }
 
     @Override
     public BOCreateUserResponse create(BOCreateUserRequest request) {

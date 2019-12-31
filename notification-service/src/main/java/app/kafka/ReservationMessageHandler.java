@@ -2,7 +2,7 @@ package app.kafka;
 
 import app.book.api.kafka.ReservationMessage;
 import app.user.api.UserWebService;
-import app.user.api.user.GetUserResponse;
+import app.user.api.user.UserView;
 import core.framework.inject.Inject;
 import core.framework.kafka.MessageHandler;
 import core.framework.log.ActionLogContext;
@@ -21,7 +21,7 @@ public class ReservationMessageHandler implements MessageHandler<ReservationMess
     public void handle(String key, ReservationMessage value) {
         ActionLogContext.put("user_id", value.userId);
         ActionLogContext.put("book_id", value.bookId);
-        GetUserResponse user = userWebService.get(value.userId);
+        UserView user = userWebService.get(value.userId);
         logger.info("sending email, userName={},userEmail={}", user.userName, user.userEmail);
     }
 }

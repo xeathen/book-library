@@ -1,14 +1,15 @@
 package app.user.service;
 
 import app.user.ErrorCodes;
-import app.user.api.user.GetUserResponse;
 import app.user.api.user.UserLoginRequest;
 import app.user.api.user.UserLoginResponse;
 import app.user.api.user.UserStatusView;
+import app.user.api.user.UserView;
 import app.user.domain.User;
 import core.framework.db.Query;
 import core.framework.db.Repository;
 import core.framework.inject.Inject;
+import core.framework.web.exception.ConflictException;
 import core.framework.web.exception.NotFoundException;
 
 /**
@@ -18,7 +19,7 @@ public class UserService {
     @Inject
     Repository<User> userRepository;
 
-    public GetUserResponse get(Long id) {
+    public UserView get(Long id) {
         User user = userRepository.get(id).orElseThrow(() -> new NotFoundException("user not found, id=" + id, ErrorCodes.USER_NOT_FOUND));
         return convert(user);
     }
@@ -26,16 +27,19 @@ public class UserService {
     public UserLoginResponse login(UserLoginRequest request) {
         Query<User> query = userRepository.select();
         query.where("user_name = ?", request.userName);
-        query.where("password = ?", request.password);
         User user = query.fetchOne().orElseThrow(() -> new NotFoundException("user not found", ErrorCodes.USER_NOT_FOUND));
-        UserLoginResponse response = new UserLoginResponse();
-        response.userId = user.id;
-        response.userName = user.userName;
-        return response;
+        if (!user.password.equals(request.password)) {
+            throw new ConflictException("Wrong password.", ErrorCodes.WRONG_PASSWORD);
+        } else {
+            UserLoginResponse response = new UserLoginResponse();
+            response.userId = user.id;
+            response.userName = user.userName;
+            return response;
+        }
     }
 
-    private GetUserResponse convert(User user) {
-        GetUserResponse response = new GetUserResponse();
+    private UserView convert(User user) {
+        UserView response = new UserView();
         response.id = user.id;
         response.userName = user.userName;
         response.userEmail = user.userEmail;

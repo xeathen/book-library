@@ -1,15 +1,15 @@
 package app;
 
 import app.book.api.BookWebService;
-import app.library.api.BookAJAXWebService;
-import app.library.api.UserAJAXWebService;
-import app.library.api.UserBorrowAJAXWebService;
-import app.library.book.service.BookService;
-import app.library.book.web.BookAJAXWebServiceImpl;
-import app.library.book.web.UserBorrowAJAXWebServiceImpl;
-import app.library.user.service.UserService;
-import app.library.user.web.UserAJAXWebServiceImpl;
 import app.user.api.UserWebService;
+import app.web.api.BookAJAXWebService;
+import app.web.api.UserAJAXWebService;
+import app.web.api.UserBorrowAJAXWebService;
+import app.web.book.service.BookService;
+import app.web.book.web.BookAJAXWebServiceImpl;
+import app.web.book.web.UserBorrowAJAXWebServiceImpl;
+import app.web.user.service.UserService;
+import app.web.user.web.UserAJAXWebServiceImpl;
 import core.framework.module.APIConfig;
 import core.framework.module.Module;
 

@@ -1,7 +1,7 @@
 package app.bo.user.service;
 
-import app.bo.api.book.AdminLoginRequest;
-import app.bo.api.book.AdminLoginResponse;
+import app.bo.api.user.AdminLoginRequest;
+import app.bo.api.user.AdminLoginResponse;
 import core.framework.util.Strings;
 import core.framework.web.exception.BadRequestException;
 

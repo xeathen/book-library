@@ -4,19 +4,25 @@ import app.bo.api.user.ChangeStatusAJAXResponse;
 import app.bo.api.user.CreateUserAJAXRequest;
 import app.bo.api.user.CreateUserAJAXResponse;
 import app.bo.api.user.DeleteUserAJAXResponse;
+import app.bo.api.user.ListUserAJAXResponse;
 import app.bo.api.user.ResetPasswordAJAXResponse;
 import app.bo.api.user.UpdateUserAJAXRequest;
 import app.bo.api.user.UpdateUserAJAXResponse;
+import app.bo.api.user.UserAJAXView;
 import app.bo.api.user.UserStatusAJAXView;
 import app.user.api.BOUserWebService;
 import app.user.api.user.BOChangeStatusResponse;
 import app.user.api.user.BOCreateUserRequest;
 import app.user.api.user.BOCreateUserResponse;
+import app.user.api.user.BOListUserResponse;
 import app.user.api.user.BOResetPasswordResponse;
 import app.user.api.user.BOUpdateUserRequest;
 import app.user.api.user.BOUpdateUserResponse;
 import app.user.api.user.UserStatusView;
 import core.framework.inject.Inject;
+import core.framework.web.exception.BadRequestException;
+
+import java.util.stream.Collectors;
 
 /**
  * @author Ethan
@@ -24,6 +30,21 @@ import core.framework.inject.Inject;
 public class UserService {
     @Inject
     BOUserWebService boUserWebService;
+
+    public ListUserAJAXResponse list() {
+        ListUserAJAXResponse ajaxResponse = new ListUserAJAXResponse();
+        BOListUserResponse response = boUserWebService.listUser();
+        ajaxResponse.users = response.users.stream().map(userView -> {
+            UserAJAXView ajaxView = new UserAJAXView();
+            ajaxView.id = userView.id;
+            ajaxView.userName = userView.userName;
+            ajaxView.userEmail = userView.userEmail;
+            ajaxView.status = userView.status == null ? null : UserStatusAJAXView.valueOf(userView.status.name());
+            return ajaxView;
+        }).collect(Collectors.toList());
+        ajaxResponse.total = response.total;
+        return ajaxResponse;
+    }
 
     public CreateUserAJAXResponse create(CreateUserAJAXRequest request) {
         CreateUserAJAXResponse response = new CreateUserAJAXResponse();
@@ -56,6 +77,9 @@ public class UserService {
 
     public ChangeStatusAJAXResponse changeStatus(Long id) {
         ChangeStatusAJAXResponse response = new ChangeStatusAJAXResponse();
+        if (id == 1L) {
+            throw new BadRequestException("You can not inactive yourself.");
+        }
         convert(boUserWebService.changeStatus(id), response);
         return response;
     }

@@ -19,8 +19,8 @@ import app.book.domain.Category;
 import app.book.domain.Reservation;
 import app.book.domain.Tag;
 import app.user.api.UserWebService;
-import app.user.api.user.GetUserResponse;
 import app.user.api.user.UserStatusView;
+import app.user.api.user.UserView;
 import com.mongodb.ReadPreference;
 import com.mongodb.client.model.Filters;
 import core.framework.db.Database;
@@ -30,6 +30,7 @@ import core.framework.inject.Inject;
 import core.framework.mongo.MongoCollection;
 import core.framework.util.Strings;
 import core.framework.web.exception.BadRequestException;
+import core.framework.web.exception.ConflictException;
 import core.framework.web.exception.NotFoundException;
 
 import java.time.ZonedDateTime;
@@ -87,31 +88,31 @@ public class BookService {
     public BorrowBookResponse borrowBook(BorrowBookRequest request) {
         BorrowBookResponse response = new BorrowBookResponse();
         Optional<Book> book = bookRepository.get(request.bookId);
-        GetUserResponse getUserResponse = userWebService.get(request.userId);
-        if (getUserResponse == null) {
-            throw new NotFoundException("user not found, id=" + request.userId);
+        UserView userView = userWebService.get(request.userId);
+        if (book.isEmpty()) {
+            throw new NotFoundException("Book not found.", ErrorCodes.BOOK_NOT_FOUND);
         }
-        if (getUserResponse.status == UserStatusView.INACTIVE) {
-            throw new BadRequestException("you are banned!");
+        if (book.get().num <= 0) {
+            throw new BadRequestException("No book rest.", ErrorCodes.NO_BOOK_REST);
         }
-        if (bookRepository.get(request.bookId).isEmpty()) {
-            throw new NotFoundException("book not found, id=" + request.userId);
+        if (userView == null) {
+            throw new NotFoundException("User not found.", ErrorCodes.USER_NOT_FOUND);
+        }
+        if (userView.status == UserStatusView.INACTIVE) {
+            throw new ConflictException("You are banned!", ErrorCodes.BANNED);
         }
         if (!isReturned(request.userId, request.bookId)) {
-            throw new BadRequestException("you had borrowed this book already.");
-        }
-        if (book.isPresent() && book.get().num <= 0) {
-            throw new BadRequestException("no book rest.");
+            throw new ConflictException("You had borrowed this book already.", ErrorCodes.BORROWED_ALREADY);
         }
         if (ZonedDateTime.now().isAfter(request.returnTime)) {
-            throw new BadRequestException("returnTime is past");
+            throw new BadRequestException("ReturnTime is past.", ErrorCodes.RETURN_TIME_PAST);
         }
         BorrowedRecord borrowedRecord = new BorrowedRecord();
         borrowedRecord.id = UUID.randomUUID().toString();
         borrowedRecord.userId = request.userId;
-        borrowedRecord.userName = getUserResponse.userName;
+        borrowedRecord.userName = userView.userName;
         borrowedRecord.bookId = request.bookId;
-        borrowedRecord.bookName = book.orElseThrow(() -> new NotFoundException("book not found", ErrorCodes.BOOK_NOT_FOUND)).name;
+        borrowedRecord.bookName = book.get().name;
         borrowedRecord.borrowTime = ZonedDateTime.now();
         borrowedRecord.returnTime = request.returnTime;
         borrowedRecord.isReturned = Boolean.FALSE;

@@ -6,12 +6,12 @@ CREATE TABLE IF NOT EXISTS `users`
     `user_email` varchar(50)    NOT NULL,
     `status`     varchar(10)    NOT NULL,
     PRIMARY KEY (`id`),
-    UNIQUE INDEX `user_name` (`user_name`, `user_email`) USING BTREE
+    UNIQUE INDEX `user_name` (`user_name`, `user_email`)
 )
     ENGINE = InnoDB
     DEFAULT CHARACTER SET = utf8;
 
 INSERT INTO `users`
-VALUES (1, 'admin', 'admin', 'admin@gmail.com', b'1');
+VALUES (1, 'admin', 'admin', 'admin@gmail.com', "ACTIVE");
 
 

@@ -10,6 +10,6 @@ import core.framework.api.validate.NotNull;
 public class BOCreateCategoryRequest {
     @NotNull
     @NotBlank
-    @Property(name = "name")
+    @Property(name = "category_name")
     public String categoryName;
 }

@@ -5,19 +5,23 @@ import app.user.api.user.BOChangeStatusResponse;
 import app.user.api.user.BOCreateUserRequest;
 import app.user.api.user.BOCreateUserResponse;
 import app.user.api.user.BODeleteUserResponse;
+import app.user.api.user.BOListUserResponse;
 import app.user.api.user.BOResetPasswordResponse;
 import app.user.api.user.BOUpdateUserRequest;
 import app.user.api.user.BOUpdateUserResponse;
 import app.user.api.user.UserStatusView;
+import app.user.api.user.UserView;
 import app.user.domain.User;
 import app.user.domain.UserStatus;
+import core.framework.db.Query;
 import core.framework.db.Repository;
 import core.framework.inject.Inject;
+import core.framework.util.Strings;
 import core.framework.web.exception.ConflictException;
 import core.framework.web.exception.NotFoundException;
 
-import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * @author Ethan
@@ -26,14 +30,31 @@ public class BOUserService {
     @Inject
     Repository<User> userRepository;
 
+    public BOListUserResponse listUser() {
+        BOListUserResponse response = new BOListUserResponse();
+        Query<User> query = userRepository.select();
+        response.users = query.fetch().stream().map(user -> {
+            UserView userView = new UserView();
+            userView.id = user.id;
+            userView.userName = user.userName;
+            userView.userEmail = user.userEmail;
+            userView.status = user.status == null ? null : UserStatusView.valueOf(user.status.name());
+            return userView;
+        }).collect(Collectors.toList());
+        response.total = query.count();
+        return response;
+    }
+
     public BOCreateUserResponse create(BOCreateUserRequest request) {
         BOCreateUserResponse response = new BOCreateUserResponse();
-        List<User> selectUserName = userRepository.select("user_name = ? ", request.userName);
-        if (!selectUserName.isEmpty()) {
+        Query query = userRepository.select();
+        query.where("user_name = ? ", request.userName);
+        if (!query.fetch().isEmpty()) {
             throw new ConflictException("find duplicate username", ErrorCodes.DUPLICATE_USERNAME);
         }
-        List<User> selectUserEmail = userRepository.select("user_email = ?", request.userEmail);
-        if (!selectUserEmail.isEmpty()) {
+        query = userRepository.select();
+        query.where("user_email = ?", request.userEmail);
+        if (!query.fetch().isEmpty()) {
             throw new ConflictException("find duplicate email", ErrorCodes.DUPLICATE_EMAIL);
         }
         response.id = userRepository.insert(convert(request)).orElseThrow();
@@ -48,16 +69,8 @@ public class BOUserService {
         temp.id = id;
         userRepository.partialUpdate(temp);
         response.id = id;
-        if (request.userName != null) {
-            response.userName = request.userName;
-        } else {
-            response.userName = user.userName;
-        }
-        if (request.userEmail != null) {
-            response.userEmail = request.userEmail;
-        } else {
-            response.userEmail = user.userEmail;
-        }
+        response.userName = Strings.isBlank(request.userName) ? user.userName : request.userName;
+        response.userEmail = Strings.isBlank(request.userEmail) ? user.userEmail : request.userEmail;
         return response;
     }
 
@@ -86,11 +99,7 @@ public class BOUserService {
         User user = checkUser(id);
         User temp = new User();
         temp.id = id;
-        if (user.status == UserStatus.ACTIVE) {
-            temp.status = UserStatus.INACTIVE;
-        } else {
-            temp.status = UserStatus.ACTIVE;
-        }
+        temp.status = user.status == UserStatus.ACTIVE ? UserStatus.INACTIVE : UserStatus.ACTIVE;
         userRepository.partialUpdate(temp);
         response.userId = id;
         response.userName = user.userName;

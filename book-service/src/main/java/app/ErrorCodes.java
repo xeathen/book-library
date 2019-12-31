@@ -13,4 +13,9 @@ public class ErrorCodes {
     public static final String CATEGORY_NOT_FOUND = "CATEGORY_NOT_FOUND";
     public static final String TAG_NOT_FOUND = "TAG_NOT_FOUND";
     public static final String AUTHOR_NOT_FOUND = "AUTHOR_NOT_FOUND";
+    public static final String USER_NOT_FOUND = "USER_NOT_FOUND";
+    public static final String BANNED = "BANNED";
+    public static final String BORROWED_ALREADY = "BORROWED_ALREADY";
+    public static final String RETURN_TIME_PAST = "RETURN_TIME_PAST";
+    public static final String NO_BOOK_REST = "NO_BOOK_REST";
 }

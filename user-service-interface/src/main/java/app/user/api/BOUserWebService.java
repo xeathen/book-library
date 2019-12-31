@@ -4,10 +4,12 @@ import app.user.api.user.BOChangeStatusResponse;
 import app.user.api.user.BOCreateUserRequest;
 import app.user.api.user.BOCreateUserResponse;
 import app.user.api.user.BODeleteUserResponse;
+import app.user.api.user.BOListUserResponse;
 import app.user.api.user.BOResetPasswordResponse;
 import app.user.api.user.BOUpdateUserRequest;
 import app.user.api.user.BOUpdateUserResponse;
 import core.framework.api.web.service.DELETE;
+import core.framework.api.web.service.GET;
 import core.framework.api.web.service.POST;
 import core.framework.api.web.service.PUT;
 import core.framework.api.web.service.Path;
@@ -17,6 +19,10 @@ import core.framework.api.web.service.PathParam;
  * @author Ethan
  */
 public interface BOUserWebService {
+    @GET
+    @Path("/bo/user")
+    BOListUserResponse listUser();
+
     @POST
     @Path("/bo/user")
     BOCreateUserResponse create(BOCreateUserRequest request);

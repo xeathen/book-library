@@ -14,4 +14,6 @@ public class ErrorCodes {
     public static final String TAG_NOT_FOUND = "TAG_NOT_FOUND";
     public static final String AUTHOR_NOT_FOUND = "AUTHOR_NOT_FOUND";
     public static final String ALREADY_LOGIN = "ALREADY_LOGIN";
+    public static final String WRONG_PASSWORD = "WRONG_PASSWORD";
+    public static final String USER_NOT_FOUND = "USER_NOT_FOUND";
 }
