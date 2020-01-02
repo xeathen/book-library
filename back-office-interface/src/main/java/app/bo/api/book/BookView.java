@@ -5,7 +5,7 @@ import core.framework.api.json.Property;
 /**
  * @author xeathen
  */
-public class BookAJAXView {
+public class BookView {
     @Property(name = "id")
     public Long id;
 
@@ -21,12 +21,12 @@ public class BookAJAXView {
     @Property(name = "tag_id")
     public String tagName;
 
-    @Property(name = "pub")
-    public String pub;
+    @Property(name = "publishing_house")
+    public String publishingHouse;
 
     @Property(name = "description")
     public String description;
 
-    @Property(name = "num")
-    public Integer num;
+    @Property(name = "mount")
+    public Integer mount;
 }

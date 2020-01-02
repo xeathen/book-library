@@ -1,11 +1,11 @@
-package app.web.api.book;
+package app.bo.api.book;
 
 import core.framework.api.json.Property;
 
 /**
  * @author xeathen
  */
-public class AuthorAJAXView {
+public class AuthorView {
     @Property(name = "author_id")
     public Integer authorId;
 

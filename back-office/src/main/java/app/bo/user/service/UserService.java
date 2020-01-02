@@ -8,8 +8,8 @@ import app.bo.api.user.ListUserAJAXResponse;
 import app.bo.api.user.ResetPasswordAJAXResponse;
 import app.bo.api.user.UpdateUserAJAXRequest;
 import app.bo.api.user.UpdateUserAJAXResponse;
-import app.bo.api.user.UserAJAXView;
 import app.bo.api.user.UserStatusAJAXView;
+import app.bo.api.user.UserView;
 import app.user.api.BOUserWebService;
 import app.user.api.user.BOChangeStatusResponse;
 import app.user.api.user.BOCreateUserRequest;
@@ -33,12 +33,12 @@ public class UserService {
 
     public ListUserAJAXResponse list() {
         ListUserAJAXResponse ajaxResponse = new ListUserAJAXResponse();
-        BOListUserResponse response = boUserWebService.listUser();
+        BOListUserResponse response = boUserWebService.list();
         ajaxResponse.users = response.users.stream().map(userView -> {
-            UserAJAXView ajaxView = new UserAJAXView();
+            UserView ajaxView = new UserView();
             ajaxView.id = userView.id;
             ajaxView.userName = userView.userName;
-            ajaxView.userEmail = userView.userEmail;
+            ajaxView.email = userView.email;
             ajaxView.status = userView.status == null ? null : UserStatusAJAXView.valueOf(userView.status.name());
             return ajaxView;
         }).collect(Collectors.toList());
@@ -47,11 +47,9 @@ public class UserService {
     }
 
     public CreateUserAJAXResponse create(CreateUserAJAXRequest request) {
-        CreateUserAJAXResponse response = new CreateUserAJAXResponse();
         BOCreateUserRequest boRequest = new BOCreateUserRequest();
-        convert(request, boRequest);
-        convert(boUserWebService.create(boRequest), response);
-        return response;
+        boCreateUserRequest(request);
+        return createUserAJAXResponse(boUserWebService.create(boRequest));
     }
 
     public DeleteUserAJAXResponse delete(Long id) {
@@ -62,62 +60,68 @@ public class UserService {
     }
 
     public UpdateUserAJAXResponse update(Long id, UpdateUserAJAXRequest request) {
-        UpdateUserAJAXResponse response = new UpdateUserAJAXResponse();
-        BOUpdateUserRequest boRequest = new BOUpdateUserRequest();
-        convert(request, boRequest);
-        convert(boUserWebService.update(id, boRequest), response);
-        return response;
+        BOUpdateUserRequest boRequest = boUpdateUserRequest(request);
+        BOUpdateUserResponse boUpdateUserResponse = boUserWebService.update(id, boRequest);
+        return updateUserAJAXResponse(boUpdateUserResponse);
     }
 
     public ResetPasswordAJAXResponse resetPassword(Long id) {
-        ResetPasswordAJAXResponse response = new ResetPasswordAJAXResponse();
-        convert(boUserWebService.resetPassword(id), response);
-        return response;
+        return resetPasswordAJAXResponse(boUserWebService.resetPassword(id));
     }
 
     public ChangeStatusAJAXResponse changeStatus(Long id) {
-        ChangeStatusAJAXResponse response = new ChangeStatusAJAXResponse();
         if (id == 1L) {
             throw new BadRequestException("You can not inactive yourself.");
         }
-        convert(boUserWebService.changeStatus(id), response);
-        return response;
+        return changeStatusAJAXResponse(boUserWebService.changeStatus(id));
     }
 
-    private void convert(BOChangeStatusResponse boResponse, ChangeStatusAJAXResponse response) {
+    private ChangeStatusAJAXResponse changeStatusAJAXResponse(BOChangeStatusResponse boResponse) {
+        ChangeStatusAJAXResponse response = new ChangeStatusAJAXResponse();
         response.userId = boResponse.userId;
         response.userName = boResponse.userName;
         response.status = boResponse.status == null ? null : UserStatusAJAXView.valueOf(boResponse.status.name());
+        return response;
     }
 
-    private void convert(BOResetPasswordResponse boResponse, ResetPasswordAJAXResponse response) {
+    private ResetPasswordAJAXResponse resetPasswordAJAXResponse(BOResetPasswordResponse boResponse) {
+        ResetPasswordAJAXResponse response = new ResetPasswordAJAXResponse();
         response.userId = boResponse.userId;
         response.userName = boResponse.userName;
+        return response;
     }
 
-    private void convert(CreateUserAJAXRequest ajaxRequest, BOCreateUserRequest boRequest) {
+    private BOCreateUserRequest boCreateUserRequest(CreateUserAJAXRequest ajaxRequest) {
+        BOCreateUserRequest boRequest = new BOCreateUserRequest();
         boRequest.userName = ajaxRequest.userName;
         boRequest.password = ajaxRequest.password;
-        boRequest.userEmail = ajaxRequest.userEmail;
+        boRequest.email = ajaxRequest.email;
         boRequest.status = ajaxRequest.status == null ? null : UserStatusView.valueOf(ajaxRequest.status.name());
+        return boRequest;
     }
 
-    private void convert(BOCreateUserResponse boResponse, CreateUserAJAXResponse ajaxResponse) {
+    private CreateUserAJAXResponse createUserAJAXResponse(BOCreateUserResponse boResponse) {
+        CreateUserAJAXResponse ajaxResponse = new CreateUserAJAXResponse();
         ajaxResponse.id = boResponse.id;
         ajaxResponse.userName = boResponse.userName;
         ajaxResponse.password = boResponse.password;
-        ajaxResponse.userEmail = boResponse.userEmail;
+        ajaxResponse.email = boResponse.email;
         ajaxResponse.status = boResponse.status == null ? null : UserStatusAJAXView.valueOf(boResponse.status.name());
+        return ajaxResponse;
     }
 
-    private void convert(UpdateUserAJAXRequest ajaxRequest, BOUpdateUserRequest boRequest) {
+    private BOUpdateUserRequest boUpdateUserRequest(UpdateUserAJAXRequest ajaxRequest) {
+        BOUpdateUserRequest boRequest = new BOUpdateUserRequest();
         boRequest.userName = ajaxRequest.userName;
-        boRequest.userEmail = ajaxRequest.userEmail;
+        boRequest.email = ajaxRequest.email;
+        return boRequest;
     }
 
-    private void convert(BOUpdateUserResponse boResponse, UpdateUserAJAXResponse ajaxResponse) {
+    private UpdateUserAJAXResponse updateUserAJAXResponse(BOUpdateUserResponse boResponse) {
+        UpdateUserAJAXResponse ajaxResponse = new UpdateUserAJAXResponse();
         ajaxResponse.id = boResponse.id;
         ajaxResponse.userName = boResponse.userName;
-        ajaxResponse.userEmail = boResponse.userEmail;
+        ajaxResponse.email = boResponse.email;
+        return ajaxResponse;
     }
 }

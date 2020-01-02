@@ -1,10 +1,10 @@
 package app.user.service;
 
 import app.user.ErrorCodes;
+import app.user.api.user.GetUserResponse;
 import app.user.api.user.UserLoginRequest;
 import app.user.api.user.UserLoginResponse;
 import app.user.api.user.UserStatusView;
-import app.user.api.user.UserView;
 import app.user.domain.User;
 import core.framework.db.Query;
 import core.framework.db.Repository;
@@ -19,9 +19,9 @@ public class UserService {
     @Inject
     Repository<User> userRepository;
 
-    public UserView get(Long id) {
+    public GetUserResponse get(Long id) {
         User user = userRepository.get(id).orElseThrow(() -> new NotFoundException("User not found, id=" + id, ErrorCodes.USER_NOT_FOUND));
-        return convert(user);
+        return getUserResponse(user);
     }
 
     public UserLoginResponse login(UserLoginRequest request) {
@@ -38,11 +38,11 @@ public class UserService {
         }
     }
 
-    private UserView convert(User user) {
-        UserView response = new UserView();
+    private GetUserResponse getUserResponse(User user) {
+        GetUserResponse response = new GetUserResponse();
         response.id = user.id;
         response.userName = user.userName;
-        response.userEmail = user.userEmail;
+        response.email = user.email;
         response.status = user.status == null ? null : UserStatusView.valueOf(user.status.name());
         return response;
     }

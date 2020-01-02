@@ -12,6 +12,6 @@ public class UpdateUserAJAXResponse {
     @Property(name = "user_name")
     public String userName;
 
-    @Property(name = "user_email")
-    public String userEmail;
+    @Property(name = "email")
+    public String email;
 }

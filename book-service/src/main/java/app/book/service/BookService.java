@@ -7,6 +7,7 @@ import app.book.api.book.BorrowBookResponse;
 import app.book.api.book.BorrowedRecordView;
 import app.book.api.book.CreateReservationRequest;
 import app.book.api.book.CreateReservationResponse;
+import app.book.api.book.GetBookResponse;
 import app.book.api.book.ReturnBookRequest;
 import app.book.api.book.ReturnBookResponse;
 import app.book.api.book.SearchBookRequest;
@@ -19,8 +20,8 @@ import app.book.domain.Category;
 import app.book.domain.Reservation;
 import app.book.domain.Tag;
 import app.user.api.UserWebService;
+import app.user.api.user.GetUserResponse;
 import app.user.api.user.UserStatusView;
-import app.user.api.user.UserView;
 import com.mongodb.client.model.Filters;
 import core.framework.db.Database;
 import core.framework.db.Query;
@@ -60,10 +61,10 @@ public class BookService {
     @Inject
     Database database;
 
-    public BookView get(Long bookId) {
+    public GetBookResponse get(Long bookId) {
         Optional<Book> book = bookRepository.get(bookId);
         book.orElseThrow(() -> new NotFoundException("Book not found.", ErrorCodes.BOOK_NOT_FOUND));
-        return convert(book.get());
+        return getBookResponse(book.get());
     }
 
     public SearchBookResponse search(SearchBookRequest request) {
@@ -78,23 +79,22 @@ public class BookService {
         core.framework.mongo.Query query = new core.framework.mongo.Query();
         query.filter = Filters.eq("user_id", userId);
         List<BorrowedRecord> borrowedRecordList = mongoCollection.find(query);
-        response.borrowedRecords = borrowedRecordList.stream().map(this::convert).collect(Collectors.toList());
+        response.borrowedRecords = borrowedRecordList.stream().map(this::borrowedRecordView).collect(Collectors.toList());
         response.total = borrowedRecordList.size();
         return response;
     }
 
     public BorrowBookResponse borrowBook(BorrowBookRequest request) {
-        BorrowBookResponse response = new BorrowBookResponse();
         Book book = bookRepository.get(request.bookId).orElseThrow(() ->
             new NotFoundException("Book not found.", ErrorCodes.BOOK_NOT_FOUND));
-        UserView userView = userWebService.get(request.userId);
-        if (book.num <= 0) {
+        GetUserResponse user = userWebService.get(request.userId);
+        if (book.mount <= 0) {
             throw new BadRequestException("No book rest.", ErrorCodes.NO_BOOK_REST);
         }
-        if (userView == null) {
+        if (user == null) {
             throw new NotFoundException("User not found.", ErrorCodes.USER_NOT_FOUND);
         }
-        if (userView.status == UserStatusView.INACTIVE) {
+        if (user.status == UserStatusView.INACTIVE) {
             throw new ConflictException("You are banned!", ErrorCodes.BANNED);
         }
         if (!isReturned(request.userId, request.bookId)) {
@@ -103,11 +103,10 @@ public class BookService {
         if (ZonedDateTime.now().isAfter(request.returnTime)) {
             throw new BadRequestException("ReturnTime is past.", ErrorCodes.RETURN_TIME_PAST);
         }
-        BorrowedRecord borrowedRecord = createBorrowedRecord(request, book, userView);
+        BorrowedRecord borrowedRecord = createBorrowedRecord(request, book, user);
         mongoCollection.insert(borrowedRecord);
-        changeBookNum(book, -1);
-        convert(borrowedRecord, response);
-        return response;
+        changeBookMount(book, -1);
+        return borrowBookResponse(borrowedRecord);
     }
 
     public ReturnBookResponse returnBook(ReturnBookRequest request) {
@@ -127,23 +126,23 @@ public class BookService {
         response.returnTime = ZonedDateTime.now();
         Book book = bookRepository.get(request.bookId).orElseThrow(() ->
             new NotFoundException("Book not found.", ErrorCodes.BOOK_NOT_FOUND));
-        changeBookNum(book, 1);
+        changeBookMount(book, 1);
         return response;
     }
 
-    private void changeBookNum(Book book, Integer x) {
-        Integer num = book.num;
+    private void changeBookMount(Book book, Integer x) {
+        Integer mount = book.mount;
         Book borrowedBook = new Book();
         borrowedBook.id = book.id;
-        borrowedBook.num = num + x;
+        borrowedBook.mount = mount + x;
         bookRepository.partialUpdate(borrowedBook);
     }
 
-    private BorrowedRecord createBorrowedRecord(BorrowBookRequest request, Book book, UserView userView) {
+    private BorrowedRecord createBorrowedRecord(BorrowBookRequest request, Book book, GetUserResponse response) {
         BorrowedRecord borrowedRecord = new BorrowedRecord();
         borrowedRecord.id = UUID.randomUUID().toString();
         borrowedRecord.userId = request.userId;
-        borrowedRecord.userName = userView.userName;
+        borrowedRecord.userName = response.userName;
         borrowedRecord.bookId = request.bookId;
         borrowedRecord.bookName = book.name;
         borrowedRecord.borrowTime = ZonedDateTime.now();
@@ -160,10 +159,8 @@ public class BookService {
         if (!collect.isEmpty()) {
             throw new BadRequestException("You have reserved this book already.", ErrorCodes.ALREADY_RESERVED);
         }
-        CreateReservationResponse response = new CreateReservationResponse();
         createReservation(request.userId, request.bookId);
-        convert(request, response);
-        return response;
+        return createReservationResponse(request);
     }
 
     private void createReservation(Long userId, Long bookId) {
@@ -189,17 +186,17 @@ public class BookService {
         if (!Strings.isBlank(request.tag)) {
             where("tags.name like ?", Strings.format("%{}%", request.tag), whereClause, params);
         }
-        if (!Strings.isBlank(request.pub)) {
-            where("books.pub like ?", Strings.format("%{}%", request.pub), whereClause, params);
+        if (!Strings.isBlank(request.publishingHouse)) {
+            where("books.publishing_house like ?", Strings.format("%{}%", request.publishingHouse), whereClause, params);
         }
         if (!Strings.isBlank(request.description)) {
             where("books.description like ?", Strings.format("%{}%", request.description), whereClause, params);
         }
         String sql = "SELECT `books`.`id` as `id`, `books`.`name` as `name`, `authors`.`name` as `author_name`,"
-            + "`categories`.`name` as `category_name`, tags.`name` as `tag_name`, books.`pub`, books.`description` , books.`num`"
+            + "`categories`.`name` as `category_name`, tags.`name` as `tag_name`, books.`publishing_house`, books.`description` , books.`mount`"
             + "FROM `books` join `categories` join tags join `authors`"
             + "on books.category_id = categories.id and tags.id = books.tag_id and `authors`.id = books.author_id "
-            + "where " + whereClause;
+            + "where " + (whereClause.length() > 0 ? whereClause : "1 = 1");
         return database.select(sql, BookView.class, params.toArray());
     }
 
@@ -223,15 +220,17 @@ public class BookService {
         return mongoCollection.find(query);
     }
 
-    private void convert(CreateReservationRequest request, CreateReservationResponse response) {
+    private CreateReservationResponse createReservationResponse(CreateReservationRequest request) {
+        CreateReservationResponse response = new CreateReservationResponse();
         response.userId = request.userId;
         response.userName = userWebService.get(request.userId).userName;
         response.bookId = request.bookId;
         response.bookName = bookRepository.get(request.bookId).orElseThrow().name;
+        return response;
     }
 
-    private BookView convert(Book book) {
-        BookView response = new BookView();
+    private GetBookResponse getBookResponse(Book book) {
+        GetBookResponse response = new GetBookResponse();
         response.id = book.id;
         response.name = book.name;
         response.categoryName = categoryRepository.get(book.categoryId).orElseThrow(() ->
@@ -240,22 +239,24 @@ public class BookService {
             new NotFoundException("Tag not found.", ErrorCodes.TAG_NOT_FOUND)).name;
         response.authorName = authorRepository.get(book.authorId).orElseThrow(() ->
             new NotFoundException("Author not found.", ErrorCodes.AUTHOR_NOT_FOUND)).name;
-        response.pub = book.pub;
+        response.publishingHouse = book.publishingHouse;
         response.description = book.description;
-        response.num = book.num;
+        response.mount = book.mount;
         return response;
     }
 
-    private void convert(BorrowedRecord borrowedRecord, BorrowBookResponse response) {
+    private BorrowBookResponse borrowBookResponse(BorrowedRecord borrowedRecord) {
+        BorrowBookResponse response = new BorrowBookResponse();
         response.userId = borrowedRecord.userId;
         response.userName = borrowedRecord.userName;
         response.bookId = borrowedRecord.bookId;
         response.bookName = borrowedRecord.bookName;
         response.borrowTime = borrowedRecord.borrowTime;
         response.returnTime = borrowedRecord.returnTime;
+        return response;
     }
 
-    private BorrowedRecordView convert(BorrowedRecord borrowedRecord) {
+    private BorrowedRecordView borrowedRecordView(BorrowedRecord borrowedRecord) {
         BorrowedRecordView response = new BorrowedRecordView();
         response.id = borrowedRecord.id;
         response.userId = borrowedRecord.userId;

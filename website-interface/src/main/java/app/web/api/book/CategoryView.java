@@ -1,11 +1,11 @@
-package app.bo.api.book;
+package app.web.api.book;
 
 import core.framework.api.json.Property;
 
 /**
  * @author xeathen
  */
-public class CategoryAJAXView {
+public class CategoryView {
     @Property(name = "category_id")
     public Integer categoryId;
 

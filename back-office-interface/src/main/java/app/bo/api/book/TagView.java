@@ -5,7 +5,7 @@ import core.framework.api.json.Property;
 /**
  * @author xeathen
  */
-public class TagAJAXView {
+public class TagView {
     @Property(name = "tag_id")
     public Integer tagId;
 

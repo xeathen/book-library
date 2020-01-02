@@ -11,7 +11,6 @@ import core.framework.db.Table;
 @Table(name = "books")
 public class Book {
     @PrimaryKey(autoIncrement = true)
-    @NotNull
     @Column(name = "id")
     public Long id;
 
@@ -32,13 +31,13 @@ public class Book {
     public Integer tagId;
 
     @NotNull
-    @Column(name = "pub")
-    public String pub;
+    @Column(name = "publishing_house")
+    public String publishingHouse;
 
     @Column(name = "description")
     public String description;
 
     @NotNull
-    @Column(name = "num")
-    public Integer num;
+    @Column(name = "mount")
+    public Integer mount;
 }

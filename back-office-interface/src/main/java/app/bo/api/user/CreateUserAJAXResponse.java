@@ -15,8 +15,8 @@ public class CreateUserAJAXResponse {
     @Property(name = "password")
     public String password;
 
-    @Property(name = "user_email")
-    public String userEmail;
+    @Property(name = "email")
+    public String email;
 
     @Property(name = "status")
     public UserStatusAJAXView status;

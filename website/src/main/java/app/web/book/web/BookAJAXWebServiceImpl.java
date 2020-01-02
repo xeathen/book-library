@@ -1,7 +1,7 @@
 package app.web.book.web;
 
 import app.web.api.BookAJAXWebService;
-import app.web.api.book.BookAJAXView;
+import app.web.api.book.GetBookAJAXResponse;
 import app.web.api.book.SearchBookAJAXRequest;
 import app.web.api.book.SearchBookAJAXResponse;
 import app.web.book.service.BookService;
@@ -17,15 +17,15 @@ public class BookAJAXWebServiceImpl implements BookAJAXWebService {
     BookService bookService;
 
     @Override
-    public BookAJAXView get(Long bookId) {
-        ActionLogContext.put("book_id", bookId);
+    public GetBookAJAXResponse get(Long bookId) {
+        ActionLogContext.put("bookId", bookId);
         return bookService.get(bookId);
     }
 
     @Override
     public SearchBookAJAXResponse search(SearchBookAJAXRequest request) {
         if (!Strings.isBlank(request.name)) {
-            ActionLogContext.put("book_name", request.name);
+            ActionLogContext.put("bookName", request.name);
         }
         return bookService.search(request);
     }

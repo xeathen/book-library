@@ -8,6 +8,7 @@ import app.book.api.book.BOCreateCategoryRequest;
 import app.book.api.book.BOCreateCategoryResponse;
 import app.book.api.book.BOCreateTagRequest;
 import app.book.api.book.BOCreateTagResponse;
+import app.book.api.book.BOGetBookResponse;
 import app.book.api.book.BOListAuthorResponse;
 import app.book.api.book.BOListCategoryResponse;
 import app.book.api.book.BOListTagResponse;
@@ -16,7 +17,6 @@ import app.book.api.book.BOSearchBookResponse;
 import app.book.api.book.BOSearchRecordResponse;
 import app.book.api.book.BOUpdateBookRequest;
 import app.book.api.book.BOUpdateBookResponse;
-import app.book.api.book.BookView;
 import core.framework.api.web.service.GET;
 import core.framework.api.web.service.POST;
 import core.framework.api.web.service.PUT;
@@ -27,10 +27,9 @@ import core.framework.api.web.service.PathParam;
  * @author Ethan
  */
 public interface BOBookWebService {
-
     @GET
     @Path("/bo/book/:id")
-    BookView get(@PathParam("id") Long bookId);
+    BOGetBookResponse get(@PathParam("id") Long bookId);
 
     @GET
     @Path("/bo/book")

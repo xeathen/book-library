@@ -2,9 +2,9 @@ package app.web.user.service;
 
 import app.ErrorCodes;
 import app.user.api.UserWebService;
+import app.user.api.user.GetUserResponse;
 import app.user.api.user.UserLoginRequest;
 import app.user.api.user.UserLoginResponse;
-import app.user.api.user.UserView;
 import app.web.api.user.GetUserAJAXResponse;
 import app.web.api.user.UserLoginAJAXRequest;
 import app.web.api.user.UserLoginAJAXResponse;
@@ -26,9 +26,7 @@ public class UserService {
     WebContext webContext;
 
     public GetUserAJAXResponse get(@PathParam("id") Long id) {
-        GetUserAJAXResponse ajaxResponse = new GetUserAJAXResponse();
-        convert(userWebService.get(id), ajaxResponse);
-        return ajaxResponse;
+        return getUserAJAXResponse(userWebService.get(id));
     }
 
     public UserLoginAJAXResponse login(UserLoginAJAXRequest ajaxRequest) {
@@ -37,8 +35,7 @@ public class UserService {
         if (session.get("userId").isPresent()) {
             throw new BadRequestException("You are login already.", ErrorCodes.ALREADY_LOGIN);
         } else {
-            UserLoginRequest request = new UserLoginRequest();
-            convert(ajaxRequest, request);
+            UserLoginRequest request = userLoginRequest(ajaxRequest);
             UserLoginResponse response = userWebService.login(request);
             if (!Strings.isBlank(response.userName)) {
                 ajaxResponse.userId = response.userId;
@@ -49,15 +46,19 @@ public class UserService {
         }
     }
 
-    private void convert(UserLoginAJAXRequest ajaxRequest, UserLoginRequest request) {
+    private UserLoginRequest userLoginRequest(UserLoginAJAXRequest ajaxRequest) {
+        UserLoginRequest request = new UserLoginRequest();
         request.userName = ajaxRequest.userName;
         request.password = ajaxRequest.password;
+        return request;
     }
 
-    private void convert(UserView response, GetUserAJAXResponse ajaxResponse) {
+    private GetUserAJAXResponse getUserAJAXResponse(GetUserResponse response) {
+        GetUserAJAXResponse ajaxResponse = new GetUserAJAXResponse();
         ajaxResponse.id = response.id;
         ajaxResponse.userName = response.userName;
-        ajaxResponse.userEmail = response.userEmail;
+        ajaxResponse.email = response.email;
         ajaxResponse.status = response.status == null ? null : UserStatusAJAXView.valueOf(response.status.name());
+        return ajaxResponse;
     }
 }

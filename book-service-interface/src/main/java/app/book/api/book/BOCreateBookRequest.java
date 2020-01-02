@@ -27,13 +27,13 @@ public class BOCreateBookRequest {
 
     @NotNull
     @NotBlank
-    @Property(name = "pub")
-    public String pub;
+    @Property(name = "publishing_house")
+    public String publishingHouse;
 
     @Property(name = "description")
     public String description;
 
     @NotNull
-    @Property(name = "num")
-    public Integer num;
+    @Property(name = "mount")
+    public Integer mount;
 }

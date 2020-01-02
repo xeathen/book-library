@@ -1,7 +1,6 @@
 package app.bo.book.web;
 
 import app.bo.api.BookAJAXWebService;
-import app.bo.api.book.BookAJAXView;
 import app.bo.api.book.CreateAuthorAJAXRequest;
 import app.bo.api.book.CreateAuthorAJAXResponse;
 import app.bo.api.book.CreateBookAJAXRequest;
@@ -10,6 +9,7 @@ import app.bo.api.book.CreateCategoryAJAXRequest;
 import app.bo.api.book.CreateCategoryAJAXResponse;
 import app.bo.api.book.CreateTagAJAXRequest;
 import app.bo.api.book.CreateTagAJAXResponse;
+import app.bo.api.book.GetBookAJAXResponse;
 import app.bo.api.book.ListAuthorAJAXResponse;
 import app.bo.api.book.ListCategoryAJAXResponse;
 import app.bo.api.book.ListTagAJAXResponse;
@@ -31,40 +31,40 @@ public class BookAJAXWebServiceImpl implements BookAJAXWebService {
     BookService bookService;
 
     @Override
-    public BookAJAXView get(Long bookId) {
-        ActionLogContext.put("book_id", bookId);
+    public GetBookAJAXResponse get(Long bookId) {
+        ActionLogContext.put("bookId", bookId);
         return bookService.get(bookId);
     }
 
     @Override
     public CreateBookAJAXResponse create(CreateBookAJAXRequest request) {
-        ActionLogContext.put("book_name", request.name);
+        ActionLogContext.put("bookName", request.name);
         return bookService.create(request);
     }
 
     @Override
     public SearchBookAJAXResponse search(SearchBookAJAXRequest request) {
         if (!Strings.isBlank(request.name)) {
-            ActionLogContext.put("book_name", request.name);
+            ActionLogContext.put("bookName", request.name);
         }
         return bookService.search(request);
     }
 
     @Override
     public CreateCategoryAJAXResponse createCategory(CreateCategoryAJAXRequest request) {
-        ActionLogContext.put("category_name", request.categoryName);
+        ActionLogContext.put("categoryName", request.categoryName);
         return bookService.createCategory(request);
     }
 
     @Override
     public CreateTagAJAXResponse createTag(CreateTagAJAXRequest request) {
-        ActionLogContext.put("tag_name", request.tagName);
+        ActionLogContext.put("tagName", request.tagName);
         return bookService.createTag(request);
     }
 
     @Override
     public CreateAuthorAJAXResponse createAuthor(CreateAuthorAJAXRequest request) {
-        ActionLogContext.put("author_name", request.authorName);
+        ActionLogContext.put("authorName", request.authorName);
         return bookService.createAuthor(request);
     }
 
@@ -85,16 +85,16 @@ public class BookAJAXWebServiceImpl implements BookAJAXWebService {
 
     @Override
     public UpdateBookAJAXResponse update(Long bookId, UpdateBookAJAXRequest request) {
-        ActionLogContext.put("book_id", bookId);
+        ActionLogContext.put("bookId", bookId);
         if (!Strings.isBlank(request.name)) {
-            ActionLogContext.put("book_name", request.name);
+            ActionLogContext.put("bookName", request.name);
         }
         return bookService.update(bookId, request);
     }
 
     @Override
     public SearchRecordAJAXResponse searchRecordByBookId(Long bookId) {
-        ActionLogContext.put("book_id", bookId);
+        ActionLogContext.put("bookId", bookId);
         return bookService.searchRecordByBookId(bookId);
     }
 }

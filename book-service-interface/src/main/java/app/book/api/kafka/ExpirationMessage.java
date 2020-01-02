@@ -6,7 +6,7 @@ import core.framework.api.validate.NotNull;
 /**
  * @author Ethan
  */
-public class ExpireMessage {
+public class ExpirationMessage {
     @NotNull
     @Property(name = "user_id")
     public Long userId;

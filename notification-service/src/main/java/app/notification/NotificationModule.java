@@ -1,6 +1,6 @@
 package app.notification;
 
-import app.book.api.kafka.ExpireMessage;
+import app.book.api.kafka.ExpirationMessage;
 import app.book.api.kafka.ReservationMessage;
 import app.kafka.ExpireMassageHandler;
 import app.kafka.ReservationMessageHandler;
@@ -19,6 +19,6 @@ public class NotificationModule extends Module {
 
     private void configureKafka() {
         kafka().subscribe("reservation", ReservationMessage.class, bind(ReservationMessageHandler.class));
-        kafka().subscribe("expire", ExpireMessage.class, bind(ExpireMassageHandler.class));
+        kafka().subscribe("expiration", ExpirationMessage.class, bind(ExpireMassageHandler.class));
     }
 }

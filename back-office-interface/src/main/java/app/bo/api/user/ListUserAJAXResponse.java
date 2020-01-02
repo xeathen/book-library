@@ -12,5 +12,5 @@ public class ListUserAJAXResponse {
     public Integer total;
 
     @Property(name = "users")
-    public List<UserAJAXView> users;
+    public List<UserView> users;
 }

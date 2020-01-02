@@ -1,12 +1,12 @@
 CREATE TABLE IF NOT EXISTS `books`  (
-    `id`          bigint(20)   NOT NULL AUTO_INCREMENT,
-    `name`        varchar(100) NOT NULL,
-    `author_id`   int(11)      NOT NULL,
-    `category_id` int(11)      NOT NULL,
-    `tag_id`      int(11)      NOT NULL,
-    `pub`         varchar(50)  NOT NULL,
-    `description` varchar(255) NULL DEFAULT NULL,
-    `num`         int(11)      NOT NULL,
+    `id`                BIGINT(20)   NOT NULL AUTO_INCREMENT,
+    `name`              VARCHAR(100) NOT NULL,
+    `author_id`         INT(11)      NOT NULL,
+    `category_id`       INT(11)      NOT NULL,
+    `tag_id`            INT(11)      NOT NULL,
+    `publishing_house`  VARCHAR(50)  NOT NULL,
+    `description`       VARCHAR(255) NULL DEFAULT NULL,
+    `mount`             INT(11)      NOT NULL,
     PRIMARY KEY (`id`)
 )
     ENGINE = InnoDB

@@ -1,6 +1,5 @@
 package app.bo.api;
 
-import app.bo.api.book.BookAJAXView;
 import app.bo.api.book.CreateAuthorAJAXRequest;
 import app.bo.api.book.CreateAuthorAJAXResponse;
 import app.bo.api.book.CreateBookAJAXRequest;
@@ -9,6 +8,7 @@ import app.bo.api.book.CreateCategoryAJAXRequest;
 import app.bo.api.book.CreateCategoryAJAXResponse;
 import app.bo.api.book.CreateTagAJAXRequest;
 import app.bo.api.book.CreateTagAJAXResponse;
+import app.bo.api.book.GetBookAJAXResponse;
 import app.bo.api.book.ListAuthorAJAXResponse;
 import app.bo.api.book.ListCategoryAJAXResponse;
 import app.bo.api.book.ListTagAJAXResponse;
@@ -29,7 +29,7 @@ import core.framework.api.web.service.PathParam;
 public interface BookAJAXWebService {
     @GET
     @Path("/ajax/book/:id")
-    BookAJAXView get(@PathParam("id") Long bookId);
+    GetBookAJAXResponse get(@PathParam("id") Long bookId);
 
     @POST
     @Path("/ajax/book")

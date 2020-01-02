@@ -20,8 +20,8 @@ public class BOCreateUserRequest {
 
     @NotNull
     @NotBlank
-    @Property(name = "user_email")
-    public String userEmail;
+    @Property(name = "email")
+    public String email;
 
     @NotNull
     @Property(name = "status")

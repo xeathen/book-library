@@ -17,13 +17,14 @@ public class UserAJAXWebServiceImpl implements UserAJAXWebService {
 
     @Override
     public GetUserAJAXResponse get(Long userId) {
-        ActionLogContext.put("user_id", userId);
+        ActionLogContext.put("userId", userId);
         return userService.get(userId);
     }
 
     @Override
     public UserLoginAJAXResponse login(UserLoginAJAXRequest request) {
-        ActionLogContext.put("user_name", request.userName);
+        //TODO:email
+        ActionLogContext.put("userName", request.userName);
         return userService.login(request);
     }
 }

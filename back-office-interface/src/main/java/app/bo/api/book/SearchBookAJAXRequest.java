@@ -10,11 +10,11 @@ import core.framework.api.web.service.QueryParam;
 public class SearchBookAJAXRequest {
     @NotNull
     @QueryParam(name = "skip")
-    public Integer skip = 0;
+    public Integer skip;
 
     @NotNull
     @QueryParam(name = "limit")
-    public Integer limit = 1000;
+    public Integer limit;
 
     @QueryParam(name = "name")
     public String name;
@@ -23,8 +23,8 @@ public class SearchBookAJAXRequest {
     @Length(max = 50)
     public String author;
 
-    @QueryParam(name = "pub")
-    public String pub;
+    @QueryParam(name = "publishing_house")
+    public String publishingHouse;
 
     @QueryParam(name = "category")
     public String category;

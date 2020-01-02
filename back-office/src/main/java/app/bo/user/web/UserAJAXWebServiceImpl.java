@@ -21,39 +21,39 @@ public class UserAJAXWebServiceImpl implements UserAJAXWebService {
     UserService userService;
 
     @Override
-    public ListUserAJAXResponse listUser() {
+    public ListUserAJAXResponse list() {
         return userService.list();
     }
 
     @Override
     public CreateUserAJAXResponse create(CreateUserAJAXRequest request) {
-        ActionLogContext.put("user_name", request.userName);
-        ActionLogContext.put("user_email", request.userEmail);
+        ActionLogContext.put("userName", request.userName);
+        ActionLogContext.put("userEmail", request.email);
         return userService.create(request);
     }
 
     @Override
     public DeleteUserAJAXResponse delete(Long userId) {
-        ActionLogContext.put("user_id", userId);
+        ActionLogContext.put("userId", userId);
 
         return userService.delete(userId);
     }
 
     @Override
     public UpdateUserAJAXResponse update(Long userId, UpdateUserAJAXRequest request) {
-        ActionLogContext.put("user_id", userId);
+        ActionLogContext.put("userId", userId);
         return userService.update(userId, request);
     }
 
     @Override
     public ResetPasswordAJAXResponse resetPassword(Long userId) {
-        ActionLogContext.put("user_id", userId);
+        ActionLogContext.put("userId", userId);
         return userService.resetPassword(userId);
     }
 
     @Override
     public ChangeStatusAJAXResponse changeStatus(Long userId) {
-        ActionLogContext.put("user_id", userId);
+        ActionLogContext.put("userId", userId);
         return userService.changeStatus(userId);
     }
 }

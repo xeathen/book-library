@@ -21,37 +21,37 @@ public class BOUserWebServiceImpl implements BOUserWebService {
     BOUserService boUserService;
 
     @Override
-    public BOListUserResponse listUser() {
+    public BOListUserResponse list() {
         return boUserService.listUser();
     }
 
     @Override
     public BOCreateUserResponse create(BOCreateUserRequest request) {
-        ActionLogContext.put("user_name", request);
+        ActionLogContext.put("userName", request);
         return boUserService.create(request);
     }
 
     @Override
     public BOUpdateUserResponse update(Long id, BOUpdateUserRequest request) {
-        ActionLogContext.put("user_id", id);
+        ActionLogContext.put("userId", id);
         return boUserService.update(id, request);
     }
 
     @Override
     public BODeleteUserResponse delete(Long id) {
-        ActionLogContext.put("user_id", id);
+        ActionLogContext.put("userId", id);
         return boUserService.delete(id);
     }
 
     @Override
     public BOResetPasswordResponse resetPassword(Long id) {
-        ActionLogContext.put("user_id", id);
+        ActionLogContext.put("userId", id);
         return boUserService.resetPassword(id);
     }
 
     @Override
     public BOChangeStatusResponse changeStatus(Long id) {
-        ActionLogContext.put("user_id", id);
+        ActionLogContext.put("userId", id);
         return boUserService.changeStatus(id);
     }
 }

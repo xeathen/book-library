@@ -37,7 +37,7 @@ public class BOUserService {
             UserView userView = new UserView();
             userView.id = user.id;
             userView.userName = user.userName;
-            userView.userEmail = user.userEmail;
+            userView.email = user.email;
             userView.status = user.status == null ? null : UserStatusView.valueOf(user.status.name());
             return userView;
         }).collect(Collectors.toList());
@@ -46,31 +46,30 @@ public class BOUserService {
     }
 
     public BOCreateUserResponse create(BOCreateUserRequest request) {
-        BOCreateUserResponse response = new BOCreateUserResponse();
         Query query = userRepository.select();
         query.where("user_name = ? ", request.userName);
         if (!query.fetch().isEmpty()) {
             throw new ConflictException("find duplicate username", ErrorCodes.DUPLICATE_USERNAME);
         }
         query = userRepository.select();
-        query.where("user_email = ?", request.userEmail);
+        query.where("email = ?", request.email);
         if (!query.fetch().isEmpty()) {
             throw new ConflictException("find duplicate email", ErrorCodes.DUPLICATE_EMAIL);
         }
-        response.id = userRepository.insert(convert(request)).orElseThrow();
-        convert(request, response);
+        BOCreateUserResponse response = boCreateUserResponse(request);
+        response.id = userRepository.insert(user(request)).orElseThrow();
         return response;
     }
 
     public BOUpdateUserResponse update(Long id, BOUpdateUserRequest request) {
         User user = checkUser(id);
         BOUpdateUserResponse response = new BOUpdateUserResponse();
-        User temp = convert(request);
+        User temp = user(request);
         temp.id = id;
         userRepository.partialUpdate(temp);
         response.id = id;
         response.userName = Strings.isBlank(request.userName) ? user.userName : request.userName;
-        response.userEmail = Strings.isBlank(request.userEmail) ? user.userEmail : request.userEmail;
+        response.email = Strings.isBlank(request.email) ? user.email : request.email;
         return response;
     }
 
@@ -115,26 +114,28 @@ public class BOUserService {
         return userOptional.get();
     }
 
-    private User convert(BOUpdateUserRequest request) {
+    private User user(BOUpdateUserRequest request) {
         User user = new User();
         user.userName = request.userName;
-        user.userEmail = request.userEmail;
+        user.email = request.email;
         return user;
     }
 
-    private User convert(BOCreateUserRequest request) {
+    private User user(BOCreateUserRequest request) {
         User user = new User();
         user.userName = request.userName;
         user.password = request.password;
-        user.userEmail = request.userEmail;
+        user.email = request.email;
         user.status = UserStatus.valueOf(request.status.name());
         return user;
     }
 
-    private void convert(BOCreateUserRequest request, BOCreateUserResponse response) {
+    private BOCreateUserResponse boCreateUserResponse(BOCreateUserRequest request) {
+        BOCreateUserResponse response = new BOCreateUserResponse();
         response.userName = request.userName;
         response.password = request.password;
-        response.userEmail = request.userEmail;
+        response.email = request.email;
         response.status = request.status;
+        return response;
     }
 }

@@ -12,21 +12,21 @@ public class GetBookResponse {
     @Property(name = "name")
     public String name;
 
-    @Property(name = "author_id")
-    public Integer authorId;
+    @Property(name = "author_name")
+    public String authorName;
 
-    @Property(name = "category_id")
-    public Integer categoryId;
+    @Property(name = "category_name")
+    public String categoryName;
 
-    @Property(name = "tag_id")
-    public Integer tagId;
+    @Property(name = "tag_name")
+    public String tagName;
 
-    @Property(name = "pub")
-    public String pub;
+    @Property(name = "publishing_house")
+    public String publishingHouse;
 
     @Property(name = "description")
     public String description;
 
-    @Property(name = "num")
-    public Integer num;
+    @Property(name = "mount")
+    public Integer mount;
 }

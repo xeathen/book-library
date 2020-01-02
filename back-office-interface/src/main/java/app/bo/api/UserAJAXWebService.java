@@ -21,7 +21,7 @@ import core.framework.api.web.service.PathParam;
 public interface UserAJAXWebService {
     @GET
     @Path("/ajax/user")
-    ListUserAJAXResponse listUser();
+    ListUserAJAXResponse list();
 
     @POST
     @Path("/ajax/user")

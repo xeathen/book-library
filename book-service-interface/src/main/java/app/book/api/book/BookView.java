@@ -27,15 +27,15 @@ public class BookView {
     @Column(name = "tag_name")
     public String tagName;
 
-    @Property(name = "pub")
-    @Column(name = "pub")
-    public String pub;
+    @Property(name = "publishing_house")
+    @Column(name = "publishing_house")
+    public String publishingHouse;
 
     @Property(name = "description")
     @Column(name = "description")
     public String description;
 
-    @Property(name = "num")
-    @Column(name = "num")
-    public Integer num;
+    @Property(name = "mount")
+    @Column(name = "mount")
+    public Integer mount;
 }

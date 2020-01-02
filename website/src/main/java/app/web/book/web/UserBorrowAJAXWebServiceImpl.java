@@ -21,28 +21,28 @@ public class UserBorrowAJAXWebServiceImpl implements UserBorrowAJAXWebService {
 
     @Override
     public SearchRecordAJAXResponse searchRecordByUserId(Long userId) {
-        ActionLogContext.put("user_id", userId);
+        ActionLogContext.put("userId", userId);
         return bookService.searchRecordByUserId(userId);
     }
 
     @Override
     public BorrowBookAJAXResponse borrowBook(BorrowBookAJAXRequest request) {
-        ActionLogContext.put("user_id", request.userId);
-        ActionLogContext.put("book_id", request.bookId);
+        ActionLogContext.put("userId", request.userId);
+        ActionLogContext.put("bookId", request.bookId);
         return bookService.borrowBook(request);
     }
 
     @Override
     public ReturnBookAJAXResponse returnBook(ReturnBookAJAXRequest request) {
-        ActionLogContext.put("user_id", request.userId);
-        ActionLogContext.put("book_id", request.bookId);
+        ActionLogContext.put("userId", request.userId);
+        ActionLogContext.put("bookId", request.bookId);
         return bookService.returnBook(request);
     }
 
     @Override
     public CreateReservationAJAXResponse reserve(CreateReservationAJAXRequest request) {
-        ActionLogContext.put("user_id", request.userId);
-        ActionLogContext.put("book_id", request.bookId);
+        ActionLogContext.put("userId", request.userId);
+        ActionLogContext.put("bookId", request.bookId);
         return bookService.reserve(request);
     }
 }

@@ -21,7 +21,7 @@ import core.framework.api.web.service.PathParam;
 public interface BOUserWebService {
     @GET
     @Path("/bo/user")
-    BOListUserResponse listUser();
+    BOListUserResponse list();
 
     @POST
     @Path("/bo/user")

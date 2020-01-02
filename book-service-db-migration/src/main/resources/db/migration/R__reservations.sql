@@ -1,8 +1,8 @@
 CREATE TABLE IF NOT EXISTS `reservations`  (
-  `id`              int(11)         NOT NULL    AUTO_INCREMENT,
-  `user_id`         bigint(11)      NOT NULL,
-  `book_id`         bigint(11)      NOT NULL,
-  `reserve_time`    timestamp(6)    NOT NULL,
+  `id`              INT(11)         NOT NULL    AUTO_INCREMENT,
+  `user_id`         BIGINT(11)      NOT NULL,
+  `book_id`         BIGINT(11)      NOT NULL,
+  `reserve_time`    TIMESTAMP(6)    NOT NULL,
   PRIMARY KEY (`id`)
 )
     ENGINE = InnoDB

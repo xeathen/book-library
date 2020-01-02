@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS `tags`  (
-  `id`      int(11)         NOT NULL    AUTO_INCREMENT,
-  `name`    varchar(50)     NOT NULL,
+  `id`      INT(11)         NOT NULL    AUTO_INCREMENT,
+  `name`    VARCHAR(50)     NOT NULL,
   PRIMARY KEY (`id`)
 )
     ENGINE = InnoDB

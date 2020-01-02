@@ -1,6 +1,6 @@
 package app.web.api;
 
-import app.web.api.book.BookAJAXView;
+import app.web.api.book.GetBookAJAXResponse;
 import app.web.api.book.SearchBookAJAXRequest;
 import app.web.api.book.SearchBookAJAXResponse;
 import core.framework.api.web.service.GET;
@@ -13,7 +13,7 @@ import core.framework.api.web.service.PathParam;
 public interface BookAJAXWebService {
     @GET
     @Path("/ajax/book/:id")
-    BookAJAXView get(@PathParam("id") Long id);
+    GetBookAJAXResponse get(@PathParam("id") Long id);
 
     @GET
     @Path("/ajax/book")
