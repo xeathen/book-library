@@ -23,7 +23,6 @@ public class UserAJAXWebServiceImpl implements UserAJAXWebService {
 
     @Override
     public UserLoginAJAXResponse login(UserLoginAJAXRequest request) {
-        //TODO:email
         ActionLogContext.put("userName", request.userName);
         return userService.login(request);
     }

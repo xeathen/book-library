@@ -1,0 +1,21 @@
+package app.book.api;
+
+import app.book.api.tag.BOCreateTagRequest;
+import app.book.api.tag.BOCreateTagResponse;
+import app.book.api.tag.BOListTagResponse;
+import core.framework.api.web.service.GET;
+import core.framework.api.web.service.POST;
+import core.framework.api.web.service.Path;
+
+/**
+ * @author Ethan
+ */
+public interface BOTagWebService {
+    @GET
+    @Path("/bo/book/tag")
+    BOListTagResponse list();
+
+    @POST
+    @Path("/bo/book/tag")
+    BOCreateTagResponse create(BOCreateTagRequest request);
+}

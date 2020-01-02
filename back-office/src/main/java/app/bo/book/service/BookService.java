@@ -1,40 +1,19 @@
 package app.bo.book.service;
 
-import app.bo.api.book.AuthorView;
 import app.bo.api.book.BookView;
 import app.bo.api.book.BorrowedRecordView;
-import app.bo.api.book.CategoryView;
-import app.bo.api.book.CreateAuthorAJAXRequest;
-import app.bo.api.book.CreateAuthorAJAXResponse;
 import app.bo.api.book.CreateBookAJAXRequest;
 import app.bo.api.book.CreateBookAJAXResponse;
-import app.bo.api.book.CreateCategoryAJAXRequest;
-import app.bo.api.book.CreateCategoryAJAXResponse;
-import app.bo.api.book.CreateTagAJAXRequest;
-import app.bo.api.book.CreateTagAJAXResponse;
 import app.bo.api.book.GetBookAJAXResponse;
-import app.bo.api.book.ListAuthorAJAXResponse;
-import app.bo.api.book.ListCategoryAJAXResponse;
-import app.bo.api.book.ListTagAJAXResponse;
 import app.bo.api.book.SearchBookAJAXRequest;
 import app.bo.api.book.SearchBookAJAXResponse;
 import app.bo.api.book.SearchRecordAJAXResponse;
-import app.bo.api.book.TagView;
 import app.bo.api.book.UpdateBookAJAXRequest;
 import app.bo.api.book.UpdateBookAJAXResponse;
 import app.book.api.BOBookWebService;
-import app.book.api.book.BOCreateAuthorRequest;
-import app.book.api.book.BOCreateAuthorResponse;
 import app.book.api.book.BOCreateBookRequest;
 import app.book.api.book.BOCreateBookResponse;
-import app.book.api.book.BOCreateCategoryRequest;
-import app.book.api.book.BOCreateCategoryResponse;
-import app.book.api.book.BOCreateTagRequest;
-import app.book.api.book.BOCreateTagResponse;
 import app.book.api.book.BOGetBookResponse;
-import app.book.api.book.BOListAuthorResponse;
-import app.book.api.book.BOListCategoryResponse;
-import app.book.api.book.BOListTagResponse;
 import app.book.api.book.BOSearchBookRequest;
 import app.book.api.book.BOSearchBookResponse;
 import app.book.api.book.BOSearchRecordResponse;
@@ -63,63 +42,6 @@ public class BookService {
     public SearchBookAJAXResponse search(SearchBookAJAXRequest ajaxRequest) {
         BOSearchBookRequest boSearchBookRequest = boSearchBookRequest(ajaxRequest);
         return searchBookAJAXResponse(boBookWebService.search(boSearchBookRequest));
-    }
-
-    public CreateCategoryAJAXResponse createCategory(CreateCategoryAJAXRequest ajaxRequest) {
-        BOCreateCategoryRequest boRequest = new BOCreateCategoryRequest();
-        boRequest.categoryName = ajaxRequest.categoryName;
-        return createCategoryAJAXResponse(boBookWebService.createCategory(boRequest));
-    }
-
-    public CreateTagAJAXResponse createTag(CreateTagAJAXRequest ajaxRequest) {
-        BOCreateTagRequest boRequest = new BOCreateTagRequest();
-        boRequest.tagName = ajaxRequest.tagName;
-        return createTagAJAXResponse(boBookWebService.createTag(boRequest));
-    }
-
-    public CreateAuthorAJAXResponse createAuthor(CreateAuthorAJAXRequest ajaxRequest) {
-        BOCreateAuthorRequest boRequest = new BOCreateAuthorRequest();
-        boRequest.authorName = ajaxRequest.authorName;
-        return createAuthorAJAXResponse(boBookWebService.createAuthor(boRequest));
-    }
-
-    public ListCategoryAJAXResponse listCategory() {
-        ListCategoryAJAXResponse ajaxResponse = new ListCategoryAJAXResponse();
-        BOListCategoryResponse boListCategoryResponse = boBookWebService.listCategory();
-        ajaxResponse.categories = boListCategoryResponse.categories.stream().map(boCategoryView -> {
-            CategoryView categoryView = new CategoryView();
-            categoryView.categoryId = boCategoryView.categoryId;
-            categoryView.categoryName = boCategoryView.categoryName;
-            return categoryView;
-        }).collect(Collectors.toList());
-        ajaxResponse.total = boListCategoryResponse.total;
-        return ajaxResponse;
-    }
-
-    public ListTagAJAXResponse listTag() {
-        ListTagAJAXResponse ajaxResponse = new ListTagAJAXResponse();
-        BOListTagResponse boListTagResponse = boBookWebService.listTag();
-        ajaxResponse.tags = boListTagResponse.tags.stream().map(boTagView -> {
-            TagView tagView = new TagView();
-            tagView.tagId = boTagView.tagId;
-            tagView.tagName = boTagView.tagName;
-            return tagView;
-        }).collect(Collectors.toList());
-        ajaxResponse.total = boListTagResponse.total;
-        return ajaxResponse;
-    }
-
-    public ListAuthorAJAXResponse listAuthor() {
-        ListAuthorAJAXResponse ajaxResponse = new ListAuthorAJAXResponse();
-        BOListAuthorResponse boListAuthorResponse = boBookWebService.listAuthor();
-        ajaxResponse.authors = boListAuthorResponse.authors.stream().map(boAuthorView -> {
-            AuthorView authorView = new AuthorView();
-            authorView.authorId = boAuthorView.authorId;
-            authorView.authorName = boAuthorView.authorName;
-            return authorView;
-        }).collect(Collectors.toList());
-        ajaxResponse.total = boListAuthorResponse.total;
-        return ajaxResponse;
     }
 
     public SearchRecordAJAXResponse searchRecordByBookId(Long bookId) {
@@ -227,31 +149,10 @@ public class BookService {
         return boCreateBookRequest;
     }
 
-    private CreateAuthorAJAXResponse createAuthorAJAXResponse(BOCreateAuthorResponse boResponse) {
-        CreateAuthorAJAXResponse ajaxResponse = new CreateAuthorAJAXResponse();
-        ajaxResponse.id = boResponse.id;
-        ajaxResponse.authorName = boResponse.authorName;
-        return ajaxResponse;
-    }
-
-    private CreateTagAJAXResponse createTagAJAXResponse(BOCreateTagResponse boResponse) {
-        CreateTagAJAXResponse ajaxResponse = new CreateTagAJAXResponse();
-        ajaxResponse.id = boResponse.id;
-        ajaxResponse.tagName = boResponse.tagName;
-        return ajaxResponse;
-    }
-
     private CreateBookAJAXResponse createBookAJAXResponse(BOCreateBookResponse boCreateBookResponse) {
         CreateBookAJAXResponse ajaxResponse = new CreateBookAJAXResponse();
         ajaxResponse.id = boCreateBookResponse.id;
         ajaxResponse.name = boCreateBookResponse.name;
-        return ajaxResponse;
-    }
-
-    private CreateCategoryAJAXResponse createCategoryAJAXResponse(BOCreateCategoryResponse boResponse) {
-        CreateCategoryAJAXResponse ajaxResponse = new CreateCategoryAJAXResponse();
-        ajaxResponse.id = boResponse.id;
-        ajaxResponse.categoryName = boResponse.categoryName;
         return ajaxResponse;
     }
 }

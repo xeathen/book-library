@@ -1,6 +1,7 @@
 package app.book.service;
 
 import app.ErrorCodes;
+import app.author.domain.Author;
 import app.book.api.book.BookView;
 import app.book.api.book.BorrowBookRequest;
 import app.book.api.book.BorrowBookResponse;
@@ -13,12 +14,11 @@ import app.book.api.book.ReturnBookResponse;
 import app.book.api.book.SearchBookRequest;
 import app.book.api.book.SearchBookResponse;
 import app.book.api.book.SearchRecordResponse;
-import app.book.domain.Author;
 import app.book.domain.Book;
 import app.book.domain.BorrowedRecord;
-import app.book.domain.Category;
 import app.book.domain.Reservation;
-import app.book.domain.Tag;
+import app.category.domain.Category;
+import app.tag.domain.Tag;
 import app.user.api.UserWebService;
 import app.user.api.user.GetUserResponse;
 import app.user.api.user.UserStatusView;

@@ -3,12 +3,9 @@ package app;
 import app.book.api.BOBookWebService;
 import app.book.api.BookWebService;
 import app.book.api.book.BookView;
-import app.book.domain.Author;
 import app.book.domain.Book;
 import app.book.domain.BorrowedRecord;
-import app.book.domain.Category;
 import app.book.domain.Reservation;
-import app.book.domain.Tag;
 import app.book.service.BOBookService;
 import app.book.service.BookService;
 import app.book.web.BOBookWebServiceImpl;
@@ -27,15 +24,10 @@ public class BookModule extends Module {
     protected void initialize() {
         DBConfig db = db();
         db.repository(Book.class);
-        db.repository(Category.class);
-        db.repository(Tag.class);
-        db.repository(Author.class);
         db.repository(Reservation.class);
         db.view(BookView.class);
 
-        MongoConfig config = config(MongoConfig.class);
-        config.uri(requiredProperty("sys.mongo.uri"));
-        config.collection(BorrowedRecord.class);
+        mongoConfig();
 
 
         APIConfig api = api();
@@ -45,5 +37,11 @@ public class BookModule extends Module {
         bind(BOBookService.class);
         api.service(BookWebService.class, bind(BookWebServiceImpl.class));
         api.service(BOBookWebService.class, bind(BOBookWebServiceImpl.class));
+    }
+
+    private void mongoConfig() {
+        MongoConfig config = config(MongoConfig.class);
+        config.uri(requiredProperty("sys.mongo.uri"));
+        config.collection(BorrowedRecord.class);
     }
 }
