@@ -47,8 +47,7 @@ public class UserService {
     }
 
     public CreateUserAJAXResponse create(CreateUserAJAXRequest request) {
-        BOCreateUserRequest boRequest = new BOCreateUserRequest();
-        boCreateUserRequest(request);
+        BOCreateUserRequest boRequest = boCreateUserRequest(request);
         return createUserAJAXResponse(boUserWebService.create(boRequest));
     }
 
