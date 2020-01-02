@@ -1,7 +1,7 @@
 package app;
 
-import app.bo.api.user.AdminLoginRequest;
-import app.bo.api.user.AdminLoginResponse;
+import app.bo.api.administrator.AdminLoginRequest;
+import app.bo.api.administrator.AdminLoginResponse;
 import app.bo.user.web.interceptor.AdminLoginInterceptor;
 import core.framework.http.HTTPMethod;
 import core.framework.module.App;

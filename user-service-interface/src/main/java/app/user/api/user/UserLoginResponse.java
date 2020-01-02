@@ -11,4 +11,7 @@ public class UserLoginResponse {
 
     @Property(name = "user_name")
     public String userName;
+
+    @Property(name = "login_message")
+    public LoginMessage loginMessage;
 }

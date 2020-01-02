@@ -2,6 +2,7 @@ package app.user.service;
 
 import app.user.ErrorCodes;
 import app.user.api.user.GetUserResponse;
+import app.user.api.user.LoginMessage;
 import app.user.api.user.UserLoginRequest;
 import app.user.api.user.UserLoginResponse;
 import app.user.api.user.UserStatusView;
@@ -9,8 +10,9 @@ import app.user.domain.User;
 import core.framework.db.Query;
 import core.framework.db.Repository;
 import core.framework.inject.Inject;
-import core.framework.web.exception.ConflictException;
 import core.framework.web.exception.NotFoundException;
+
+import java.util.Optional;
 
 /**
  * @author Ethan
@@ -26,17 +28,23 @@ public class UserService {
     }
 
     public UserLoginResponse login(UserLoginRequest request) {
+        UserLoginResponse response = new UserLoginResponse();
         Query<User> query = userRepository.select();
         query.where("user_name = ?", request.userName);
-        User user = query.fetchOne().orElseThrow(() -> new NotFoundException("User not found", ErrorCodes.USER_NOT_FOUND));
-        if (!user.password.equals(request.password)) {
-            throw new ConflictException("Wrong password.", ErrorCodes.WRONG_PASSWORD);
-        } else {
-            UserLoginResponse response = new UserLoginResponse();
-            response.userId = user.id;
-            response.userName = user.userName;
+        Optional<User> userOptional = query.fetchOne();
+        if (userOptional.isEmpty()){
+            response.loginMessage = LoginMessage.USER_NOT_FOUND;
             return response;
         }
+        User user = userOptional.get();
+        if (!user.password.equals(request.password)) {
+            response.loginMessage = LoginMessage.WRONG_PASSWORD;
+        } else {
+            response.userId = user.id;
+            response.userName = user.userName;
+            response.loginMessage = LoginMessage.SUCCESSFUL;
+        }
+        return response;
     }
 
     private GetUserResponse getUserResponse(User user) {

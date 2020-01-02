@@ -35,7 +35,6 @@ public class UserAJAXWebServiceImpl implements UserAJAXWebService {
     @Override
     public DeleteUserAJAXResponse delete(Long userId) {
         ActionLogContext.put("userId", userId);
-
         return userService.delete(userId);
     }
 

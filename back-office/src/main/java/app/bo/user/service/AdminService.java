@@ -1,26 +1,39 @@
 package app.bo.user.service;
 
-import app.Constants;
-import app.ErrorCodes;
-import app.bo.api.user.AdminLoginRequest;
-import app.bo.api.user.AdminLoginResponse;
-import core.framework.web.exception.ConflictException;
+import app.bo.administrator.domain.Administrator;
+import app.bo.api.administrator.AdminLoginRequest;
+import app.bo.api.administrator.AdminLoginResponse;
+import app.bo.api.administrator.LoginMessage;
+import core.framework.db.Query;
+import core.framework.db.Repository;
+import core.framework.inject.Inject;
+
+import java.util.Optional;
 
 /**
  * @author xeathen
  */
 public class AdminService {
+    @Inject
+    Repository<Administrator> administratorRepository;
 
     public AdminLoginResponse login(AdminLoginRequest request) {
-        if (Constants.ADMIN_NAME.equals(request.userName)
-            && Constants.ADMIN_PASSWORD.equals(request.password)) {
-            AdminLoginResponse response = new AdminLoginResponse();
-            //TODO:去数据库里查一遍
-            response.userId = 1L;
-            response.userName = "admin";
-            return response;
+        AdminLoginResponse response = new AdminLoginResponse();
+        Query<Administrator> query = administratorRepository.select();
+        query.where("admin_name = ?", request.adminName);
+        Optional<Administrator> administratorOptional = query.fetchOne();
+        if (administratorOptional.isEmpty()) {
+            response.loginMessage = LoginMessage.ADMINISTRATOR_NOT_FOUND;
         } else {
-            throw new ConflictException("Wrong Password.", ErrorCodes.WRONG_PASSWORD);
+            Administrator administrator = administratorOptional.get();
+            if (administrator.password.equals(request.password)) {
+                response.adminId = administrator.id;
+                response.adminName = administrator.adminName;
+                response.loginMessage = LoginMessage.SUCCESSFUL;
+            } else {
+                response.loginMessage = LoginMessage.WRONG_PASSWORD;
+            }
         }
+        return response;
     }
 }

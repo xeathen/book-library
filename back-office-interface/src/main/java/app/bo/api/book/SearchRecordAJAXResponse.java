@@ -11,6 +11,6 @@ public class SearchRecordAJAXResponse {
     @Property(name = "total")
     public Integer total;
 
-    @Property(name = "books")
+    @Property(name = "records")
     public List<BorrowedRecordView> borrowedRecords;
 }

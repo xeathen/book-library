@@ -1,5 +1,6 @@
 package app;
 
+import app.bo.administrator.domain.Administrator;
 import app.bo.api.AuthorAJAXWebService;
 import app.bo.api.BookAJAXWebService;
 import app.bo.api.CategoryAJAXWebService;
@@ -22,6 +23,7 @@ import app.book.api.BOCategoryWebService;
 import app.book.api.BOTagWebService;
 import app.user.api.BOUserWebService;
 import core.framework.module.APIConfig;
+import core.framework.module.DBConfig;
 import core.framework.module.Module;
 
 /**
@@ -30,6 +32,8 @@ import core.framework.module.Module;
 public class BackOfficeModule extends Module {
     @Override
     protected void initialize() {
+        db().repository(Administrator.class);
+
         APIConfig api = api();
         api.client(BOUserWebService.class, requiredProperty("app.user.serviceURL"));
         api.client(BOBookWebService.class, requiredProperty("app.book.serviceURL"));

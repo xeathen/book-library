@@ -1,4 +1,4 @@
-package app.bo.api.user;
+package app.bo.api.administrator;
 
 import core.framework.api.json.Property;
 import core.framework.api.validate.NotBlank;
@@ -10,8 +10,8 @@ import core.framework.api.validate.NotNull;
 public class AdminLoginRequest {
     @NotNull
     @NotBlank
-    @Property(name = "user_name")
-    public String userName;
+    @Property(name = "admin_name")
+    public String adminName;
 
     @NotNull
     @NotBlank

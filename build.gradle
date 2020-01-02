@@ -110,6 +110,7 @@ project(':notification-service') {
 
 project(':back-office') {
     dependencies {
+        runtimeOnly 'mysql:mysql-connector-java:8.0.17'
         implementation project(':back-office-interface')
         implementation project(':book-service-interface')
         implementation project(':user-service-interface')
