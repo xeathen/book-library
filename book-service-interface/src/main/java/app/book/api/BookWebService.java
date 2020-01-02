@@ -27,19 +27,19 @@ public interface BookWebService {
     @Path("/book")
     SearchBookResponse search(SearchBookRequest request);
 
-    @GET
-    @Path("/borrowed-record/:id")
-    SearchRecordResponse searchRecordByUserId(@PathParam("id") Long userId);
+    @POST
+    @Path("/book/borrow")
+    BorrowBookResponse borrow(BorrowBookRequest request);
 
     @POST
-    @Path("/borrowed-record/borrow-book")
-    BorrowBookResponse borrowBook(BorrowBookRequest request);
-
-    @POST
-    @Path("/borrowed-record/return-book")
-    ReturnBookResponse returnBook(ReturnBookRequest request);
+    @Path("/book/return-back")
+    ReturnBookResponse returnBack(ReturnBookRequest request);
 
     @POST
     @Path("/reservation")
     CreateReservationResponse reserve(CreateReservationRequest request);
+
+    @GET
+    @Path("/borrowed-record/:id")
+    SearchRecordResponse searchRecordByUserId(@PathParam("id") Long userId);
 }

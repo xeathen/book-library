@@ -1,5 +1,6 @@
 package app.user.service;
 
+import app.user.Constants;
 import app.user.ErrorCodes;
 import app.user.api.user.BOChangeStatusResponse;
 import app.user.api.user.BOCreateUserRequest;
@@ -46,7 +47,7 @@ public class BOUserService {
     }
 
     public BOCreateUserResponse create(BOCreateUserRequest request) {
-        Query query = userRepository.select();
+        Query<User> query = userRepository.select();
         query.where("user_name = ? ", request.userName);
         if (!query.fetch().isEmpty()) {
             throw new ConflictException("find duplicate username", ErrorCodes.DUPLICATE_USERNAME);
@@ -86,7 +87,7 @@ public class BOUserService {
         User user = checkUser(id);
         User temp = new User();
         temp.id = id;
-        temp.password = "123456";
+        temp.password = Constants.PASSWORD_RESET;
         userRepository.partialUpdate(temp);
         response.userId = id;
         response.userName = user.userName;

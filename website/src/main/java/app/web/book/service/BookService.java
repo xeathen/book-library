@@ -56,15 +56,15 @@ public class BookService {
         return searchRecordAJAXResponse(response);
     }
 
-    public BorrowBookAJAXResponse borrowBook(BorrowBookAJAXRequest ajaxRequest) {
+    public BorrowBookAJAXResponse borrow(BorrowBookAJAXRequest ajaxRequest) {
         BorrowBookRequest request = borrowBookRequest(ajaxRequest);
-        BorrowBookResponse response = bookWebService.borrowBook(request);
+        BorrowBookResponse response = bookWebService.borrow(request);
         return borrowBookAJAXResponse(response);
     }
 
-    public ReturnBookAJAXResponse returnBook(ReturnBookAJAXRequest ajaxRequest) {
+    public ReturnBookAJAXResponse returnBack(ReturnBookAJAXRequest ajaxRequest) {
         ReturnBookRequest request = returnBookRequest(ajaxRequest);
-        ReturnBookResponse response = bookWebService.returnBook(request);
+        ReturnBookResponse response = bookWebService.returnBack(request);
         return returnBookAJAXResponse(response);
     }
 

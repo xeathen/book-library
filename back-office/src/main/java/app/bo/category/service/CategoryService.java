@@ -19,9 +19,6 @@ public class CategoryService {
     @Inject
     BOCategoryWebService boCategoryWebService;
 
-    @Inject
-
-
     public ListCategoryAJAXResponse list() {
         ListCategoryAJAXResponse ajaxResponse = new ListCategoryAJAXResponse();
         BOListCategoryResponse boListCategoryResponse = boCategoryWebService.list();

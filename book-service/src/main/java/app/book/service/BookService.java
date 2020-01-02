@@ -84,7 +84,7 @@ public class BookService {
         return response;
     }
 
-    public BorrowBookResponse borrowBook(BorrowBookRequest request) {
+    public BorrowBookResponse borrow(BorrowBookRequest request) {
         Book book = bookRepository.get(request.bookId).orElseThrow(() ->
             new NotFoundException("Book not found.", ErrorCodes.BOOK_NOT_FOUND));
         GetUserResponse user = userWebService.get(request.userId);
@@ -109,7 +109,7 @@ public class BookService {
         return borrowBookResponse(borrowedRecord);
     }
 
-    public ReturnBookResponse returnBook(ReturnBookRequest request) {
+    public ReturnBookResponse returnBack(ReturnBookRequest request) {
         ReturnBookResponse response = new ReturnBookResponse();
         if (isReturned(request.userId, request.bookId)) {
             throw new NotFoundException("Record not found.", ErrorCodes.RECORD_NOT_FOUND);

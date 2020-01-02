@@ -4,10 +4,8 @@ import app.book.api.BookWebService;
 import app.user.api.UserWebService;
 import app.web.api.BookAJAXWebService;
 import app.web.api.UserAJAXWebService;
-import app.web.api.UserBorrowAJAXWebService;
 import app.web.book.service.BookService;
 import app.web.book.web.BookAJAXWebServiceImpl;
-import app.web.book.web.UserBorrowAJAXWebServiceImpl;
 import app.web.user.service.UserService;
 import app.web.user.web.UserAJAXWebServiceImpl;
 import core.framework.module.APIConfig;
@@ -28,6 +26,5 @@ public class LibraryModule extends Module {
 
         api.service(UserAJAXWebService.class, bind(UserAJAXWebServiceImpl.class));
         api.service(BookAJAXWebService.class, bind(BookAJAXWebServiceImpl.class));
-        api.service(UserBorrowAJAXWebService.class, bind(UserBorrowAJAXWebServiceImpl.class));
     }
 }

@@ -13,16 +13,16 @@ import core.framework.log.ActionLogContext;
  */
 public class BOAuthorWebServiceImpl implements BOAuthorWebService {
     @Inject
-    BOAuthorService boAuthorWebService;
+    BOAuthorService boAuthorService;
 
     @Override
     public BOCreateAuthorResponse create(BOCreateAuthorRequest request) {
         ActionLogContext.put("authorName", request.authorName);
-        return boAuthorWebService.create(request);
+        return boAuthorService.create(request);
     }
 
     @Override
     public BOListAuthorResponse list() {
-        return boAuthorWebService.list();
+        return boAuthorService.list();
     }
 }

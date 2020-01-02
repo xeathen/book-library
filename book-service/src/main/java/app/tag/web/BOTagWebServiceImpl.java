@@ -13,16 +13,16 @@ import core.framework.log.ActionLogContext;
  */
 public class BOTagWebServiceImpl implements BOTagWebService {
     @Inject
-    BOTagService boTagWebService;
+    BOTagService boTagService;
 
     @Override
     public BOListTagResponse list() {
-        return boTagWebService.list();
+        return boTagService.list();
     }
 
     @Override
     public BOCreateTagResponse create(BOCreateTagRequest request) {
         ActionLogContext.put("tagName", request.tagName);
-        return boTagWebService.create(request);
+        return boTagService.create(request);
     }
 }

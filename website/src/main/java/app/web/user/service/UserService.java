@@ -11,7 +11,6 @@ import app.web.api.user.UserLoginAJAXResponse;
 import app.web.api.user.UserStatusAJAXView;
 import core.framework.api.web.service.PathParam;
 import core.framework.inject.Inject;
-import core.framework.util.Strings;
 import core.framework.web.Session;
 import core.framework.web.WebContext;
 import core.framework.web.exception.BadRequestException;
@@ -30,17 +29,15 @@ public class UserService {
     }
 
     public UserLoginAJAXResponse login(UserLoginAJAXRequest ajaxRequest) {
-        UserLoginAJAXResponse ajaxResponse = new UserLoginAJAXResponse();
         Session session = webContext.request().session();
         if (session.get("userId").isPresent()) {
             throw new BadRequestException("You are login already.", ErrorCodes.ALREADY_LOGIN);
         } else {
+            UserLoginAJAXResponse ajaxResponse = new UserLoginAJAXResponse();
             UserLoginRequest request = userLoginRequest(ajaxRequest);
             UserLoginResponse response = userWebService.login(request);
-            if (!Strings.isBlank(response.userName)) {
-                ajaxResponse.userId = response.userId;
-                ajaxResponse.userName = response.userName;
-            }
+            ajaxResponse.userId = response.userId;
+            ajaxResponse.userName = response.userName;
             session.set("userId", response.userId.toString());
             return ajaxResponse;
         }

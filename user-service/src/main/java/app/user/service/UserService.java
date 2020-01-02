@@ -20,6 +20,7 @@ public class UserService {
     Repository<User> userRepository;
 
     public GetUserResponse get(Long id) {
+        //TODO:只允许get自己
         User user = userRepository.get(id).orElseThrow(() -> new NotFoundException("User not found, id=" + id, ErrorCodes.USER_NOT_FOUND));
         return getUserResponse(user);
     }

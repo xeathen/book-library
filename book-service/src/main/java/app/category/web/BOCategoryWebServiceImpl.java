@@ -13,16 +13,16 @@ import core.framework.log.ActionLogContext;
  */
 public class BOCategoryWebServiceImpl implements BOCategoryWebService {
     @Inject
-    BOCategoryService boCategoryWebService;
+    BOCategoryService boCategoryService;
 
     @Override
     public BOListCategoryResponse list() {
-        return boCategoryWebService.list();
+        return boCategoryService.list();
     }
 
     @Override
     public BOCreateCategoryResponse create(BOCreateCategoryRequest request) {
         ActionLogContext.put("categoryName", request.categoryName);
-        return boCategoryWebService.create(request);
+        return boCategoryService.create(request);
     }
 }

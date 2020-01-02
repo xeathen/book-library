@@ -23,8 +23,6 @@ import core.framework.inject.Inject;
 import core.framework.mongo.MongoCollection;
 import core.framework.util.Strings;
 import core.framework.web.exception.NotFoundException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +33,6 @@ import java.util.stream.Collectors;
  * @author Ethan
  */
 public class BOBookService {
-    private final Logger logger = LoggerFactory.getLogger(BOBookService.class);
     @Inject
     Repository<Book> bookRepository;
     @Inject
@@ -167,11 +164,11 @@ public class BOBookService {
         response.id = book.id;
         response.name = book.name;
         response.categoryName = categoryRepository.get(book.categoryId).orElseThrow(() ->
-            new NotFoundException("category not found", ErrorCodes.CATEGORY_NOT_FOUND)).name;
+            new NotFoundException("Category not found.", ErrorCodes.CATEGORY_NOT_FOUND)).name;
         response.tagName = tagRepository.get(book.tagId).orElseThrow(() ->
-            new NotFoundException("tag not found", ErrorCodes.TAG_NOT_FOUND)).name;
+            new NotFoundException("Tag not found.", ErrorCodes.TAG_NOT_FOUND)).name;
         response.authorName = authorRepository.get(book.authorId).orElseThrow(() ->
-            new NotFoundException("author not found", ErrorCodes.AUTHOR_NOT_FOUND)).name;
+            new NotFoundException("Author not found.", ErrorCodes.AUTHOR_NOT_FOUND)).name;
         response.publishingHouse = book.publishingHouse;
         response.description = book.description;
         response.mount = book.mount;
