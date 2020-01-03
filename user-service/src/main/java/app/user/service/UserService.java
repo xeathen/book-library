@@ -1,16 +1,15 @@
 package app.user.service;
 
-import app.user.ErrorCodes;
-import app.user.api.user.GetUserResponse;
+import app.user.api.user.BOGetUserResponse;
 import app.user.api.user.LoginMessage;
 import app.user.api.user.UserLoginRequest;
 import app.user.api.user.UserLoginResponse;
 import app.user.api.user.UserStatusView;
 import app.user.domain.User;
+import app.user.util.MD5Util;
 import core.framework.db.Query;
 import core.framework.db.Repository;
 import core.framework.inject.Inject;
-import core.framework.web.exception.NotFoundException;
 
 import java.util.Optional;
 
@@ -21,23 +20,17 @@ public class UserService {
     @Inject
     Repository<User> userRepository;
 
-    public GetUserResponse get(Long id) {
-        //TODO:只允许get自己
-        User user = userRepository.get(id).orElseThrow(() -> new NotFoundException("User not found, id=" + id, ErrorCodes.USER_NOT_FOUND));
-        return getUserResponse(user);
-    }
-
     public UserLoginResponse login(UserLoginRequest request) {
         UserLoginResponse response = new UserLoginResponse();
         Query<User> query = userRepository.select();
         query.where("user_name = ?", request.userName);
         Optional<User> userOptional = query.fetchOne();
-        if (userOptional.isEmpty()){
+        if (userOptional.isEmpty()) {
             response.loginMessage = LoginMessage.USER_NOT_FOUND;
             return response;
         }
         User user = userOptional.get();
-        if (!user.password.equals(request.password)) {
+        if (!MD5Util.getSaltVerifyMD5(request.password, user.password)) {
             response.loginMessage = LoginMessage.WRONG_PASSWORD;
         } else {
             response.userId = user.id;
@@ -47,8 +40,8 @@ public class UserService {
         return response;
     }
 
-    private GetUserResponse getUserResponse(User user) {
-        GetUserResponse response = new GetUserResponse();
+    private BOGetUserResponse getUserResponse(User user) {
+        BOGetUserResponse response = new BOGetUserResponse();
         response.id = user.id;
         response.userName = user.userName;
         response.email = user.email;

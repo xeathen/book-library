@@ -4,6 +4,7 @@ import app.bo.api.user.ChangeStatusAJAXResponse;
 import app.bo.api.user.CreateUserAJAXRequest;
 import app.bo.api.user.CreateUserAJAXResponse;
 import app.bo.api.user.DeleteUserAJAXResponse;
+import app.bo.api.user.GetUserAJAXResponse;
 import app.bo.api.user.ListUserAJAXResponse;
 import app.bo.api.user.ResetPasswordAJAXResponse;
 import app.bo.api.user.UpdateUserAJAXRequest;
@@ -19,6 +20,10 @@ import core.framework.api.web.service.PathParam;
  * @author Ethan
  */
 public interface UserAJAXWebService {
+    @GET
+    @Path("/ajax/user/:id")
+    GetUserAJAXResponse get(@PathParam("id") Long id);
+
     @GET
     @Path("/ajax/user")
     ListUserAJAXResponse list();

@@ -9,5 +9,5 @@ CREATE TABLE IF NOT EXISTS `administrators` (
     DEFAULT CHARACTER SET = utf8;
 
 INSERT INTO `administrators`
-VALUES (1, 'admin', 'admin');
+VALUES (1, 'admin', '52e525a79f6ce5de1899080381cc74436f0c12ac9b002e52');
 

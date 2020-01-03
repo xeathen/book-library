@@ -23,7 +23,6 @@ import app.book.api.BOCategoryWebService;
 import app.book.api.BOTagWebService;
 import app.user.api.BOUserWebService;
 import core.framework.module.APIConfig;
-import core.framework.module.DBConfig;
 import core.framework.module.Module;
 
 /**

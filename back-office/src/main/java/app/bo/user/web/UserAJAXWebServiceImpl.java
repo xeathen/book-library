@@ -5,6 +5,7 @@ import app.bo.api.user.ChangeStatusAJAXResponse;
 import app.bo.api.user.CreateUserAJAXRequest;
 import app.bo.api.user.CreateUserAJAXResponse;
 import app.bo.api.user.DeleteUserAJAXResponse;
+import app.bo.api.user.GetUserAJAXResponse;
 import app.bo.api.user.ListUserAJAXResponse;
 import app.bo.api.user.ResetPasswordAJAXResponse;
 import app.bo.api.user.UpdateUserAJAXRequest;
@@ -19,6 +20,12 @@ import core.framework.log.ActionLogContext;
 public class UserAJAXWebServiceImpl implements UserAJAXWebService {
     @Inject
     UserService userService;
+
+    @Override
+    public GetUserAJAXResponse get(Long id) {
+        ActionLogContext.put("userId", id);
+        return userService.get(id);
+    }
 
     @Override
     public ListUserAJAXResponse list() {

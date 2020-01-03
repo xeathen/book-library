@@ -6,6 +6,7 @@ import app.user.api.user.BOChangeStatusResponse;
 import app.user.api.user.BOCreateUserRequest;
 import app.user.api.user.BOCreateUserResponse;
 import app.user.api.user.BODeleteUserResponse;
+import app.user.api.user.BOGetUserResponse;
 import app.user.api.user.BOListUserResponse;
 import app.user.api.user.BOResetPasswordResponse;
 import app.user.api.user.BOUpdateUserRequest;
@@ -14,6 +15,7 @@ import app.user.api.user.UserStatusView;
 import app.user.api.user.UserView;
 import app.user.domain.User;
 import app.user.domain.UserStatus;
+import app.user.util.MD5Util;
 import core.framework.db.Query;
 import core.framework.db.Repository;
 import core.framework.inject.Inject;
@@ -30,6 +32,11 @@ import java.util.stream.Collectors;
 public class BOUserService {
     @Inject
     Repository<User> userRepository;
+
+    public BOGetUserResponse get(Long id) {
+        User user = userRepository.get(id).orElseThrow(() -> new NotFoundException("User not found, id=" + id, ErrorCodes.USER_NOT_FOUND));
+        return getUserResponse(user);
+    }
 
     public BOListUserResponse listUser() {
         BOListUserResponse response = new BOListUserResponse();
@@ -57,6 +64,7 @@ public class BOUserService {
         if (!query.fetch().isEmpty()) {
             throw new ConflictException("find duplicate email", ErrorCodes.DUPLICATE_EMAIL);
         }
+        request.password = MD5Util.getSaltMD5(request.password);
         BOCreateUserResponse response = boCreateUserResponse(request);
         response.id = userRepository.insert(user(request)).orElseThrow();
         return response;
@@ -137,6 +145,15 @@ public class BOUserService {
         response.password = request.password;
         response.email = request.email;
         response.status = request.status;
+        return response;
+    }
+
+    private BOGetUserResponse getUserResponse(User user) {
+        BOGetUserResponse response = new BOGetUserResponse();
+        response.id = user.id;
+        response.userName = user.userName;
+        response.email = user.email;
+        response.status = user.status == null ? null : UserStatusView.valueOf(user.status.name());
         return response;
     }
 }

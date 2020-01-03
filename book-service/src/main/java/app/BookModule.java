@@ -10,7 +10,7 @@ import app.book.service.BOBookService;
 import app.book.service.BookService;
 import app.book.web.BOBookWebServiceImpl;
 import app.book.web.BookWebServiceImpl;
-import app.user.api.UserWebService;
+import app.user.api.BOUserWebService;
 import core.framework.module.APIConfig;
 import core.framework.module.DBConfig;
 import core.framework.module.Module;
@@ -29,9 +29,8 @@ public class BookModule extends Module {
 
         mongoConfig();
 
-
         APIConfig api = api();
-        api.client(UserWebService.class, requiredProperty("app.userWebService.URL"));
+        api.client(BOUserWebService.class, requiredProperty("app.user.serviceURL"));
 
         bind(BookService.class);
         bind(BOBookService.class);

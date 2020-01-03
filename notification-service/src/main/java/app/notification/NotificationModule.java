@@ -4,7 +4,7 @@ import app.book.api.kafka.ExpirationMessage;
 import app.book.api.kafka.ReservationMessage;
 import app.kafka.ExpireMassageHandler;
 import app.kafka.ReservationMessageHandler;
-import app.user.api.UserWebService;
+import app.user.api.BOUserWebService;
 import core.framework.module.Module;
 
 /**
@@ -13,7 +13,7 @@ import core.framework.module.Module;
 public class NotificationModule extends Module {
     @Override
     protected void initialize() {
-        api().client(UserWebService.class, requiredProperty("app.userWebService.URL"));
+        api().client(BOUserWebService.class, requiredProperty("app.user.serviceURL"));
         configureKafka();
     }
 

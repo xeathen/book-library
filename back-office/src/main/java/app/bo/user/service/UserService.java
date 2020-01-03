@@ -4,6 +4,7 @@ import app.bo.api.user.ChangeStatusAJAXResponse;
 import app.bo.api.user.CreateUserAJAXRequest;
 import app.bo.api.user.CreateUserAJAXResponse;
 import app.bo.api.user.DeleteUserAJAXResponse;
+import app.bo.api.user.GetUserAJAXResponse;
 import app.bo.api.user.ListUserAJAXResponse;
 import app.bo.api.user.ResetPasswordAJAXResponse;
 import app.bo.api.user.UpdateUserAJAXRequest;
@@ -14,6 +15,7 @@ import app.user.api.BOUserWebService;
 import app.user.api.user.BOChangeStatusResponse;
 import app.user.api.user.BOCreateUserRequest;
 import app.user.api.user.BOCreateUserResponse;
+import app.user.api.user.BOGetUserResponse;
 import app.user.api.user.BOListUserResponse;
 import app.user.api.user.BOResetPasswordResponse;
 import app.user.api.user.BOUpdateUserRequest;
@@ -30,6 +32,11 @@ import java.util.stream.Collectors;
 public class UserService {
     @Inject
     BOUserWebService boUserWebService;
+
+    public GetUserAJAXResponse get(Long id) {
+        BOGetUserResponse boGetUserResponse = boUserWebService.get(id);
+        return getUserAJAXResponse(boGetUserResponse);
+    }
 
     public ListUserAJAXResponse list() {
         ListUserAJAXResponse ajaxResponse = new ListUserAJAXResponse();
@@ -73,6 +80,15 @@ public class UserService {
             throw new BadRequestException("You can not inactive yourself.");
         }
         return changeStatusAJAXResponse(boUserWebService.changeStatus(id));
+    }
+
+    private GetUserAJAXResponse getUserAJAXResponse(BOGetUserResponse response) {
+        GetUserAJAXResponse ajaxResponse = new GetUserAJAXResponse();
+        ajaxResponse.id = response.id;
+        ajaxResponse.userName = response.userName;
+        ajaxResponse.email = response.email;
+        ajaxResponse.status = response.status == null ? null : UserStatusAJAXView.valueOf(response.status.name());
+        return ajaxResponse;
     }
 
     private ChangeStatusAJAXResponse changeStatusAJAXResponse(BOChangeStatusResponse boResponse) {

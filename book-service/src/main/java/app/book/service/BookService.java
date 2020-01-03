@@ -19,8 +19,8 @@ import app.book.domain.BorrowedRecord;
 import app.book.domain.Reservation;
 import app.category.domain.Category;
 import app.tag.domain.Tag;
-import app.user.api.UserWebService;
-import app.user.api.user.GetUserResponse;
+import app.user.api.BOUserWebService;
+import app.user.api.user.BOGetUserResponse;
 import app.user.api.user.UserStatusView;
 import com.mongodb.client.model.Filters;
 import core.framework.db.Database;
@@ -57,7 +57,7 @@ public class BookService {
     @Inject
     MongoCollection<BorrowedRecord> mongoCollection;
     @Inject
-    UserWebService userWebService;
+    BOUserWebService boUserWebService;
     @Inject
     Database database;
 
@@ -87,7 +87,7 @@ public class BookService {
     public BorrowBookResponse borrow(BorrowBookRequest request) {
         Book book = bookRepository.get(request.bookId).orElseThrow(() ->
             new NotFoundException("Book not found.", ErrorCodes.BOOK_NOT_FOUND));
-        GetUserResponse user = userWebService.get(request.userId);
+        BOGetUserResponse user = boUserWebService.get(request.userId);
         if (book.mount <= 0) {
             throw new BadRequestException("No book rest.", ErrorCodes.NO_BOOK_REST);
         }
@@ -138,7 +138,7 @@ public class BookService {
         bookRepository.partialUpdate(borrowedBook);
     }
 
-    private BorrowedRecord createBorrowedRecord(BorrowBookRequest request, Book book, GetUserResponse response) {
+    private BorrowedRecord createBorrowedRecord(BorrowBookRequest request, Book book, BOGetUserResponse response) {
         BorrowedRecord borrowedRecord = new BorrowedRecord();
         borrowedRecord.id = UUID.randomUUID().toString();
         borrowedRecord.userId = request.userId;
@@ -223,7 +223,7 @@ public class BookService {
     private CreateReservationResponse createReservationResponse(CreateReservationRequest request) {
         CreateReservationResponse response = new CreateReservationResponse();
         response.userId = request.userId;
-        response.userName = userWebService.get(request.userId).userName;
+        response.userName = boUserWebService.get(request.userId).userName;
         response.bookId = request.bookId;
         response.bookName = bookRepository.get(request.bookId).orElseThrow().name;
         return response;

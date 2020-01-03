@@ -4,6 +4,7 @@ import app.user.api.user.BOChangeStatusResponse;
 import app.user.api.user.BOCreateUserRequest;
 import app.user.api.user.BOCreateUserResponse;
 import app.user.api.user.BODeleteUserResponse;
+import app.user.api.user.BOGetUserResponse;
 import app.user.api.user.BOListUserResponse;
 import app.user.api.user.BOResetPasswordResponse;
 import app.user.api.user.BOUpdateUserRequest;
@@ -19,6 +20,10 @@ import core.framework.api.web.service.PathParam;
  * @author Ethan
  */
 public interface BOUserWebService {
+    @GET
+    @Path("/bo/user/:id")
+    BOGetUserResponse get(@PathParam("id") Long id);
+
     @GET
     @Path("/bo/user")
     BOListUserResponse list();

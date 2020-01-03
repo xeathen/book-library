@@ -1,11 +1,11 @@
-package app.user.api.user;
+package app.bo.api.user;
 
 import core.framework.api.json.Property;
 
 /**
  * @author Ethan
  */
-public class GetUserResponse {
+public class GetUserAJAXResponse {
     @Property(name = "id")
     public Long id;
 
@@ -16,5 +16,5 @@ public class GetUserResponse {
     public String email;
 
     @Property(name = "status")
-    public UserStatusView status;
+    public UserStatusAJAXView status;
 }

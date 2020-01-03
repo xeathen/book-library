@@ -4,6 +4,7 @@ import app.bo.administrator.domain.Administrator;
 import app.bo.api.administrator.AdminLoginRequest;
 import app.bo.api.administrator.AdminLoginResponse;
 import app.bo.api.administrator.LoginMessage;
+import app.bo.util.MD5Util;
 import core.framework.db.Query;
 import core.framework.db.Repository;
 import core.framework.inject.Inject;
@@ -26,7 +27,7 @@ public class AdminService {
             response.loginMessage = LoginMessage.ADMINISTRATOR_NOT_FOUND;
         } else {
             Administrator administrator = administratorOptional.get();
-            if (administrator.password.equals(request.password)) {
+            if (MD5Util.getSaltVerifyMD5(request.password, administrator.password)) {
                 response.adminId = administrator.id;
                 response.adminName = administrator.adminName;
                 response.loginMessage = LoginMessage.SUCCESSFUL;

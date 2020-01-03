@@ -21,7 +21,7 @@ public class AdminLoginController implements Controller {
         AdminLoginRequest adminLoginRequest = request.bean(AdminLoginRequest.class);
         AdminLoginResponse adminLoginResponse = new AdminLoginResponse();
         if (request.session().get("adminId").isPresent()) {
-           adminLoginResponse.loginMessage = LoginMessage.ALREADY_LOGIN;
+            adminLoginResponse.loginMessage = LoginMessage.ALREADY_LOGIN;
         } else {
             adminLoginResponse = adminService.login(adminLoginRequest);
             if (adminLoginResponse.loginMessage.equals(LoginMessage.SUCCESSFUL)) {
