@@ -22,7 +22,6 @@ public interface BOBookWebService {
     @Path("/bo/book/:id")
     BOGetBookResponse get(@PathParam("id") Long bookId);
 
-    //TODO:PUT
     @PUT
     @Path("/bo/book")
     BOSearchBookResponse search(BOSearchBookRequest request);

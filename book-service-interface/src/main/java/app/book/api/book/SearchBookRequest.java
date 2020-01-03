@@ -2,7 +2,6 @@ package app.book.api.book;
 
 import core.framework.api.json.Property;
 import core.framework.api.validate.NotNull;
-import core.framework.api.web.service.QueryParam;
 
 /**
  * @author Ethan

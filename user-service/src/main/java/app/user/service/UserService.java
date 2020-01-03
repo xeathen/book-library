@@ -6,7 +6,6 @@ import app.user.api.user.UserLoginRequest;
 import app.user.api.user.UserLoginResponse;
 import app.user.api.user.UserStatusView;
 import app.user.domain.User;
-import app.user.util.MD5Util;
 import core.framework.crypto.Hash;
 import core.framework.db.Query;
 import core.framework.db.Repository;

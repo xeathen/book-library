@@ -180,37 +180,6 @@ public class BookService {
         reservationRepository.insert(reservation);
     }
 
-    private List<BookView> select(SearchBookRequest request) {
-        //TODO:分页查询
-        StringBuilder whereClause = new StringBuilder();
-        List<String> params = new ArrayList<>();
-        if (!Strings.isBlank(request.name)) {
-            where("books.name like ?", Strings.format("%{}%", request.name), whereClause, params);
-        }
-        if (!Strings.isBlank(request.author)) {
-            where("authors.name like ?", Strings.format("%{}%", request.author), whereClause, params);
-        }
-        if (!Strings.isBlank(request.category)) {
-            where("categories.name like ?", Strings.format("%{}%", request.category), whereClause, params);
-        }
-        if (!Strings.isBlank(request.tag)) {
-            where("tags.name like ?", Strings.format("%{}%", request.tag), whereClause, params);
-        }
-        if (!Strings.isBlank(request.publishingHouse)) {
-            where("books.publishing_house like ?", Strings.format("%{}%", request.publishingHouse), whereClause, params);
-        }
-        if (!Strings.isBlank(request.description)) {
-            where("books.description like ?", Strings.format("%{}%", request.description), whereClause, params);
-        }
-        String sql = "SELECT `books`.`id` as `id`, `books`.`name` as `name`, `authors`.`name` as `author_name`, "
-            + "`categories`.`name` as `category_name`, tags.`name` as `tag_name`, books.`publishing_house`, books.`description` , books.`mount` "
-            + "FROM `books` join `categories` join `tags` join `authors` "
-            + "on books.category_id = categories.id and tags.id = books.tag_id and `authors`.id = books.author_id "
-            + "where " + (whereClause.length() > 0 ? whereClause : "1 = 1")
-            + "limit " + request.skip + ", " + request.limit;
-        return database.select(sql, BookView.class, params.toArray());
-    }
-
     private String whereSQL(SearchBookRequest request, List<String> params) {
         StringBuilder whereClause = new StringBuilder();
         if (!Strings.isBlank(request.name)) {
