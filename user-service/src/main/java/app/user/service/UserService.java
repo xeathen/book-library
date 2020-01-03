@@ -48,12 +48,4 @@ public class UserService {
         return hashedPassword;
     }
 
-    private BOGetUserResponse getUserResponse(User user) {
-        BOGetUserResponse response = new BOGetUserResponse();
-        response.id = user.id;
-        response.userName = user.userName;
-        response.email = user.email;
-        response.status = user.status == null ? null : UserStatusView.valueOf(user.status.name());
-        return response;
-    }
 }

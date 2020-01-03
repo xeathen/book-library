@@ -14,7 +14,7 @@ public class ExpirationNotificationJob implements Job {
     ReservationService reservationService;
 
     @Override
-    public void execute(JobContext context) throws Exception {
+    public void execute(JobContext context) {
         ActionLogContext.put("jobName", context.name);
         ActionLogContext.put("jobScheduleTime", context.scheduledTime);
         reservationService.notifyExpiration();
