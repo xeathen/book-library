@@ -1,10 +1,8 @@
 package app.user.service;
 
-import app.user.api.user.BOGetUserResponse;
 import app.user.api.user.LoginMessage;
 import app.user.api.user.UserLoginRequest;
 import app.user.api.user.UserLoginResponse;
-import app.user.api.user.UserStatusView;
 import app.user.domain.User;
 import core.framework.crypto.Hash;
 import core.framework.db.Query;
@@ -47,5 +45,4 @@ public class UserService {
         }
         return hashedPassword;
     }
-
 }

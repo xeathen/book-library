@@ -32,8 +32,10 @@ public class UserService {
             UserLoginResponse response = userWebService.login(request);
             ajaxResponse.userId = response.userId;
             ajaxResponse.userName = response.userName;
-            ajaxResponse.loginMessage = response.loginMessage == null ? null : LoginMessage.valueOf(response.loginMessage.name());
-            if (LoginMessage.SUCCESSFUL.equals(ajaxResponse.loginMessage)) {
+            if (response.loginMessage != null) {
+                ajaxResponse.loginMessage = LoginMessage.valueOf(response.loginMessage.name());
+            }
+            if (ajaxResponse.loginMessage == LoginMessage.SUCCESSFUL) {
                 session.set("userName", response.userName);
             }
         }
