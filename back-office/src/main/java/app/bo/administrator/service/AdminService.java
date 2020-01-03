@@ -1,4 +1,4 @@
-package app.bo.user.service;
+package app.bo.administrator.service;
 
 import app.bo.administrator.domain.Administrator;
 import app.bo.api.administrator.AdminLoginRequest;
@@ -44,9 +44,5 @@ public class AdminService {
             hashedPassword = Hash.sha256Hex(salt + hashedPassword);
         }
         return hashedPassword;
-    }
-
-    public static void main(String[] args) {
-        System.out.println(new AdminService().hash("admin", "hiasdb", 6));
     }
 }

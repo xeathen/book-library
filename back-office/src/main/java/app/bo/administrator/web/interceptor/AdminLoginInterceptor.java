@@ -1,4 +1,4 @@
-package app.bo.user.web.interceptor;
+package app.bo.administrator.web.interceptor;
 
 import core.framework.web.Interceptor;
 import core.framework.web.Invocation;

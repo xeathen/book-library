@@ -56,11 +56,11 @@ public class BOBookService {
 
     public BOSearchBookResponse search(BOSearchBookRequest request) {
         List<String> params = new ArrayList<>();
-        String selectSQL = "SELECT books.id AS id, books.name AS name, authors.name AS author_name, " +
-            "categories.name AS category_name, tags.name AS tag_name, " +
-            "books.publishing_house, books.description , books.mount ";
-        String fromSQL = "FROM `books` JOIN `categories` JOIN `tags` JOIN `authors` " +
-            "ON books.category_id = categories.id AND tags.id = books.tag_id AND `authors`.id = books.author_id ";
+        String selectSQL = "SELECT books.id AS id, books.name AS name, authors.name AS author_name, "
+            + "categories.name AS category_name, tags.name AS tag_name, "
+            + "books.publishing_house, books.description , books.mount ";
+        String fromSQL = "FROM books JOIN categories JOIN tags JOIN authors "
+            + "ON books.category_id = categories.id AND tags.id = books.tag_id AND authors.id = books.author_id ";
         String whereSQL = whereSQL(request, params);
         String limitSQL = "limit " + request.skip + ", " + request.limit;
         BOSearchBookResponse response = new BOSearchBookResponse();
