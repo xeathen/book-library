@@ -18,7 +18,7 @@ public class ExpireMassageHandler implements MessageHandler<ExpirationMessage> {
     BOUserWebService boUserWebService;
 
     @Override
-    public void handle(String key, ExpirationMessage value) throws Exception {
+    public void handle(String key, ExpirationMessage value) {
         ActionLogContext.put("userId", value.userId);
         ActionLogContext.put("bookId", value.bookId);
         BOGetUserResponse user = boUserWebService.get(value.userId);

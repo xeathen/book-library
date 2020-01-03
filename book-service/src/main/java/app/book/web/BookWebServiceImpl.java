@@ -25,6 +25,7 @@ public class BookWebServiceImpl implements BookWebService {
 
     @Override
     public GetBookResponse get(Long bookId) {
+        ActionLogContext.put("bookId", bookId);
         return bookService.get(bookId);
     }
 

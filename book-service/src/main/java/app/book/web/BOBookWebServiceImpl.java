@@ -23,6 +23,7 @@ public class BOBookWebServiceImpl implements BOBookWebService {
 
     @Override
     public BOGetBookResponse get(Long bookId) {
+        ActionLogContext.put("bookId", bookId);
         return boBookService.get(bookId);
     }
 
