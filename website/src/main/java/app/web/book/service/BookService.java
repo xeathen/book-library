@@ -11,6 +11,7 @@ import app.book.api.book.ReturnBookRequest;
 import app.book.api.book.ReturnBookResponse;
 import app.book.api.book.SearchBookRequest;
 import app.book.api.book.SearchBookResponse;
+import app.book.api.book.SearchRecordRequest;
 import app.book.api.book.SearchRecordResponse;
 import app.web.api.book.BookView;
 import app.web.api.book.BorrowBookAJAXRequest;
@@ -23,6 +24,7 @@ import app.web.api.book.ReturnBookAJAXRequest;
 import app.web.api.book.ReturnBookAJAXResponse;
 import app.web.api.book.SearchBookAJAXRequest;
 import app.web.api.book.SearchBookAJAXResponse;
+import app.web.api.book.SearchRecordAJAXRequest;
 import app.web.api.book.SearchRecordAJAXResponse;
 import core.framework.inject.Inject;
 
@@ -39,9 +41,9 @@ public class BookService {
         return getBookAJAXResponse(bookWebService.get(id));
     }
 
-    public SearchBookAJAXResponse search(SearchBookAJAXRequest request) {
-        SearchBookRequest boRequest = searchBookRequest(request);
-        SearchBookResponse response = bookWebService.search(boRequest);
+    public SearchBookAJAXResponse search(SearchBookAJAXRequest ajaxRequest) {
+        SearchBookRequest request = searchBookRequest(ajaxRequest);
+        SearchBookResponse response = bookWebService.search(request);
         return searchBookAJAXResponse(response);
     }
 
@@ -51,8 +53,9 @@ public class BookService {
         return createReservationAJAXResponse(reserve);
     }
 
-    public SearchRecordAJAXResponse searchRecordByUserId(Long userId) {
-        SearchRecordResponse response = bookWebService.searchRecordByUserId(userId);
+    public SearchRecordAJAXResponse searchRecord(SearchRecordAJAXRequest ajaxRequest, String userName) {
+        SearchRecordRequest request = searchRecordRequest(ajaxRequest, userName);
+        SearchRecordResponse response = bookWebService.searchRecord(request);
         return searchRecordAJAXResponse(response);
     }
 
@@ -76,6 +79,14 @@ public class BookService {
         ajaxResponse.bookName = response.bookName;
         ajaxResponse.returnTime = response.returnTime;
         return ajaxResponse;
+    }
+
+    private SearchRecordRequest searchRecordRequest(SearchRecordAJAXRequest ajaxRequest, String userName) {
+        SearchRecordRequest request = new SearchRecordRequest();
+        request.skip = ajaxRequest.skip;
+        request.limit = ajaxRequest.limit;
+        request.userName = userName;
+        return request;
     }
 
     private GetBookAJAXResponse getBookAJAXResponse(GetBookResponse response) {

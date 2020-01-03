@@ -9,6 +9,7 @@ import app.web.api.book.ReturnBookAJAXRequest;
 import app.web.api.book.ReturnBookAJAXResponse;
 import app.web.api.book.SearchBookAJAXRequest;
 import app.web.api.book.SearchBookAJAXResponse;
+import app.web.api.book.SearchRecordAJAXRequest;
 import app.web.api.book.SearchRecordAJAXResponse;
 import core.framework.api.web.service.GET;
 import core.framework.api.web.service.POST;
@@ -42,5 +43,5 @@ public interface BookAJAXWebService {
 
     @GET
     @Path("/ajax/borrowed-record")
-    SearchRecordAJAXResponse searchRecord();
+    SearchRecordAJAXResponse searchRecord(SearchRecordAJAXRequest request);
 }

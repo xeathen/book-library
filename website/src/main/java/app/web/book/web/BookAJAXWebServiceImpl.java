@@ -10,6 +10,7 @@ import app.web.api.book.ReturnBookAJAXRequest;
 import app.web.api.book.ReturnBookAJAXResponse;
 import app.web.api.book.SearchBookAJAXRequest;
 import app.web.api.book.SearchBookAJAXResponse;
+import app.web.api.book.SearchRecordAJAXRequest;
 import app.web.api.book.SearchRecordAJAXResponse;
 import app.web.book.service.BookService;
 import core.framework.inject.Inject;
@@ -41,10 +42,10 @@ public class BookAJAXWebServiceImpl implements BookAJAXWebService {
     }
 
     @Override
-    public SearchRecordAJAXResponse searchRecord() {
-        String userId = webContext.request().session().get("userId").orElseThrow();
-        ActionLogContext.put("userId", userId);
-        return bookService.searchRecordByUserId(Long.valueOf(userId));
+    public SearchRecordAJAXResponse searchRecord(SearchRecordAJAXRequest request) {
+        String userName = webContext.request().session().get("userName").orElseThrow();
+        ActionLogContext.put("userName", userName);
+        return bookService.searchRecord(request, userName);
     }
 
     @Override

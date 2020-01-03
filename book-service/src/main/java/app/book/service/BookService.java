@@ -13,6 +13,7 @@ import app.book.api.book.ReturnBookRequest;
 import app.book.api.book.ReturnBookResponse;
 import app.book.api.book.SearchBookRequest;
 import app.book.api.book.SearchBookResponse;
+import app.book.api.book.SearchRecordRequest;
 import app.book.api.book.SearchRecordResponse;
 import app.book.domain.Book;
 import app.book.domain.BorrowedRecord;
@@ -83,13 +84,15 @@ public class BookService {
         return response;
     }
 
-    public SearchRecordResponse searchRecordByUserId(Long userId) {
+    public SearchRecordResponse searchRecord(SearchRecordRequest request) {
         SearchRecordResponse response = new SearchRecordResponse();
         core.framework.mongo.Query query = new core.framework.mongo.Query();
-        query.filter = Filters.eq("user_id", userId);
+        query.skip = request.skip;
+        query.limit = request.limit;
+        query.filter = Filters.eq("user_name", request.userName);
         List<BorrowedRecord> borrowedRecordList = mongoCollection.find(query);
         response.borrowedRecords = borrowedRecordList.stream().map(this::borrowedRecordView).collect(Collectors.toList());
-        response.total = borrowedRecordList.size();
+        response.total = mongoCollection.count(query.filter);
         return response;
     }
 

@@ -9,6 +9,7 @@ import app.book.api.book.ReturnBookRequest;
 import app.book.api.book.ReturnBookResponse;
 import app.book.api.book.SearchBookRequest;
 import app.book.api.book.SearchBookResponse;
+import app.book.api.book.SearchRecordRequest;
 import app.book.api.book.SearchRecordResponse;
 import core.framework.api.web.service.GET;
 import core.framework.api.web.service.POST;
@@ -41,6 +42,6 @@ public interface BookWebService {
     CreateReservationResponse reserve(CreateReservationRequest request);
 
     @GET
-    @Path("/borrowed-record/:id")
-    SearchRecordResponse searchRecordByUserId(@PathParam("id") Long userId);
+    @Path("/borrowed-record/")
+    SearchRecordResponse searchRecord(SearchRecordRequest request);
 }

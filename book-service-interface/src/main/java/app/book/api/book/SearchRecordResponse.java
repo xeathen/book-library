@@ -9,7 +9,7 @@ import java.util.List;
  */
 public class SearchRecordResponse {
     @Property(name = "total")
-    public Integer total;
+    public Long total;
 
     @Property(name = "records")
     public List<BorrowedRecordView> borrowedRecords;

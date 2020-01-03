@@ -10,6 +10,7 @@ import app.book.api.book.ReturnBookRequest;
 import app.book.api.book.ReturnBookResponse;
 import app.book.api.book.SearchBookRequest;
 import app.book.api.book.SearchBookResponse;
+import app.book.api.book.SearchRecordRequest;
 import app.book.api.book.SearchRecordResponse;
 import app.book.service.BookService;
 import core.framework.inject.Inject;
@@ -38,9 +39,9 @@ public class BookWebServiceImpl implements BookWebService {
     }
 
     @Override
-    public SearchRecordResponse searchRecordByUserId(Long userId) {
-        ActionLogContext.put("userId", userId);
-        return bookService.searchRecordByUserId(userId);
+    public SearchRecordResponse searchRecord(SearchRecordRequest request) {
+        ActionLogContext.put("userName", request.userName);
+        return bookService.searchRecord(request);
     }
 
     @Override
