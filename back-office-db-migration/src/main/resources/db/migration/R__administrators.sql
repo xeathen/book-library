@@ -1,7 +1,7 @@
 CREATE TABLE IF NOT EXISTS `administrators` (
     `id`            BIGINT(11)      NOT NULL AUTO_INCREMENT,
     `admin_name`    VARCHAR(50)     NOT NULL,
-    `password`      VARCHAR(50)     NOT NULL,
+    `password`      CHAR(64)        NOT NULL,
     `salt`          CHAR(6)         NOT NULL,
     `iteration`     INT(11)         NOT NULL,
     PRIMARY KEY (`id`),
