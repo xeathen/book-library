@@ -7,6 +7,7 @@ import app.user.api.user.UserLoginResponse;
 import app.user.api.user.UserStatusView;
 import app.user.domain.User;
 import app.user.util.MD5Util;
+import core.framework.crypto.Hash;
 import core.framework.db.Query;
 import core.framework.db.Repository;
 import core.framework.inject.Inject;
@@ -30,7 +31,7 @@ public class UserService {
             return response;
         }
         User user = userOptional.get();
-        if (!MD5Util.getSaltVerifyMD5(request.password, user.password)) {
+        if (!user.password.equals(hash(request.password, user.salt, user.iteration))) {
             response.loginMessage = LoginMessage.WRONG_PASSWORD;
         } else {
             response.userId = user.id;
@@ -38,6 +39,14 @@ public class UserService {
             response.loginMessage = LoginMessage.SUCCESSFUL;
         }
         return response;
+    }
+
+    private String hash(String password, String salt, int iteration) {
+        String hashedPassword = password;
+        for (int i = 0; i < iteration; i++) {
+            hashedPassword = Hash.sha256Hex(salt + hashedPassword);
+        }
+        return hashedPassword;
     }
 
     private BOGetUserResponse getUserResponse(User user) {

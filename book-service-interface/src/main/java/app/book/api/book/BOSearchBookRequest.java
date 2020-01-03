@@ -1,5 +1,6 @@
 package app.book.api.book;
 
+import core.framework.api.json.Property;
 import core.framework.api.validate.NotNull;
 import core.framework.api.web.service.QueryParam;
 
@@ -8,28 +9,28 @@ import core.framework.api.web.service.QueryParam;
  */
 public class BOSearchBookRequest {
     @NotNull
-    @QueryParam(name = "skip")
+    @Property(name = "skip")
     public Integer skip;
 
     @NotNull
-    @QueryParam(name = "limit")
+    @Property(name = "limit")
     public Integer limit;
 
-    @QueryParam(name = "name")
+    @Property(name = "name")
     public String name;
 
-    @QueryParam(name = "author")
+    @Property(name = "author")
     public String author;
 
-    @QueryParam(name = "publishing_house")
+    @Property(name = "publishing_house")
     public String publishingHouse;
 
-    @QueryParam(name = "category")
+    @Property(name = "category")
     public String category;
 
-    @QueryParam(name = "tag")
+    @Property(name = "tag")
     public String tag;
 
-    @QueryParam(name = "description")
+    @Property(name = "description")
     public String description;
 }

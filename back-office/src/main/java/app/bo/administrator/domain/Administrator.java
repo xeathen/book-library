@@ -24,4 +24,13 @@ public class Administrator {
     @NotBlank
     @Column(name = "password")
     public String password;
+
+    @NotNull
+    @NotBlank
+    @Column(name = "salt")
+    public String salt;
+
+    @NotNull
+    @Column(name = "iteration")
+    public Integer iteration;
 }

@@ -15,10 +15,11 @@ import app.user.api.user.UserStatusView;
 import app.user.api.user.UserView;
 import app.user.domain.User;
 import app.user.domain.UserStatus;
-import app.user.util.MD5Util;
+import core.framework.crypto.Hash;
 import core.framework.db.Query;
 import core.framework.db.Repository;
 import core.framework.inject.Inject;
+import core.framework.util.Randoms;
 import core.framework.util.Strings;
 import core.framework.web.exception.ConflictException;
 import core.framework.web.exception.NotFoundException;
@@ -64,9 +65,14 @@ public class BOUserService {
         if (!query.fetch().isEmpty()) {
             throw new ConflictException("find duplicate email", ErrorCodes.DUPLICATE_EMAIL);
         }
-        request.password = MD5Util.getSaltMD5(request.password);
         BOCreateUserResponse response = boCreateUserResponse(request);
-        response.id = userRepository.insert(user(request)).orElseThrow();
+        User user = user(request);
+        String salt = Randoms.alphaNumeric(6);
+        user.salt = salt;
+        int iteration = Randoms.nextInt(0, 9);
+        user.password = hash(request.password, salt, iteration);
+        user.iteration = iteration;
+        response.id = userRepository.insert(user).orElseThrow();
         return response;
     }
 
@@ -75,6 +81,11 @@ public class BOUserService {
         BOUpdateUserResponse response = new BOUpdateUserResponse();
         User temp = user(request);
         temp.id = id;
+        int iteration = Randoms.nextInt(0, 9);
+        temp.iteration = iteration;
+        String salt = Randoms.alphaNumeric(6);
+        temp.salt = salt;
+        temp.password = hash(request.password, salt, iteration);
         userRepository.partialUpdate(temp);
         response.id = id;
         response.userName = Strings.isBlank(request.userName) ? user.userName : request.userName;
@@ -95,7 +106,11 @@ public class BOUserService {
         User user = checkUser(id);
         User temp = new User();
         temp.id = id;
-        temp.password = Constants.PASSWORD_RESET;
+        int iteration = Randoms.nextInt(0, 9);
+        temp.iteration = iteration;
+        String salt = Randoms.alphaNumeric(6);
+        temp.salt = salt;
+        temp.password = hash(Constants.PASSWORD_RESET, salt, iteration);
         userRepository.partialUpdate(temp);
         response.userId = id;
         response.userName = user.userName;
@@ -113,6 +128,14 @@ public class BOUserService {
         response.userName = user.userName;
         response.status = user.status == null ? null : UserStatusView.valueOf(temp.status.name());
         return response;
+    }
+
+    private String hash(String password, String salt, int iteration) {
+        String hashedPassword = password;
+        for (int i = 0; i < iteration; i++) {
+            hashedPassword = Hash.sha256Hex(salt + hashedPassword);
+        }
+        return hashedPassword;
     }
 
     private User checkUser(Long id) {
@@ -133,7 +156,6 @@ public class BOUserService {
     private User user(BOCreateUserRequest request) {
         User user = new User();
         user.userName = request.userName;
-        user.password = request.password;
         user.email = request.email;
         user.status = UserStatus.valueOf(request.status.name());
         return user;
@@ -142,7 +164,6 @@ public class BOUserService {
     private BOCreateUserResponse boCreateUserResponse(BOCreateUserRequest request) {
         BOCreateUserResponse response = new BOCreateUserResponse();
         response.userName = request.userName;
-        response.password = request.password;
         response.email = request.email;
         response.status = request.status;
         return response;

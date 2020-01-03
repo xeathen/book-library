@@ -119,7 +119,6 @@ public class UserService {
         CreateUserAJAXResponse ajaxResponse = new CreateUserAJAXResponse();
         ajaxResponse.id = boResponse.id;
         ajaxResponse.userName = boResponse.userName;
-        ajaxResponse.password = boResponse.password;
         ajaxResponse.email = boResponse.email;
         ajaxResponse.status = boResponse.status == null ? null : UserStatusAJAXView.valueOf(boResponse.status.name());
         return ajaxResponse;
@@ -129,6 +128,7 @@ public class UserService {
         BOUpdateUserRequest boRequest = new BOUpdateUserRequest();
         boRequest.userName = ajaxRequest.userName;
         boRequest.email = ajaxRequest.email;
+        boRequest.password = ajaxRequest.password;
         return boRequest;
     }
 

@@ -12,6 +12,7 @@ import app.web.api.book.SearchBookAJAXResponse;
 import app.web.api.book.SearchRecordAJAXResponse;
 import core.framework.api.web.service.GET;
 import core.framework.api.web.service.POST;
+import core.framework.api.web.service.PUT;
 import core.framework.api.web.service.Path;
 import core.framework.api.web.service.PathParam;
 
@@ -23,7 +24,7 @@ public interface BookAJAXWebService {
     @Path("/ajax/book/:id")
     GetBookAJAXResponse get(@PathParam("id") Long id);
 
-    @GET
+    @PUT
     @Path("/ajax/book")
     SearchBookAJAXResponse search(SearchBookAJAXRequest request);
 
@@ -40,6 +41,6 @@ public interface BookAJAXWebService {
     CreateReservationAJAXResponse reserve(CreateReservationAJAXRequest request);
 
     @GET
-    @Path("/ajax/borrowed-record/:id")
-    SearchRecordAJAXResponse searchRecordByUserId(@PathParam("id") Long userId);
+    @Path("/ajax/borrowed-record")
+    SearchRecordAJAXResponse searchRecord();
 }

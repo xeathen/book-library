@@ -12,6 +12,7 @@ import app.book.api.book.SearchBookResponse;
 import app.book.api.book.SearchRecordResponse;
 import core.framework.api.web.service.GET;
 import core.framework.api.web.service.POST;
+import core.framework.api.web.service.PUT;
 import core.framework.api.web.service.Path;
 import core.framework.api.web.service.PathParam;
 
@@ -23,7 +24,7 @@ public interface BookWebService {
     @Path("/book/:id")
     GetBookResponse get(@PathParam("id") Long bookId);
 
-    @GET
+    @PUT
     @Path("/book")
     SearchBookResponse search(SearchBookRequest request);
 

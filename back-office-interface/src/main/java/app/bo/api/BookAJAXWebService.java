@@ -26,7 +26,7 @@ public interface BookAJAXWebService {
     @Path("/ajax/book")
     CreateBookAJAXResponse create(CreateBookAJAXRequest request);
 
-    @GET
+    @PUT
     @Path("/ajax/book")
     SearchBookAJAXResponse search(SearchBookAJAXRequest request);
 

@@ -68,9 +68,18 @@ public class BookService {
     }
 
     public SearchBookResponse search(SearchBookRequest request) {
+        List<String> params = new ArrayList<>();
+        String selectSQL = "SELECT books.id AS id, books.name AS name, authors.name AS author_name, " +
+            "categories.name AS category_name, tags.name AS tag_name, " +
+            "books.publishing_house, books.description , books.mount ";
+        String fromSQL = "FROM `books` JOIN `categories` JOIN `tags` JOIN `authors` " +
+            "ON books.category_id = categories.id AND tags.id = books.tag_id AND `authors`.id = books.author_id ";
+        String whereSQL = whereSQL(request, params);
+        String limitSQL = "limit " + request.skip + ", " + request.limit;
         SearchBookResponse response = new SearchBookResponse();
-        response.books = select(request);
-        response.total = response.books.size();
+        response.books = database.select(selectSQL + fromSQL + whereSQL + limitSQL, BookView.class, params.toArray());
+        String countSQL = "SELECT COUNT(1) ";
+        response.total = database.selectOne(countSQL + fromSQL + whereSQL, Integer.class, params.toArray()).orElse(0);
         return response;
     }
 
@@ -172,6 +181,7 @@ public class BookService {
     }
 
     private List<BookView> select(SearchBookRequest request) {
+        //TODO:分页查询
         StringBuilder whereClause = new StringBuilder();
         List<String> params = new ArrayList<>();
         if (!Strings.isBlank(request.name)) {
@@ -192,12 +202,36 @@ public class BookService {
         if (!Strings.isBlank(request.description)) {
             where("books.description like ?", Strings.format("%{}%", request.description), whereClause, params);
         }
-        String sql = "SELECT `books`.`id` as `id`, `books`.`name` as `name`, `authors`.`name` as `author_name`,"
-            + "`categories`.`name` as `category_name`, tags.`name` as `tag_name`, books.`publishing_house`, books.`description` , books.`mount`"
-            + "FROM `books` join `categories` join tags join `authors`"
+        String sql = "SELECT `books`.`id` as `id`, `books`.`name` as `name`, `authors`.`name` as `author_name`, "
+            + "`categories`.`name` as `category_name`, tags.`name` as `tag_name`, books.`publishing_house`, books.`description` , books.`mount` "
+            + "FROM `books` join `categories` join `tags` join `authors` "
             + "on books.category_id = categories.id and tags.id = books.tag_id and `authors`.id = books.author_id "
-            + "where " + (whereClause.length() > 0 ? whereClause : "1 = 1");
+            + "where " + (whereClause.length() > 0 ? whereClause : "1 = 1")
+            + "limit " + request.skip + ", " + request.limit;
         return database.select(sql, BookView.class, params.toArray());
+    }
+
+    private String whereSQL(SearchBookRequest request, List<String> params) {
+        StringBuilder whereClause = new StringBuilder();
+        if (!Strings.isBlank(request.name)) {
+            where("books.name LIKE ?", Strings.format("%{}%", request.name), whereClause, params);
+        }
+        if (!Strings.isBlank(request.author)) {
+            where("authors.name LIKE ?", Strings.format("%{}%", request.author), whereClause, params);
+        }
+        if (!Strings.isBlank(request.category)) {
+            where("categories.name LIKE ?", Strings.format("%{}%", request.category), whereClause, params);
+        }
+        if (!Strings.isBlank(request.tag)) {
+            where("tags.name LIKE ?", Strings.format("%{}%", request.tag), whereClause, params);
+        }
+        if (!Strings.isBlank(request.publishingHouse)) {
+            where("books.publishing_house LIKE ?", Strings.format("%{}%", request.publishingHouse), whereClause, params);
+        }
+        if (!Strings.isBlank(request.description)) {
+            where("books.description LIKE ?", Strings.format("%{}%", request.description), whereClause, params);
+        }
+        return whereClause.length() > 0 ? "WHERE " + whereClause.toString() : " ";
     }
 
     private void where(String condition, String param, StringBuilder whereClause, List<String> params) {

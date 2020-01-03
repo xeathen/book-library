@@ -11,4 +11,7 @@ public class UpdateUserAJAXRequest {
 
     @Property(name = "email")
     public String email;
+
+    @Property(name = "password")
+    public String password;
 }

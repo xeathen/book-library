@@ -33,4 +33,13 @@ public class User {
     @NotNull
     @Column(name = "status")
     public UserStatus status;
+
+    @NotNull
+    @NotBlank
+    @Column(name = "salt")
+    public String salt;
+
+    @NotNull
+    @Column(name = "iteration")
+    public Integer iteration;
 }

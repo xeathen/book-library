@@ -15,6 +15,7 @@ import app.web.book.service.BookService;
 import core.framework.inject.Inject;
 import core.framework.log.ActionLogContext;
 import core.framework.util.Strings;
+import core.framework.web.WebContext;
 
 /**
  * @author Ethan
@@ -22,6 +23,8 @@ import core.framework.util.Strings;
 public class BookAJAXWebServiceImpl implements BookAJAXWebService {
     @Inject
     BookService bookService;
+    @Inject
+    WebContext webContext;
 
     @Override
     public GetBookAJAXResponse get(Long bookId) {
@@ -38,9 +41,10 @@ public class BookAJAXWebServiceImpl implements BookAJAXWebService {
     }
 
     @Override
-    public SearchRecordAJAXResponse searchRecordByUserId(Long userId) {
+    public SearchRecordAJAXResponse searchRecord() {
+        String userId = webContext.request().session().get("userId").orElseThrow();
         ActionLogContext.put("userId", userId);
-        return bookService.searchRecordByUserId(userId);
+        return bookService.searchRecordByUserId(Long.valueOf(userId));
     }
 
     @Override
