@@ -71,24 +71,6 @@ public class BookService {
         return searchRecordAJAXResponse(response);
     }
 
-    private ReturnBookAJAXResponse returnBookAJAXResponse(ReturnBookResponse response) {
-        ReturnBookAJAXResponse ajaxResponse = new ReturnBookAJAXResponse();
-        ajaxResponse.userId = response.userId;
-        ajaxResponse.userName = response.userName;
-        ajaxResponse.bookId = response.bookId;
-        ajaxResponse.bookName = response.bookName;
-        ajaxResponse.returnTime = response.returnTime;
-        return ajaxResponse;
-    }
-
-    private SearchRecordRequest searchRecordRequest(SearchRecordAJAXRequest ajaxRequest, String userName) {
-        SearchRecordRequest request = new SearchRecordRequest();
-        request.skip = ajaxRequest.skip;
-        request.limit = ajaxRequest.limit;
-        request.userName = userName;
-        return request;
-    }
-
     private GetBookAJAXResponse getBookAJAXResponse(GetBookResponse response) {
         GetBookAJAXResponse ajaxResponse = new GetBookAJAXResponse();
         ajaxResponse.id = response.id;
@@ -99,48 +81,6 @@ public class BookService {
         ajaxResponse.description = response.description;
         ajaxResponse.publishingHouse = response.publishingHouse;
         ajaxResponse.mount = response.mount;
-        return ajaxResponse;
-    }
-
-    private ReturnBookRequest returnBookRequest(ReturnBookAJAXRequest ajaxRequest) {
-        ReturnBookRequest request = new ReturnBookRequest();
-        request.userId = ajaxRequest.userId;
-        request.bookId = ajaxRequest.bookId;
-        return request;
-    }
-
-    private BorrowBookAJAXResponse borrowBookAJAXResponse(BorrowBookResponse response) {
-        BorrowBookAJAXResponse ajaxResponse = new BorrowBookAJAXResponse();
-        ajaxResponse.userId = response.userId;
-        ajaxResponse.userName = response.userName;
-        ajaxResponse.bookId = response.bookId;
-        ajaxResponse.bookName = response.bookName;
-        ajaxResponse.borrowTime = response.borrowTime;
-        ajaxResponse.returnTime = response.returnTime;
-        return ajaxResponse;
-    }
-
-    private BorrowBookRequest borrowBookRequest(BorrowBookAJAXRequest ajaxRequest) {
-        BorrowBookRequest request = new BorrowBookRequest();
-        request.userId = ajaxRequest.userId;
-        request.bookId = ajaxRequest.bookId;
-        request.returnTime = ajaxRequest.returnTime;
-        return request;
-    }
-
-    private SearchRecordAJAXResponse searchRecordAJAXResponse(SearchRecordResponse response) {
-        SearchRecordAJAXResponse ajaxResponse = new SearchRecordAJAXResponse();
-        ajaxResponse.borrowedRecords = response.borrowedRecords.stream().map(this::borrowedRecordAJAXView).collect(Collectors.toList());
-        ajaxResponse.total = response.total;
-        return ajaxResponse;
-    }
-
-    private CreateReservationAJAXResponse createReservationAJAXResponse(CreateReservationResponse response) {
-        CreateReservationAJAXResponse ajaxResponse = new CreateReservationAJAXResponse();
-        ajaxResponse.userId = response.userId;
-        ajaxResponse.userName = response.userName;
-        ajaxResponse.bookId = response.bookId;
-        ajaxResponse.bookName = response.bookName;
         return ajaxResponse;
     }
 
@@ -175,11 +115,71 @@ public class BookService {
         return ajaxResponse;
     }
 
+    private BorrowBookRequest borrowBookRequest(BorrowBookAJAXRequest ajaxRequest) {
+        BorrowBookRequest request = new BorrowBookRequest();
+        request.userId = ajaxRequest.userId;
+        request.bookId = ajaxRequest.bookId;
+        request.returnTime = ajaxRequest.returnTime;
+        return request;
+    }
+
+    private BorrowBookAJAXResponse borrowBookAJAXResponse(BorrowBookResponse response) {
+        BorrowBookAJAXResponse ajaxResponse = new BorrowBookAJAXResponse();
+        ajaxResponse.userId = response.userId;
+        ajaxResponse.userName = response.userName;
+        ajaxResponse.bookId = response.bookId;
+        ajaxResponse.bookName = response.bookName;
+        ajaxResponse.borrowTime = response.borrowTime;
+        ajaxResponse.returnTime = response.returnTime;
+        return ajaxResponse;
+    }
+
+    private ReturnBookRequest returnBookRequest(ReturnBookAJAXRequest ajaxRequest) {
+        ReturnBookRequest request = new ReturnBookRequest();
+        request.userId = ajaxRequest.userId;
+        request.bookId = ajaxRequest.bookId;
+        return request;
+    }
+
+    private ReturnBookAJAXResponse returnBookAJAXResponse(ReturnBookResponse response) {
+        ReturnBookAJAXResponse ajaxResponse = new ReturnBookAJAXResponse();
+        ajaxResponse.userId = response.userId;
+        ajaxResponse.userName = response.userName;
+        ajaxResponse.bookId = response.bookId;
+        ajaxResponse.bookName = response.bookName;
+        ajaxResponse.returnTime = response.returnTime;
+        return ajaxResponse;
+    }
+
     private CreateReservationRequest createReservationRequest(CreateReservationAJAXRequest ajaxRequest) {
         CreateReservationRequest request = new CreateReservationRequest();
         request.userId = ajaxRequest.userId;
         request.bookId = ajaxRequest.bookId;
         return request;
+    }
+
+    private CreateReservationAJAXResponse createReservationAJAXResponse(CreateReservationResponse response) {
+        CreateReservationAJAXResponse ajaxResponse = new CreateReservationAJAXResponse();
+        ajaxResponse.userId = response.userId;
+        ajaxResponse.userName = response.userName;
+        ajaxResponse.bookId = response.bookId;
+        ajaxResponse.bookName = response.bookName;
+        return ajaxResponse;
+    }
+
+    private SearchRecordRequest searchRecordRequest(SearchRecordAJAXRequest ajaxRequest, String userName) {
+        SearchRecordRequest request = new SearchRecordRequest();
+        request.skip = ajaxRequest.skip;
+        request.limit = ajaxRequest.limit;
+        request.userName = userName;
+        return request;
+    }
+
+    private SearchRecordAJAXResponse searchRecordAJAXResponse(SearchRecordResponse response) {
+        SearchRecordAJAXResponse ajaxResponse = new SearchRecordAJAXResponse();
+        ajaxResponse.borrowedRecords = response.borrowedRecords.stream().map(this::borrowedRecordAJAXView).collect(Collectors.toList());
+        ajaxResponse.total = response.total;
+        return ajaxResponse;
     }
 
     private BorrowedRecordAJAXView borrowedRecordAJAXView(BorrowedRecordView response) {

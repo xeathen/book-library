@@ -45,14 +45,7 @@ public class BOUserService {
         Query<User> query = userRepository.select();
         query.skip(request.skip);
         query.limit(request.limit);
-        response.users = query.fetch().stream().map(user -> {
-            UserView userView = new UserView();
-            userView.id = user.id;
-            userView.userName = user.userName;
-            userView.email = user.email;
-            userView.status = user.status == null ? null : UserStatusView.valueOf(user.status.name());
-            return userView;
-        }).collect(Collectors.toList());
+        response.users = query.fetch().stream().map(this::userview).collect(Collectors.toList());
         response.total = query.count();
         return response;
     }
@@ -68,13 +61,13 @@ public class BOUserService {
         if (!query.fetch().isEmpty()) {
             throw new ConflictException("find duplicate email", ErrorCodes.DUPLICATE_EMAIL);
         }
-        BOCreateUserResponse response = boCreateUserResponse(request);
         User user = user(request);
         String salt = Randoms.alphaNumeric(6);
         user.salt = salt;
         int iteration = Randoms.nextInt(0, 9);
         user.password = hash(request.password, salt, iteration);
         user.iteration = iteration;
+        BOCreateUserResponse response = boCreateUserResponse(request);
         response.id = userRepository.insert(user).orElseThrow();
         return response;
     }
@@ -150,19 +143,21 @@ public class BOUserService {
         return response;
     }
 
+    private UserView userview(User user) {
+        UserView userView = new UserView();
+        userView.id = user.id;
+        userView.userName = user.userName;
+        userView.email = user.email;
+        userView.status = user.status == null ? null : UserStatusView.valueOf(user.status.name());
+        return userView;
+    }
+
     private User checkUser(Long id) {
         Optional<User> userOptional = userRepository.get(id);
         if (userOptional.isEmpty()) {
             throw new NotFoundException("user not found", ErrorCodes.USER_NOT_FOUND);
         }
         return userOptional.get();
-    }
-
-    private User user(BOUpdateUserRequest request) {
-        User user = new User();
-        user.userName = request.userName;
-        user.email = request.email;
-        return user;
     }
 
     private User user(BOCreateUserRequest request) {
@@ -179,5 +174,12 @@ public class BOUserService {
         response.email = request.email;
         response.status = request.status;
         return response;
+    }
+
+    private User user(BOUpdateUserRequest request) {
+        User user = new User();
+        user.userName = request.userName;
+        user.email = request.email;
+        return user;
     }
 }
