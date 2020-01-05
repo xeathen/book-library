@@ -5,6 +5,7 @@ import app.bo.api.user.CreateUserAJAXRequest;
 import app.bo.api.user.CreateUserAJAXResponse;
 import app.bo.api.user.DeleteUserAJAXResponse;
 import app.bo.api.user.GetUserAJAXResponse;
+import app.bo.api.user.ListUserAJAXRequest;
 import app.bo.api.user.ListUserAJAXResponse;
 import app.bo.api.user.ResetPasswordAJAXResponse;
 import app.bo.api.user.UpdateUserAJAXRequest;
@@ -16,6 +17,7 @@ import app.user.api.user.BOChangeStatusResponse;
 import app.user.api.user.BOCreateUserRequest;
 import app.user.api.user.BOCreateUserResponse;
 import app.user.api.user.BOGetUserResponse;
+import app.user.api.user.BOListUserRequest;
 import app.user.api.user.BOListUserResponse;
 import app.user.api.user.BOResetPasswordResponse;
 import app.user.api.user.BOUpdateUserRequest;
@@ -36,12 +38,13 @@ public class UserService {
         return getUserAJAXResponse(boUserWebService.get(id));
     }
 
-    public ListUserAJAXResponse list() {
-        return listUserAJAXResponse(boUserWebService.list());
+    public ListUserAJAXResponse list(ListUserAJAXRequest ajaxRequest) {
+        BOListUserRequest request = bolistUserRequest(ajaxRequest);
+        return listUserAJAXResponse(boUserWebService.list(request));
     }
 
-    public CreateUserAJAXResponse create(CreateUserAJAXRequest request) {
-        BOCreateUserRequest boRequest = boCreateUserRequest(request);
+    public CreateUserAJAXResponse create(CreateUserAJAXRequest ajaxRequest) {
+        BOCreateUserRequest boRequest = boCreateUserRequest(ajaxRequest);
         return createUserAJAXResponse(boUserWebService.create(boRequest));
     }
 
@@ -51,9 +54,9 @@ public class UserService {
         return response;
     }
 
-    public UpdateUserAJAXResponse update(Long id, UpdateUserAJAXRequest request) {
-        BOUpdateUserRequest boRequest = boUpdateUserRequest(request);
-        return updateUserAJAXResponse(boUserWebService.update(id, boRequest));
+    public UpdateUserAJAXResponse update(Long id, UpdateUserAJAXRequest ajaxRequest) {
+        BOUpdateUserRequest request = boUpdateUserRequest(ajaxRequest);
+        return updateUserAJAXResponse(boUserWebService.update(id, request));
     }
 
     public ResetPasswordAJAXResponse resetPassword(Long id) {
@@ -71,6 +74,13 @@ public class UserService {
         ajaxResponse.email = response.email;
         ajaxResponse.status = response.status == null ? null : UserStatusAJAXView.valueOf(response.status.name());
         return ajaxResponse;
+    }
+
+    private BOListUserRequest bolistUserRequest(ListUserAJAXRequest ajaxRequest) {
+        BOListUserRequest request = new BOListUserRequest();
+        request.skip = ajaxRequest.skip;
+        request.limit = ajaxRequest.limit;
+        return request;
     }
 
     private ListUserAJAXResponse listUserAJAXResponse(BOListUserResponse response) {

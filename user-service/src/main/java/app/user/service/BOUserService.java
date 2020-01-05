@@ -7,6 +7,7 @@ import app.user.api.user.BOCreateUserRequest;
 import app.user.api.user.BOCreateUserResponse;
 import app.user.api.user.BODeleteUserResponse;
 import app.user.api.user.BOGetUserResponse;
+import app.user.api.user.BOListUserRequest;
 import app.user.api.user.BOListUserResponse;
 import app.user.api.user.BOResetPasswordResponse;
 import app.user.api.user.BOUpdateUserRequest;
@@ -39,9 +40,11 @@ public class BOUserService {
         return getUserResponse(user);
     }
 
-    public BOListUserResponse listUser() {
+    public BOListUserResponse list(BOListUserRequest request) {
         BOListUserResponse response = new BOListUserResponse();
         Query<User> query = userRepository.select();
+        query.skip(request.skip);
+        query.limit(request.limit);
         response.users = query.fetch().stream().map(user -> {
             UserView userView = new UserView();
             userView.id = user.id;
@@ -138,6 +141,15 @@ public class BOUserService {
         return hashedPassword;
     }
 
+    private BOGetUserResponse getUserResponse(User user) {
+        BOGetUserResponse response = new BOGetUserResponse();
+        response.id = user.id;
+        response.userName = user.userName;
+        response.email = user.email;
+        response.status = user.status == null ? null : UserStatusView.valueOf(user.status.name());
+        return response;
+    }
+
     private User checkUser(Long id) {
         Optional<User> userOptional = userRepository.get(id);
         if (userOptional.isEmpty()) {
@@ -166,15 +178,6 @@ public class BOUserService {
         response.userName = request.userName;
         response.email = request.email;
         response.status = request.status;
-        return response;
-    }
-
-    private BOGetUserResponse getUserResponse(User user) {
-        BOGetUserResponse response = new BOGetUserResponse();
-        response.id = user.id;
-        response.userName = user.userName;
-        response.email = user.email;
-        response.status = user.status == null ? null : UserStatusView.valueOf(user.status.name());
         return response;
     }
 }

@@ -5,6 +5,7 @@ import app.bo.api.user.CreateUserAJAXRequest;
 import app.bo.api.user.CreateUserAJAXResponse;
 import app.bo.api.user.DeleteUserAJAXResponse;
 import app.bo.api.user.GetUserAJAXResponse;
+import app.bo.api.user.ListUserAJAXRequest;
 import app.bo.api.user.ListUserAJAXResponse;
 import app.bo.api.user.ResetPasswordAJAXResponse;
 import app.bo.api.user.UpdateUserAJAXRequest;
@@ -26,7 +27,7 @@ public interface UserAJAXWebService {
 
     @GET
     @Path("/ajax/user")
-    ListUserAJAXResponse list();
+    ListUserAJAXResponse list(ListUserAJAXRequest request);
 
     @POST
     @Path("/ajax/user")

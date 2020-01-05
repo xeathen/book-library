@@ -6,6 +6,7 @@ import app.user.api.user.BOCreateUserRequest;
 import app.user.api.user.BOCreateUserResponse;
 import app.user.api.user.BODeleteUserResponse;
 import app.user.api.user.BOGetUserResponse;
+import app.user.api.user.BOListUserRequest;
 import app.user.api.user.BOListUserResponse;
 import app.user.api.user.BOResetPasswordResponse;
 import app.user.api.user.BOUpdateUserRequest;
@@ -28,8 +29,8 @@ public class BOUserWebServiceImpl implements BOUserWebService {
     }
 
     @Override
-    public BOListUserResponse list() {
-        return boUserService.listUser();
+    public BOListUserResponse list(BOListUserRequest request) {
+        return boUserService.list(request);
     }
 
     @Override
