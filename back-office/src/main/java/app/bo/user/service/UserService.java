@@ -22,7 +22,6 @@ import app.user.api.user.BOUpdateUserRequest;
 import app.user.api.user.BOUpdateUserResponse;
 import app.user.api.user.UserStatusView;
 import core.framework.inject.Inject;
-import core.framework.web.exception.BadRequestException;
 
 import java.util.stream.Collectors;
 
@@ -76,9 +75,6 @@ public class UserService {
     }
 
     public ChangeStatusAJAXResponse changeStatus(Long id) {
-        if (id == 1L) {
-            throw new BadRequestException("You can not inactive yourself.");
-        }
         return changeStatusAJAXResponse(boUserWebService.changeStatus(id));
     }
 
