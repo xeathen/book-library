@@ -92,7 +92,7 @@ public class BOBookService {
         query.filter = Filters.eq("book_id", bookId);
         List<BorrowedRecord> borrowedRecordList = collection.find(query);
         response.borrowedRecords = borrowedRecordList.stream().map(this::borrowedRecordView).collect(Collectors.toList());
-        response.total = borrowedRecordList.size();
+        response.total = collection.count(query.filter);
         return response;
     }
 
