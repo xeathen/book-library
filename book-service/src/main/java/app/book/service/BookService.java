@@ -56,7 +56,7 @@ public class BookService {
     @Inject
     Repository<Reservation> reservationRepository;
     @Inject
-    MongoCollection<BorrowedRecord> mongoCollection;
+    MongoCollection<BorrowedRecord> borrowedRecordCollection;
     @Inject
     BOUserWebService boUserWebService;
     @Inject
@@ -90,9 +90,9 @@ public class BookService {
         query.skip = request.skip;
         query.limit = request.limit;
         query.filter = Filters.eq("user_name", request.userName);
-        List<BorrowedRecord> borrowedRecordList = mongoCollection.find(query);
+        List<BorrowedRecord> borrowedRecordList = borrowedRecordCollection.find(query);
         response.borrowedRecords = borrowedRecordList.stream().map(this::borrowedRecordView).collect(Collectors.toList());
-        response.total = mongoCollection.count(query.filter);
+        response.total = borrowedRecordCollection.count(query.filter);
         return response;
     }
 
@@ -116,7 +116,7 @@ public class BookService {
             throw new BadRequestException("ReturnTime is past.", ErrorCodes.RETURN_TIME_PAST);
         }
         BorrowedRecord borrowedRecord = createBorrowedRecord(request, book, user);
-        mongoCollection.insert(borrowedRecord);
+        borrowedRecordCollection.insert(borrowedRecord);
         changeBookMount(book, -1);
         return borrowBookResponse(borrowedRecord);
     }
@@ -130,7 +130,7 @@ public class BookService {
         BorrowedRecord record = borrowedRecordList.get(0);
         record.returnTime = ZonedDateTime.now();
         record.isReturned = Boolean.TRUE;
-        mongoCollection.replace(record);
+        borrowedRecordCollection.replace(record);
         response.userId = request.userId;
         response.userName = record.userName;
         response.bookId = request.bookId;
@@ -223,7 +223,7 @@ public class BookService {
         query.filter = Filters.and(Filters.eq("book_id", bookId),
             Filters.eq("user_id", userId),
             Filters.eq("is_returned", Boolean.FALSE));
-        return mongoCollection.find(query);
+        return borrowedRecordCollection.find(query);
     }
 
     private CreateReservationResponse createReservationResponse(CreateReservationRequest request) {

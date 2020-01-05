@@ -42,7 +42,7 @@ public class BOBookService {
     @Inject
     Repository<Author> authorRepository;
     @Inject
-    MongoCollection<BorrowedRecord> collection;
+    MongoCollection<BorrowedRecord> borrowedRecordCollection;
     @Inject
     Database database;
 
@@ -90,9 +90,9 @@ public class BOBookService {
         BOSearchRecordResponse response = new BOSearchRecordResponse();
         core.framework.mongo.Query query = new core.framework.mongo.Query();
         query.filter = Filters.eq("book_id", bookId);
-        List<BorrowedRecord> borrowedRecordList = collection.find(query);
+        List<BorrowedRecord> borrowedRecordList = borrowedRecordCollection.find(query);
         response.borrowedRecords = borrowedRecordList.stream().map(this::borrowedRecordView).collect(Collectors.toList());
-        response.total = collection.count(query.filter);
+        response.total = borrowedRecordCollection.count(query.filter);
         return response;
     }
 
