@@ -197,7 +197,7 @@ public class BookService {
         if (Strings.isBlank(condition)) {
             return;
         }
-        if (whereClause.length() > 0){
+        if (whereClause.length() > 0) {
             whereClause.append(" AND ");
         }
         whereClause.append(condition);
