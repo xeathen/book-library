@@ -47,18 +47,6 @@ public class BookService {
         return searchBookAJAXResponse(response);
     }
 
-    public CreateReservationAJAXResponse reserve(CreateReservationAJAXRequest ajaxRequest) {
-        CreateReservationRequest request = createReservationRequest(ajaxRequest);
-        CreateReservationResponse reserve = bookWebService.reserve(request);
-        return createReservationAJAXResponse(reserve);
-    }
-
-    public SearchRecordAJAXResponse searchRecord(SearchRecordAJAXRequest ajaxRequest, String userName) {
-        SearchRecordRequest request = searchRecordRequest(ajaxRequest, userName);
-        SearchRecordResponse response = bookWebService.searchRecord(request);
-        return searchRecordAJAXResponse(response);
-    }
-
     public BorrowBookAJAXResponse borrow(BorrowBookAJAXRequest ajaxRequest) {
         BorrowBookRequest request = borrowBookRequest(ajaxRequest);
         BorrowBookResponse response = bookWebService.borrow(request);
@@ -69,6 +57,18 @@ public class BookService {
         ReturnBookRequest request = returnBookRequest(ajaxRequest);
         ReturnBookResponse response = bookWebService.returnBack(request);
         return returnBookAJAXResponse(response);
+    }
+
+    public CreateReservationAJAXResponse reserve(CreateReservationAJAXRequest ajaxRequest) {
+        CreateReservationRequest request = createReservationRequest(ajaxRequest);
+        CreateReservationResponse reserve = bookWebService.reserve(request);
+        return createReservationAJAXResponse(reserve);
+    }
+
+    public SearchRecordAJAXResponse searchRecord(SearchRecordAJAXRequest ajaxRequest, String userName) {
+        SearchRecordRequest request = searchRecordRequest(ajaxRequest, userName);
+        SearchRecordResponse response = bookWebService.searchRecord(request);
+        return searchRecordAJAXResponse(response);
     }
 
     private ReturnBookAJAXResponse returnBookAJAXResponse(ReturnBookResponse response) {

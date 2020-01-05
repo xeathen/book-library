@@ -84,18 +84,6 @@ public class BookService {
         return response;
     }
 
-    public SearchRecordResponse searchRecord(SearchRecordRequest request) {
-        SearchRecordResponse response = new SearchRecordResponse();
-        core.framework.mongo.Query query = new core.framework.mongo.Query();
-        query.skip = request.skip;
-        query.limit = request.limit;
-        query.filter = Filters.eq("user_name", request.userName);
-        List<BorrowedRecord> borrowedRecordList = borrowedRecordCollection.find(query);
-        response.borrowedRecords = borrowedRecordList.stream().map(this::borrowedRecordView).collect(Collectors.toList());
-        response.total = borrowedRecordCollection.count(query.filter);
-        return response;
-    }
-
     public BorrowBookResponse borrow(BorrowBookRequest request) {
         Book book = bookRepository.get(request.bookId).orElseThrow(() ->
             new NotFoundException("Book not found.", ErrorCodes.BOOK_NOT_FOUND));
@@ -124,7 +112,7 @@ public class BookService {
     public ReturnBookResponse returnBack(ReturnBookRequest request) {
         ReturnBookResponse response = new ReturnBookResponse();
         if (isReturned(request.userId, request.bookId)) {
-            throw new NotFoundException("Record not found.", ErrorCodes.RECORD_NOT_FOUND);
+            throw new NotFoundException("You had returned this book already.", ErrorCodes.RECORD_NOT_FOUND);
         }
         List<BorrowedRecord> borrowedRecordList = getNotReturnedRecordList(request.userId, request.bookId);
         BorrowedRecord record = borrowedRecordList.get(0);
@@ -142,27 +130,6 @@ public class BookService {
         return response;
     }
 
-    private void changeBookMount(Book book, Integer x) {
-        Integer mount = book.mount;
-        Book borrowedBook = new Book();
-        borrowedBook.id = book.id;
-        borrowedBook.mount = mount + x;
-        bookRepository.partialUpdate(borrowedBook);
-    }
-
-    private BorrowedRecord createBorrowedRecord(BorrowBookRequest request, Book book, BOGetUserResponse response) {
-        BorrowedRecord borrowedRecord = new BorrowedRecord();
-        borrowedRecord.id = UUID.randomUUID().toString();
-        borrowedRecord.userId = request.userId;
-        borrowedRecord.userName = response.userName;
-        borrowedRecord.bookId = request.bookId;
-        borrowedRecord.bookName = book.name;
-        borrowedRecord.borrowTime = ZonedDateTime.now();
-        borrowedRecord.returnTime = request.returnTime;
-        borrowedRecord.isReturned = Boolean.FALSE;
-        return borrowedRecord;
-    }
-
     public CreateReservationResponse reserve(CreateReservationRequest request) {
         Query<Reservation> query = reservationRepository.select();
         query.where("user_id = ?", request.userId);
@@ -175,12 +142,32 @@ public class BookService {
         return createReservationResponse(request);
     }
 
-    private void createReservation(Long userId, Long bookId) {
-        Reservation reservation = new Reservation();
-        reservation.userId = userId;
-        reservation.bookId = bookId;
-        reservation.reserveTime = ZonedDateTime.now();
-        reservationRepository.insert(reservation);
+    public SearchRecordResponse searchRecord(SearchRecordRequest request) {
+        SearchRecordResponse response = new SearchRecordResponse();
+        core.framework.mongo.Query query = new core.framework.mongo.Query();
+        query.skip = request.skip;
+        query.limit = request.limit;
+        query.filter = Filters.eq("user_name", request.userName);
+        List<BorrowedRecord> borrowedRecordList = borrowedRecordCollection.find(query);
+        response.borrowedRecords = borrowedRecordList.stream().map(this::borrowedRecordView).collect(Collectors.toList());
+        response.total = borrowedRecordCollection.count(query.filter);
+        return response;
+    }
+
+    private GetBookResponse getBookResponse(Book book) {
+        GetBookResponse response = new GetBookResponse();
+        response.id = book.id;
+        response.name = book.name;
+        response.categoryName = categoryRepository.get(book.categoryId).orElseThrow(() ->
+            new NotFoundException("Category not found.", ErrorCodes.CATEGORY_NOT_FOUND)).name;
+        response.tagName = tagRepository.get(book.tagId).orElseThrow(() ->
+            new NotFoundException("Tag not found.", ErrorCodes.TAG_NOT_FOUND)).name;
+        response.authorName = authorRepository.get(book.authorId).orElseThrow(() ->
+            new NotFoundException("Author not found.", ErrorCodes.AUTHOR_NOT_FOUND)).name;
+        response.publishingHouse = book.publishingHouse;
+        response.description = book.description;
+        response.mount = book.mount;
+        return response;
     }
 
     private String whereSQL(SearchBookRequest request, List<String> params) {
@@ -207,48 +194,40 @@ public class BookService {
     }
 
     private void where(String condition, String param, StringBuilder whereClause, List<String> params) {
-        if (Strings.isBlank(condition)) return;
-        if (whereClause.length() > 0) whereClause.append(" AND ");
+        if (Strings.isBlank(condition)) {
+            return;
+        }
+        if (whereClause.length() > 0){
+            whereClause.append(" AND ");
+        }
         whereClause.append(condition);
         params.add(param);
+    }
+
+    private BorrowedRecord createBorrowedRecord(BorrowBookRequest request, Book book, BOGetUserResponse response) {
+        BorrowedRecord borrowedRecord = new BorrowedRecord();
+        borrowedRecord.id = UUID.randomUUID().toString();
+        borrowedRecord.userId = request.userId;
+        borrowedRecord.userName = response.userName;
+        borrowedRecord.bookId = request.bookId;
+        borrowedRecord.bookName = book.name;
+        borrowedRecord.borrowTime = ZonedDateTime.now();
+        borrowedRecord.returnTime = request.returnTime;
+        borrowedRecord.isReturned = Boolean.FALSE;
+        return borrowedRecord;
+    }
+
+    private void changeBookMount(Book book, Integer x) {
+        Integer mount = book.mount;
+        Book borrowedBook = new Book();
+        borrowedBook.id = book.id;
+        borrowedBook.mount = mount + x;
+        bookRepository.partialUpdate(borrowedBook);
     }
 
     private Boolean isReturned(Long userId, Long bookId) {
         List<BorrowedRecord> notReturnedRecordList = getNotReturnedRecordList(userId, bookId);
         return notReturnedRecordList.isEmpty() ? Boolean.TRUE : Boolean.FALSE;
-    }
-
-    private List<BorrowedRecord> getNotReturnedRecordList(Long userId, Long bookId) {
-        core.framework.mongo.Query query = new core.framework.mongo.Query();
-        query.filter = Filters.and(Filters.eq("book_id", bookId),
-            Filters.eq("user_id", userId),
-            Filters.eq("is_returned", Boolean.FALSE));
-        return borrowedRecordCollection.find(query);
-    }
-
-    private CreateReservationResponse createReservationResponse(CreateReservationRequest request) {
-        CreateReservationResponse response = new CreateReservationResponse();
-        response.userId = request.userId;
-        response.userName = boUserWebService.get(request.userId).userName;
-        response.bookId = request.bookId;
-        response.bookName = bookRepository.get(request.bookId).orElseThrow().name;
-        return response;
-    }
-
-    private GetBookResponse getBookResponse(Book book) {
-        GetBookResponse response = new GetBookResponse();
-        response.id = book.id;
-        response.name = book.name;
-        response.categoryName = categoryRepository.get(book.categoryId).orElseThrow(() ->
-            new NotFoundException("Category not found.", ErrorCodes.CATEGORY_NOT_FOUND)).name;
-        response.tagName = tagRepository.get(book.tagId).orElseThrow(() ->
-            new NotFoundException("Tag not found.", ErrorCodes.TAG_NOT_FOUND)).name;
-        response.authorName = authorRepository.get(book.authorId).orElseThrow(() ->
-            new NotFoundException("Author not found.", ErrorCodes.AUTHOR_NOT_FOUND)).name;
-        response.publishingHouse = book.publishingHouse;
-        response.description = book.description;
-        response.mount = book.mount;
-        return response;
     }
 
     private BorrowBookResponse borrowBookResponse(BorrowedRecord borrowedRecord) {
@@ -259,6 +238,31 @@ public class BookService {
         response.bookName = borrowedRecord.bookName;
         response.borrowTime = borrowedRecord.borrowTime;
         response.returnTime = borrowedRecord.returnTime;
+        return response;
+    }
+
+    private List<BorrowedRecord> getNotReturnedRecordList(Long userId, Long bookId) {
+        core.framework.mongo.Query query = new core.framework.mongo.Query();
+        query.filter = Filters.and(Filters.eq("book_id", bookId),
+            Filters.eq("user_id", userId),
+            Filters.eq("is_returned", Boolean.FALSE));
+        return borrowedRecordCollection.find(query);
+    }
+
+    private void createReservation(Long userId, Long bookId) {
+        Reservation reservation = new Reservation();
+        reservation.userId = userId;
+        reservation.bookId = bookId;
+        reservation.reserveTime = ZonedDateTime.now();
+        reservationRepository.insert(reservation);
+    }
+
+    private CreateReservationResponse createReservationResponse(CreateReservationRequest request) {
+        CreateReservationResponse response = new CreateReservationResponse();
+        response.userId = request.userId;
+        response.userName = boUserWebService.get(request.userId).userName;
+        response.bookId = request.bookId;
+        response.bookName = bookRepository.get(request.bookId).orElseThrow().name;
         return response;
     }
 

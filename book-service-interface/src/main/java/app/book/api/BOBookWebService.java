@@ -5,6 +5,7 @@ import app.book.api.book.BOCreateBookResponse;
 import app.book.api.book.BOGetBookResponse;
 import app.book.api.book.BOSearchBookRequest;
 import app.book.api.book.BOSearchBookResponse;
+import app.book.api.book.BOSearchRecordRequest;
 import app.book.api.book.BOSearchRecordResponse;
 import app.book.api.book.BOUpdateBookRequest;
 import app.book.api.book.BOUpdateBookResponse;
@@ -35,6 +36,6 @@ public interface BOBookWebService {
     BOUpdateBookResponse update(@PathParam("id") Long bookId, BOUpdateBookRequest request);
 
     @GET
-    @Path("/bo/borrowed-record/:id")
-    BOSearchRecordResponse searchRecordByBookId(@PathParam("id") Long bookId);
+    @Path("/bo/borrowed-record")
+    BOSearchRecordResponse searchRecord(BOSearchRecordRequest request);
 }

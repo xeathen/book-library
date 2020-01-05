@@ -6,6 +6,7 @@ import app.book.api.book.BOCreateBookResponse;
 import app.book.api.book.BOGetBookResponse;
 import app.book.api.book.BOSearchBookRequest;
 import app.book.api.book.BOSearchBookResponse;
+import app.book.api.book.BOSearchRecordRequest;
 import app.book.api.book.BOSearchRecordResponse;
 import app.book.api.book.BOUpdateBookRequest;
 import app.book.api.book.BOUpdateBookResponse;
@@ -51,8 +52,8 @@ public class BOBookWebServiceImpl implements BOBookWebService {
     }
 
     @Override
-    public BOSearchRecordResponse searchRecordByBookId(Long bookId) {
-        ActionLogContext.put("bookId", bookId);
-        return boBookService.searchRecordByBookId(bookId);
+    public BOSearchRecordResponse searchRecord(BOSearchRecordRequest request) {
+        ActionLogContext.put("bookId", request.bookId);
+        return boBookService.searchRecord(request);
     }
 }

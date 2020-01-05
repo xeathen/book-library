@@ -7,6 +7,7 @@ import app.book.api.book.BOCreateBookResponse;
 import app.book.api.book.BOGetBookResponse;
 import app.book.api.book.BOSearchBookRequest;
 import app.book.api.book.BOSearchBookResponse;
+import app.book.api.book.BOSearchRecordRequest;
 import app.book.api.book.BOSearchRecordResponse;
 import app.book.api.book.BOUpdateBookRequest;
 import app.book.api.book.BOUpdateBookResponse;
@@ -86,13 +87,31 @@ public class BOBookService {
         return response;
     }
 
-    public BOSearchRecordResponse searchRecordByBookId(Long bookId) {
+    public BOSearchRecordResponse searchRecord(BOSearchRecordRequest request) {
         BOSearchRecordResponse response = new BOSearchRecordResponse();
         core.framework.mongo.Query query = new core.framework.mongo.Query();
-        query.filter = Filters.eq("book_id", bookId);
+        query.skip = request.skip;
+        query.limit = request.limit;
+        query.filter = Filters.eq("book_id", request.bookId);
         List<BorrowedRecord> borrowedRecordList = borrowedRecordCollection.find(query);
         response.borrowedRecords = borrowedRecordList.stream().map(this::borrowedRecordView).collect(Collectors.toList());
         response.total = borrowedRecordCollection.count(query.filter);
+        return response;
+    }
+
+    private BOGetBookResponse boGetBookResponse(Book book) {
+        BOGetBookResponse response = new BOGetBookResponse();
+        response.id = book.id;
+        response.name = book.name;
+        response.categoryName = categoryRepository.get(book.categoryId).orElseThrow(() ->
+            new NotFoundException("Category not found.", ErrorCodes.CATEGORY_NOT_FOUND)).name;
+        response.tagName = tagRepository.get(book.tagId).orElseThrow(() ->
+            new NotFoundException("Tag not found.", ErrorCodes.TAG_NOT_FOUND)).name;
+        response.authorName = authorRepository.get(book.authorId).orElseThrow(() ->
+            new NotFoundException("Author not found.", ErrorCodes.AUTHOR_NOT_FOUND)).name;
+        response.publishingHouse = book.publishingHouse;
+        response.description = book.description;
+        response.mount = book.mount;
         return response;
     }
 
@@ -120,8 +139,12 @@ public class BOBookService {
     }
 
     private void where(String condition, String param, StringBuilder whereClause, List<String> params) {
-        if (Strings.isBlank(condition)) return;
-        if (whereClause.length() > 0) whereClause.append(" AND ");
+        if (Strings.isBlank(condition)) {
+            return;
+        }
+        if (whereClause.length() > 0) {
+            whereClause.append(" AND ");
+        }
         whereClause.append(condition);
         params.add(param);
     }
@@ -159,22 +182,6 @@ public class BOBookService {
         response.publishingHouse = request.publishingHouse;
         response.description = request.description;
         response.mount = request.mount;
-        return response;
-    }
-
-    private BOGetBookResponse boGetBookResponse(Book book) {
-        BOGetBookResponse response = new BOGetBookResponse();
-        response.id = book.id;
-        response.name = book.name;
-        response.categoryName = categoryRepository.get(book.categoryId).orElseThrow(() ->
-            new NotFoundException("Category not found.", ErrorCodes.CATEGORY_NOT_FOUND)).name;
-        response.tagName = tagRepository.get(book.tagId).orElseThrow(() ->
-            new NotFoundException("Tag not found.", ErrorCodes.TAG_NOT_FOUND)).name;
-        response.authorName = authorRepository.get(book.authorId).orElseThrow(() ->
-            new NotFoundException("Author not found.", ErrorCodes.AUTHOR_NOT_FOUND)).name;
-        response.publishingHouse = book.publishingHouse;
-        response.description = book.description;
-        response.mount = book.mount;
         return response;
     }
 

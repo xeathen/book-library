@@ -5,6 +5,7 @@ import app.bo.api.book.CreateBookAJAXResponse;
 import app.bo.api.book.GetBookAJAXResponse;
 import app.bo.api.book.SearchBookAJAXRequest;
 import app.bo.api.book.SearchBookAJAXResponse;
+import app.bo.api.book.SearchRecordAJAXRequest;
 import app.bo.api.book.SearchRecordAJAXResponse;
 import app.bo.api.book.UpdateBookAJAXRequest;
 import app.bo.api.book.UpdateBookAJAXResponse;
@@ -35,6 +36,6 @@ public interface BookAJAXWebService {
     UpdateBookAJAXResponse update(@PathParam("id") Long id, UpdateBookAJAXRequest request);
 
     @GET
-    @Path("/ajax/borrowed-record/:id")
-    SearchRecordAJAXResponse searchRecordByBookId(@PathParam("id") Long bookId);
+    @Path("/ajax/borrowed-record")
+    SearchRecordAJAXResponse searchRecord(SearchRecordAJAXRequest recordAJAXRequest);
 }

@@ -7,6 +7,7 @@ import app.bo.api.book.CreateBookAJAXResponse;
 import app.bo.api.book.GetBookAJAXResponse;
 import app.bo.api.book.SearchBookAJAXRequest;
 import app.bo.api.book.SearchBookAJAXResponse;
+import app.bo.api.book.SearchRecordAJAXRequest;
 import app.bo.api.book.SearchRecordAJAXResponse;
 import app.bo.api.book.UpdateBookAJAXRequest;
 import app.bo.api.book.UpdateBookAJAXResponse;
@@ -16,6 +17,7 @@ import app.book.api.book.BOCreateBookResponse;
 import app.book.api.book.BOGetBookResponse;
 import app.book.api.book.BOSearchBookRequest;
 import app.book.api.book.BOSearchBookResponse;
+import app.book.api.book.BOSearchRecordRequest;
 import app.book.api.book.BOSearchRecordResponse;
 import app.book.api.book.BOUpdateBookRequest;
 import app.book.api.book.BOUpdateBookResponse;
@@ -44,28 +46,14 @@ public class BookService {
         return searchBookAJAXResponse(boBookWebService.search(boSearchBookRequest));
     }
 
-    public SearchRecordAJAXResponse searchRecordByBookId(Long bookId) {
-        SearchRecordAJAXResponse ajaxResponse = new SearchRecordAJAXResponse();
-        BOSearchRecordResponse boSearchRecordResponse = boBookWebService.searchRecordByBookId(bookId);
-        ajaxResponse.borrowedRecords = boSearchRecordResponse.borrowedRecords.stream().map(boBorrowedRecordView -> {
-            BorrowedRecordView borrowedRecordView = new BorrowedRecordView();
-            borrowedRecordView.id = boBorrowedRecordView.id;
-            borrowedRecordView.bookId = boBorrowedRecordView.bookId;
-            borrowedRecordView.bookName = boBorrowedRecordView.bookName;
-            borrowedRecordView.userId = boBorrowedRecordView.userId;
-            borrowedRecordView.userName = boBorrowedRecordView.userName;
-            borrowedRecordView.borrowTime = boBorrowedRecordView.borrowTime;
-            borrowedRecordView.returnTime = boBorrowedRecordView.returnTime;
-            borrowedRecordView.isReturned = boBorrowedRecordView.isReturned;
-            return borrowedRecordView;
-        }).collect(Collectors.toList());
-        ajaxResponse.total = boSearchRecordResponse.total;
-        return ajaxResponse;
-    }
-
     public UpdateBookAJAXResponse update(Long id, UpdateBookAJAXRequest ajaxRequest) {
         BOUpdateBookRequest boRequest = boUpdateBookRequest(ajaxRequest);
         return updateBookAJAXResponse(boBookWebService.update(id, boRequest));
+    }
+
+    public SearchRecordAJAXResponse searchRecord(SearchRecordAJAXRequest ajaxRequest) {
+        BOSearchRecordRequest request = boSearchRecordRequest(ajaxRequest);
+        return searchRecordAJAXResponse(boBookWebService.searchRecord(request));
     }
 
     private GetBookAJAXResponse getBookAJAXResponse(BOGetBookResponse bookResponse) {
@@ -81,6 +69,25 @@ public class BookService {
         return ajaxResponse;
     }
 
+    private BOCreateBookRequest boCreateBookRequest(CreateBookAJAXRequest ajaxRequest) {
+        BOCreateBookRequest boCreateBookRequest = new BOCreateBookRequest();
+        boCreateBookRequest.name = ajaxRequest.name;
+        boCreateBookRequest.categoryId = ajaxRequest.categoryId;
+        boCreateBookRequest.authorId = ajaxRequest.authorId;
+        boCreateBookRequest.tagId = ajaxRequest.tagId;
+        boCreateBookRequest.description = ajaxRequest.description;
+        boCreateBookRequest.publishingHouse = ajaxRequest.publishingHouse;
+        boCreateBookRequest.mount = ajaxRequest.mount;
+        return boCreateBookRequest;
+    }
+
+    private CreateBookAJAXResponse createBookAJAXResponse(BOCreateBookResponse boCreateBookResponse) {
+        CreateBookAJAXResponse ajaxResponse = new CreateBookAJAXResponse();
+        ajaxResponse.id = boCreateBookResponse.id;
+        ajaxResponse.name = boCreateBookResponse.name;
+        return ajaxResponse;
+    }
+
     private BOSearchBookRequest boSearchBookRequest(SearchBookAJAXRequest ajaxRequest) {
         BOSearchBookRequest boSearchBookRequest = new BOSearchBookRequest();
         boSearchBookRequest.skip = ajaxRequest.skip;
@@ -92,6 +99,24 @@ public class BookService {
         boSearchBookRequest.description = ajaxRequest.description;
         boSearchBookRequest.publishingHouse = ajaxRequest.publishingHouse;
         return boSearchBookRequest;
+    }
+
+    private SearchBookAJAXResponse searchBookAJAXResponse(BOSearchBookResponse boResponse) {
+        SearchBookAJAXResponse ajaxResponse = new SearchBookAJAXResponse();
+        ajaxResponse.books = boResponse.books.stream().map(boBookView -> {
+            BookView bookAJAXView = new BookView();
+            bookAJAXView.id = boBookView.id;
+            bookAJAXView.name = boBookView.name;
+            bookAJAXView.categoryName = boBookView.categoryName;
+            bookAJAXView.authorName = boBookView.authorName;
+            bookAJAXView.tagName = boBookView.tagName;
+            bookAJAXView.description = boBookView.description;
+            bookAJAXView.publishingHouse = boBookView.publishingHouse;
+            bookAJAXView.mount = boBookView.mount;
+            return bookAJAXView;
+        }).collect(Collectors.toList());
+        ajaxResponse.total = boResponse.total;
+        return ajaxResponse;
     }
 
     private UpdateBookAJAXResponse updateBookAJAXResponse(BOUpdateBookResponse boResponse) {
@@ -119,40 +144,29 @@ public class BookService {
         return boRequest;
     }
 
-    private SearchBookAJAXResponse searchBookAJAXResponse(BOSearchBookResponse boResponse) {
-        SearchBookAJAXResponse ajaxResponse = new SearchBookAJAXResponse();
-        ajaxResponse.books = boResponse.books.stream().map(boBookView -> {
-            BookView bookAJAXView = new BookView();
-            bookAJAXView.id = boBookView.id;
-            bookAJAXView.name = boBookView.name;
-            bookAJAXView.categoryName = boBookView.categoryName;
-            bookAJAXView.authorName = boBookView.authorName;
-            bookAJAXView.tagName = boBookView.tagName;
-            bookAJAXView.description = boBookView.description;
-            bookAJAXView.publishingHouse = boBookView.publishingHouse;
-            bookAJAXView.mount = boBookView.mount;
-            return bookAJAXView;
+    private BOSearchRecordRequest boSearchRecordRequest(SearchRecordAJAXRequest ajaxRequest) {
+        BOSearchRecordRequest request = new BOSearchRecordRequest();
+        request.skip = ajaxRequest.skip;
+        request.limit = ajaxRequest.limit;
+        request.bookId = ajaxRequest.bookId;
+        return request;
+    }
+
+    private SearchRecordAJAXResponse searchRecordAJAXResponse(BOSearchRecordResponse boSearchRecordResponse) {
+        SearchRecordAJAXResponse ajaxResponse = new SearchRecordAJAXResponse();
+        ajaxResponse.borrowedRecords = boSearchRecordResponse.borrowedRecords.stream().map(boBorrowedRecordView -> {
+            BorrowedRecordView borrowedRecordView = new BorrowedRecordView();
+            borrowedRecordView.id = boBorrowedRecordView.id;
+            borrowedRecordView.bookId = boBorrowedRecordView.bookId;
+            borrowedRecordView.bookName = boBorrowedRecordView.bookName;
+            borrowedRecordView.userId = boBorrowedRecordView.userId;
+            borrowedRecordView.userName = boBorrowedRecordView.userName;
+            borrowedRecordView.borrowTime = boBorrowedRecordView.borrowTime;
+            borrowedRecordView.returnTime = boBorrowedRecordView.returnTime;
+            borrowedRecordView.isReturned = boBorrowedRecordView.isReturned;
+            return borrowedRecordView;
         }).collect(Collectors.toList());
-        ajaxResponse.total = boResponse.total;
-        return ajaxResponse;
-    }
-
-    private BOCreateBookRequest boCreateBookRequest(CreateBookAJAXRequest ajaxRequest) {
-        BOCreateBookRequest boCreateBookRequest = new BOCreateBookRequest();
-        boCreateBookRequest.name = ajaxRequest.name;
-        boCreateBookRequest.categoryId = ajaxRequest.categoryId;
-        boCreateBookRequest.authorId = ajaxRequest.authorId;
-        boCreateBookRequest.tagId = ajaxRequest.tagId;
-        boCreateBookRequest.description = ajaxRequest.description;
-        boCreateBookRequest.publishingHouse = ajaxRequest.publishingHouse;
-        boCreateBookRequest.mount = ajaxRequest.mount;
-        return boCreateBookRequest;
-    }
-
-    private CreateBookAJAXResponse createBookAJAXResponse(BOCreateBookResponse boCreateBookResponse) {
-        CreateBookAJAXResponse ajaxResponse = new CreateBookAJAXResponse();
-        ajaxResponse.id = boCreateBookResponse.id;
-        ajaxResponse.name = boCreateBookResponse.name;
+        ajaxResponse.total = boSearchRecordResponse.total;
         return ajaxResponse;
     }
 }

@@ -42,13 +42,6 @@ public class BookAJAXWebServiceImpl implements BookAJAXWebService {
     }
 
     @Override
-    public SearchRecordAJAXResponse searchRecord(SearchRecordAJAXRequest request) {
-        String userName = webContext.request().session().get("userName").orElseThrow();
-        ActionLogContext.put("userName", userName);
-        return bookService.searchRecord(request, userName);
-    }
-
-    @Override
     public BorrowBookAJAXResponse borrow(BorrowBookAJAXRequest request) {
         ActionLogContext.put("userId", request.userId);
         ActionLogContext.put("bookId", request.bookId);
@@ -67,5 +60,12 @@ public class BookAJAXWebServiceImpl implements BookAJAXWebService {
         ActionLogContext.put("userId", request.userId);
         ActionLogContext.put("bookId", request.bookId);
         return bookService.reserve(request);
+    }
+
+    @Override
+    public SearchRecordAJAXResponse searchRecord(SearchRecordAJAXRequest request) {
+        String userName = webContext.request().session().get("userName").orElseThrow();
+        ActionLogContext.put("userName", userName);
+        return bookService.searchRecord(request, userName);
     }
 }
