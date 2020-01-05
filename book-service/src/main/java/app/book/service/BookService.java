@@ -32,6 +32,7 @@ import core.framework.mongo.MongoCollection;
 import core.framework.util.Strings;
 import core.framework.web.exception.BadRequestException;
 import core.framework.web.exception.ConflictException;
+import core.framework.web.exception.ForbiddenException;
 import core.framework.web.exception.NotFoundException;
 
 import java.time.ZonedDateTime;
@@ -116,6 +117,9 @@ public class BookService {
         }
         List<BorrowedRecord> borrowedRecordList = getNotReturnedRecordList(request.userId, request.bookId);
         BorrowedRecord record = borrowedRecordList.get(0);
+        if (record.returnTime.isBefore(ZonedDateTime.now())) {
+            throw new ForbiddenException("The return time is past");
+        }
         record.returnTime = ZonedDateTime.now();
         record.isReturned = Boolean.TRUE;
         borrowedRecordCollection.replace(record);
