@@ -1,6 +1,5 @@
 package app.book.api.book;
 
-import core.framework.api.validate.NotBlank;
 import core.framework.api.validate.NotNull;
 import core.framework.api.web.service.QueryParam;
 
@@ -17,7 +16,6 @@ public class SearchRecordRequest {
     public Integer limit;
 
     @NotNull
-    @NotBlank
-    @QueryParam(name = "userName")
-    public String userName;
+    @QueryParam(name = "userId")
+    public Long userId;
 }

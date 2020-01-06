@@ -18,8 +18,8 @@ public class UserLoginInterceptor implements Interceptor {
     public Response intercept(Invocation invocation) throws Exception {
         String path = invocation.context().request().path();
         logger.info("path:" + path);
-        Optional<String> userNameOptional = invocation.context().request().session().get("userName");
-        if (!"/ajax/user/login".equals(path) && userNameOptional.isEmpty()) {
+        Optional<String> userIdOptional = invocation.context().request().session().get("userId");
+        if (!"/ajax/user/login".equals(path) && userIdOptional.isEmpty()) {
             return Response.text("You should login first.");
         }
         return invocation.proceed();

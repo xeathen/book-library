@@ -61,7 +61,7 @@ public class BookWebServiceImpl implements BookWebService {
 
     @Override
     public SearchRecordResponse searchRecord(SearchRecordRequest request) {
-        ActionLogContext.put("userName", request.userName);
+        ActionLogContext.put("userId", request.userId);
         return bookService.searchRecord(request);
     }
 }

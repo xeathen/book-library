@@ -150,7 +150,7 @@ public class BookService {
         core.framework.mongo.Query query = new core.framework.mongo.Query();
         query.skip = request.skip;
         query.limit = request.limit;
-        query.filter = Filters.eq("user_name", request.userName);
+        query.filter = Filters.eq("user_id", request.userId);
         List<BorrowedRecord> borrowedRecordList = borrowedRecordCollection.find(query);
         response.borrowedRecords = borrowedRecordList.stream().map(this::borrowedRecordView).collect(Collectors.toList());
         response.total = borrowedRecordCollection.count(query.filter);

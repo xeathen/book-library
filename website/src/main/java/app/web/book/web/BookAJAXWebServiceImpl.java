@@ -43,29 +43,32 @@ public class BookAJAXWebServiceImpl implements BookAJAXWebService {
 
     @Override
     public BorrowBookAJAXResponse borrow(BorrowBookAJAXRequest request) {
-        ActionLogContext.put("userId", request.userId);
+        Long userId = Long.valueOf(webContext.request().session().get("userId").orElseThrow());
+        ActionLogContext.put("userId", userId);
         ActionLogContext.put("bookId", request.bookId);
-        return bookService.borrow(request);
+        return bookService.borrow(userId, request);
     }
 
     @Override
     public ReturnBookAJAXResponse returnBack(ReturnBookAJAXRequest request) {
-        ActionLogContext.put("userId", request.userId);
+        Long userId = Long.valueOf(webContext.request().session().get("userId").orElseThrow());
+        ActionLogContext.put("userId", userId);
         ActionLogContext.put("bookId", request.bookId);
-        return bookService.returnBack(request);
+        return bookService.returnBack(userId, request);
     }
 
     @Override
     public CreateReservationAJAXResponse reserve(CreateReservationAJAXRequest request) {
-        ActionLogContext.put("userId", request.userId);
+        Long userId = Long.valueOf(webContext.request().session().get("userId").orElseThrow());
+        ActionLogContext.put("userId", userId);
         ActionLogContext.put("bookId", request.bookId);
-        return bookService.reserve(request);
+        return bookService.reserve(userId, request);
     }
 
     @Override
     public SearchRecordAJAXResponse searchRecord(SearchRecordAJAXRequest request) {
-        String userName = webContext.request().session().get("userName").orElseThrow();
-        ActionLogContext.put("userName", userName);
-        return bookService.searchRecord(request, userName);
+        Long userId = Long.valueOf(webContext.request().session().get("userId").orElseThrow());
+        ActionLogContext.put("userId", userId);
+        return bookService.searchRecord(userId, request);
     }
 }

@@ -13,7 +13,6 @@ import app.book.api.book.SearchBookRequest;
 import app.book.api.book.SearchBookResponse;
 import app.book.api.book.SearchRecordRequest;
 import app.book.api.book.SearchRecordResponse;
-import app.user.api.BOUserWebService;
 import app.web.api.book.BookView;
 import app.web.api.book.BorrowBookAJAXRequest;
 import app.web.api.book.BorrowBookAJAXResponse;
@@ -28,8 +27,6 @@ import app.web.api.book.SearchBookAJAXResponse;
 import app.web.api.book.SearchRecordAJAXRequest;
 import app.web.api.book.SearchRecordAJAXResponse;
 import core.framework.inject.Inject;
-import core.framework.web.WebContext;
-import core.framework.web.exception.ForbiddenException;
 
 import java.util.stream.Collectors;
 
@@ -39,10 +36,6 @@ import java.util.stream.Collectors;
 public class BookService {
     @Inject
     BookWebService bookWebService;
-    @Inject
-    BOUserWebService boUserWebService;
-    @Inject
-    WebContext webContext;
 
     public GetBookAJAXResponse get(Long id) {
         return getBookAJAXResponse(bookWebService.get(id));
@@ -54,29 +47,26 @@ public class BookService {
         return searchBookAJAXResponse(response);
     }
 
-    public BorrowBookAJAXResponse borrow(BorrowBookAJAXRequest ajaxRequest) {
-        checkUser(ajaxRequest.userId);
-        BorrowBookRequest request = borrowBookRequest(ajaxRequest);
+    public BorrowBookAJAXResponse borrow(Long userId, BorrowBookAJAXRequest ajaxRequest) {
+        BorrowBookRequest request = borrowBookRequest(userId, ajaxRequest);
         BorrowBookResponse response = bookWebService.borrow(request);
         return borrowBookAJAXResponse(response);
     }
 
-    public ReturnBookAJAXResponse returnBack(ReturnBookAJAXRequest ajaxRequest) {
-        checkUser(ajaxRequest.userId);
-        ReturnBookRequest request = returnBookRequest(ajaxRequest);
+    public ReturnBookAJAXResponse returnBack(Long userId, ReturnBookAJAXRequest ajaxRequest) {
+        ReturnBookRequest request = returnBookRequest(userId, ajaxRequest);
         ReturnBookResponse response = bookWebService.returnBack(request);
         return returnBookAJAXResponse(response);
     }
 
-    public CreateReservationAJAXResponse reserve(CreateReservationAJAXRequest ajaxRequest) {
-        checkUser(ajaxRequest.userId);
-        CreateReservationRequest request = createReservationRequest(ajaxRequest);
+    public CreateReservationAJAXResponse reserve(Long userId, CreateReservationAJAXRequest ajaxRequest) {
+        CreateReservationRequest request = createReservationRequest(userId, ajaxRequest);
         CreateReservationResponse reserve = bookWebService.reserve(request);
         return createReservationAJAXResponse(reserve);
     }
 
-    public SearchRecordAJAXResponse searchRecord(SearchRecordAJAXRequest ajaxRequest, String userName) {
-        SearchRecordRequest request = searchRecordRequest(ajaxRequest, userName);
+    public SearchRecordAJAXResponse searchRecord(Long userId, SearchRecordAJAXRequest ajaxRequest) {
+        SearchRecordRequest request = searchRecordRequest(userId, ajaxRequest);
         SearchRecordResponse response = bookWebService.searchRecord(request);
         return searchRecordAJAXResponse(response);
     }
@@ -125,9 +115,9 @@ public class BookService {
         return ajaxResponse;
     }
 
-    private BorrowBookRequest borrowBookRequest(BorrowBookAJAXRequest ajaxRequest) {
+    private BorrowBookRequest borrowBookRequest(Long userId, BorrowBookAJAXRequest ajaxRequest) {
         BorrowBookRequest request = new BorrowBookRequest();
-        request.userId = ajaxRequest.userId;
+        request.userId = userId;
         request.bookId = ajaxRequest.bookId;
         request.returnTime = ajaxRequest.returnTime;
         return request;
@@ -144,9 +134,9 @@ public class BookService {
         return ajaxResponse;
     }
 
-    private ReturnBookRequest returnBookRequest(ReturnBookAJAXRequest ajaxRequest) {
+    private ReturnBookRequest returnBookRequest(Long userId, ReturnBookAJAXRequest ajaxRequest) {
         ReturnBookRequest request = new ReturnBookRequest();
-        request.userId = ajaxRequest.userId;
+        request.userId = userId;
         request.bookId = ajaxRequest.bookId;
         return request;
     }
@@ -161,9 +151,9 @@ public class BookService {
         return ajaxResponse;
     }
 
-    private CreateReservationRequest createReservationRequest(CreateReservationAJAXRequest ajaxRequest) {
+    private CreateReservationRequest createReservationRequest(Long userId, CreateReservationAJAXRequest ajaxRequest) {
         CreateReservationRequest request = new CreateReservationRequest();
-        request.userId = ajaxRequest.userId;
+        request.userId = userId;
         request.bookId = ajaxRequest.bookId;
         return request;
     }
@@ -177,11 +167,11 @@ public class BookService {
         return ajaxResponse;
     }
 
-    private SearchRecordRequest searchRecordRequest(SearchRecordAJAXRequest ajaxRequest, String userName) {
+    private SearchRecordRequest searchRecordRequest(Long userId, SearchRecordAJAXRequest ajaxRequest) {
         SearchRecordRequest request = new SearchRecordRequest();
         request.skip = ajaxRequest.skip;
         request.limit = ajaxRequest.limit;
-        request.userName = userName;
+        request.userId = userId;
         return request;
     }
 
@@ -203,13 +193,5 @@ public class BookService {
         ajaxResponse.returnTime = response.returnTime;
         ajaxResponse.isReturned = response.isReturned;
         return ajaxResponse;
-    }
-
-    private void checkUser(Long userId) {
-        String requestUserName = boUserWebService.get(userId).userName;
-        String userName = webContext.request().session().get("userName").orElseThrow();
-        if (!userName.equals(requestUserName)) {
-            throw new ForbiddenException("Incorrect user.");
-        }
     }
 }

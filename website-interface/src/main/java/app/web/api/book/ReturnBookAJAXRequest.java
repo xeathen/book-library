@@ -8,10 +8,6 @@ import core.framework.api.validate.NotNull;
  */
 public class ReturnBookAJAXRequest {
     @NotNull
-    @Property(name = "user_id")
-    public Long userId;
-
-    @NotNull
     @Property(name = "book_id")
     public Long bookId;
 }
