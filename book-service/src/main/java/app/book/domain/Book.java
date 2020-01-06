@@ -38,6 +38,6 @@ public class Book {
     public String description;
 
     @NotNull
-    @Column(name = "mount")
-    public Integer mount;
+    @Column(name = "amount")
+    public Integer amount;
 }

@@ -34,6 +34,6 @@ public class CreateBookAJAXRequest {
     public String description;
 
     @NotNull
-    @Property(name = "mount")
-    public Integer mount;
+    @Property(name = "amount")
+    public Integer amount;
 }

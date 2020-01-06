@@ -59,7 +59,7 @@ public class BOBookService {
         List<String> params = new ArrayList<>();
         String selectSQL = "SELECT books.id AS id, books.name AS name, authors.name AS author_name, "
             + "categories.name AS category_name, tags.name AS tag_name, "
-            + "books.publishing_house, books.description , books.mount ";
+            + "books.publishing_house, books.description , books.amount ";
         String fromSQL = "FROM books JOIN categories JOIN tags JOIN authors "
             + "ON books.category_id = categories.id AND tags.id = books.tag_id AND authors.id = books.author_id ";
         String whereSQL = whereSQL(request, params);
@@ -82,7 +82,8 @@ public class BOBookService {
         Book book = book(request);
         book.id = id;
         bookRepository.partialUpdate(book);
-        BOUpdateBookResponse response = boUpdateBookResponse(request);
+        Optional<Book> bookOptional = bookRepository.get(id);
+        BOUpdateBookResponse response = boUpdateBookResponse(bookOptional.orElseThrow());
         response.id = id;
         return response;
     }
@@ -111,7 +112,7 @@ public class BOBookService {
             new NotFoundException("Author not found.", ErrorCodes.AUTHOR_NOT_FOUND)).name;
         response.publishingHouse = book.publishingHouse;
         response.description = book.description;
-        response.mount = book.mount;
+        response.amount = book.amount;
         return response;
     }
 
@@ -157,7 +158,7 @@ public class BOBookService {
         book.tagId = request.tagId;
         book.publishingHouse = request.publishingHouse;
         book.description = request.description;
-        book.mount = request.mount;
+        book.amount = request.amount;
         return book;
     }
 
@@ -169,19 +170,19 @@ public class BOBookService {
         book.tagId = request.tagId;
         book.publishingHouse = request.publishingHouse;
         book.description = request.description;
-        book.mount = request.mount;
+        book.amount = request.amount;
         return book;
     }
 
-    private BOUpdateBookResponse boUpdateBookResponse(BOUpdateBookRequest request) {
+    private BOUpdateBookResponse boUpdateBookResponse(Book book) {
         BOUpdateBookResponse response = new BOUpdateBookResponse();
-        response.name = request.name;
-        response.authorId = request.authorId;
-        response.categoryId = request.categoryId;
-        response.tagId = request.tagId;
-        response.publishingHouse = request.publishingHouse;
-        response.description = request.description;
-        response.mount = request.mount;
+        response.name = book.name;
+        response.authorId = book.authorId;
+        response.categoryId = book.categoryId;
+        response.tagId = book.tagId;
+        response.publishingHouse = book.publishingHouse;
+        response.description = book.description;
+        response.amount = book.amount;
         return response;
     }
 

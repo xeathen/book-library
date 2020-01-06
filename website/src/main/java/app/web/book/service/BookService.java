@@ -90,7 +90,7 @@ public class BookService {
         ajaxResponse.tagName = response.tagName;
         ajaxResponse.description = response.description;
         ajaxResponse.publishingHouse = response.publishingHouse;
-        ajaxResponse.mount = response.mount;
+        ajaxResponse.amount = response.amount;
         return ajaxResponse;
     }
 
@@ -118,7 +118,7 @@ public class BookService {
             bookView.tagName = boBookView.tagName;
             bookView.publishingHouse = boBookView.publishingHouse;
             bookView.description = boBookView.description;
-            bookView.mount = boBookView.mount;
+            bookView.amount = boBookView.amount;
             return bookView;
         }).collect(Collectors.toList());
         ajaxResponse.total = boResponse.total;

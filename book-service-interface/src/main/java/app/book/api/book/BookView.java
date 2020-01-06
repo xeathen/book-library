@@ -35,7 +35,7 @@ public class BookView {
     @Column(name = "description")
     public String description;
 
-    @Property(name = "mount")
-    @Column(name = "mount")
-    public Integer mount;
+    @Property(name = "amount")
+    @Column(name = "amount")
+    public Integer amount;
 }

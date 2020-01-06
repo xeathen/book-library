@@ -35,7 +35,7 @@ public class ReservationService {
                 throw new NotFoundException("book not found.");
             }
             Book book = bookOptional.get();
-            if (book.mount > 0) {
+            if (book.amount > 0) {
                 logger.info("publish reservationMessage, userId={}, bookId={}", reservation.userId, reservation.bookId);
                 ReservationMessage message = new ReservationMessage();
                 message.userId = reservation.userId;

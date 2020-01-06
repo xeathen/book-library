@@ -27,6 +27,6 @@ public class BOGetBookResponse {
     @Property(name = "description")
     public String description;
 
-    @Property(name = "mount")
-    public Integer mount;
+    @Property(name = "amount")
+    public Integer amount;
 }

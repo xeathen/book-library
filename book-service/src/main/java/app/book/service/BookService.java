@@ -72,7 +72,7 @@ public class BookService {
         List<String> params = new ArrayList<>();
         String selectSQL = "SELECT books.id AS id, books.name AS name, authors.name AS author_name, "
             + "categories.name AS category_name, tags.name AS tag_name, "
-            + "books.publishing_house, books.description , books.mount ";
+            + "books.publishing_house, books.description , books.amount ";
         String fromSQL = "FROM books JOIN categories JOIN tags JOIN authors "
             + "ON books.category_id = categories.id AND tags.id = books.tag_id AND authors.id = books.author_id ";
         String whereSQL = whereSQL(request, params);
@@ -91,7 +91,7 @@ public class BookService {
         if (user == null) {
             throw new NotFoundException("User not found.", ErrorCodes.USER_NOT_FOUND);
         }
-        if (book.mount <= 0) {
+        if (book.amount <= 0) {
             throw new ForbiddenException(ErrorCodes.NO_BOOK_REST);
         }
         if (user.status == UserStatusView.INACTIVE) {
@@ -105,7 +105,7 @@ public class BookService {
         }
         BorrowedRecord borrowedRecord = createBorrowedRecord(request, book, user);
         borrowedRecordCollection.insert(borrowedRecord);
-        changeBookMount(book, -1);
+        changeBookAmount(book, -1);
         return borrowBookResponse(borrowedRecord);
     }
 
@@ -129,7 +129,7 @@ public class BookService {
         response.returnTime = ZonedDateTime.now();
         Book book = bookRepository.get(request.bookId).orElseThrow(() ->
             new NotFoundException("Book not found.", ErrorCodes.BOOK_NOT_FOUND));
-        changeBookMount(book, 1);
+        changeBookAmount(book, 1);
         return response;
     }
 
@@ -169,7 +169,7 @@ public class BookService {
             new NotFoundException("Author not found.", ErrorCodes.AUTHOR_NOT_FOUND)).name;
         response.publishingHouse = book.publishingHouse;
         response.description = book.description;
-        response.mount = book.mount;
+        response.amount = book.amount;
         return response;
     }
 
@@ -220,11 +220,11 @@ public class BookService {
         return borrowedRecord;
     }
 
-    private void changeBookMount(Book book, Integer x) {
-        Integer mount = book.mount;
+    private void changeBookAmount(Book book, Integer x) {
+        Integer amount = book.amount;
         Book borrowedBook = new Book();
         borrowedBook.id = book.id;
-        borrowedBook.mount = mount + x;
+        borrowedBook.amount = amount + x;
         bookRepository.partialUpdate(borrowedBook);
     }
 
