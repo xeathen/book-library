@@ -30,7 +30,6 @@ import core.framework.db.Repository;
 import core.framework.inject.Inject;
 import core.framework.mongo.MongoCollection;
 import core.framework.util.Strings;
-import core.framework.web.WebContext;
 import core.framework.web.exception.ConflictException;
 import core.framework.web.exception.ForbiddenException;
 import core.framework.web.exception.NotFoundException;
@@ -62,8 +61,6 @@ public class BookService {
     BOUserWebService boUserWebService;
     @Inject
     Database database;
-    @Inject
-    WebContext webContext;
 
     public GetBookResponse get(Long bookId) {
         Optional<Book> book = bookRepository.get(bookId);
@@ -90,13 +87,9 @@ public class BookService {
     public BorrowBookResponse borrow(BorrowBookRequest request) {
         Book book = bookRepository.get(request.bookId).orElseThrow(() ->
             new NotFoundException("Book not found.", ErrorCodes.BOOK_NOT_FOUND));
-        String userName = webContext.request().session().get("userName").orElseThrow();
         BOGetUserResponse user = boUserWebService.get(request.userId);
         if (user == null) {
             throw new NotFoundException("User not found.", ErrorCodes.USER_NOT_FOUND);
-        }
-        if (!userName.equals(user.userName)) {
-            throw new ForbiddenException(ErrorCodes.INCORRECT_USER);
         }
         if (book.mount <= 0) {
             throw new ForbiddenException(ErrorCodes.NO_BOOK_REST);
