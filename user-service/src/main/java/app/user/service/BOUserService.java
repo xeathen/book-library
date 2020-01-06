@@ -168,18 +168,18 @@ public class BOUserService {
         return user;
     }
 
+    private User user(BOUpdateUserRequest request) {
+        User user = new User();
+        user.userName = request.userName;
+        user.email = request.email;
+        return user;
+    }
+
     private BOCreateUserResponse boCreateUserResponse(BOCreateUserRequest request) {
         BOCreateUserResponse response = new BOCreateUserResponse();
         response.userName = request.userName;
         response.email = request.email;
         response.status = request.status;
         return response;
-    }
-
-    private User user(BOUpdateUserRequest request) {
-        User user = new User();
-        user.userName = request.userName;
-        user.email = request.email;
-        return user;
     }
 }
