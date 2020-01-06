@@ -238,7 +238,7 @@ public class BookService {
         response.bookId = borrowedRecord.bookId;
         response.bookName = borrowedRecord.bookName;
         response.borrowTime = borrowedRecord.borrowTime;
-        response.expectReturnTime = borrowedRecord.expectedReturnTime;
+        response.expectedReturnTime = borrowedRecord.expectedReturnTime;
         return response;
     }
 

@@ -130,7 +130,7 @@ public class BookService {
         ajaxResponse.bookId = response.bookId;
         ajaxResponse.bookName = response.bookName;
         ajaxResponse.borrowTime = response.borrowTime;
-        ajaxResponse.expectedReturnTime = response.expectReturnTime;
+        ajaxResponse.expectedReturnTime = response.expectedReturnTime;
         return ajaxResponse;
     }
 

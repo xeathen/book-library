@@ -23,6 +23,6 @@ public class BorrowBookResponse {
     @Property(name = "borrow_time")
     public ZonedDateTime borrowTime;
 
-    @Property(name = "expect_return_time")
-    public ZonedDateTime expectReturnTime;
+    @Property(name = "expected_return_time")
+    public ZonedDateTime expectedReturnTime;
 }
