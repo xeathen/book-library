@@ -1,10 +1,10 @@
-import app.LibraryApp;
+import app.WebsiteApp;
 
 /**
  * @author Ethan
  */
 public class Main {
     public static void main(String[] args) {
-        new LibraryApp().start();
+        new WebsiteApp().start();
     }
 }

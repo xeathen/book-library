@@ -17,7 +17,7 @@ public class TagAJAXWebServiceImpl implements TagAJAXWebService {
 
     @Override
     public CreateTagAJAXResponse create(CreateTagAJAXRequest request) {
-        ActionLogContext.put("tagName", request.tagName);
+        ActionLogContext.put("tagName", request.name);
         return tagService.create(request);
     }
 

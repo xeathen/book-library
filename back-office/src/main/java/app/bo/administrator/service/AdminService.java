@@ -21,15 +21,15 @@ public class AdminService {
     public AdminLoginResponse login(AdminLoginRequest request) {
         AdminLoginResponse response = new AdminLoginResponse();
         Query<Administrator> query = administratorRepository.select();
-        query.where("admin_name = ?", request.adminName);
+        query.where("admin_name = ?", request.name);
         Optional<Administrator> administratorOptional = query.fetchOne();
         if (administratorOptional.isEmpty()) {
             response.loginMessage = LoginMessage.ADMINISTRATOR_NOT_FOUND;
         } else {
             Administrator administrator = administratorOptional.get();
             if (administrator.password.equals(hash(request.password, administrator.salt, administrator.iteration))) {
-                response.adminId = administrator.id;
-                response.adminName = administrator.adminName;
+                response.id = administrator.id;
+                response.name = administrator.adminName;
                 response.loginMessage = LoginMessage.SUCCESSFUL;
             } else {
                 response.loginMessage = LoginMessage.WRONG_PASSWORD;

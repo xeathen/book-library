@@ -15,7 +15,7 @@ import core.framework.module.Module;
 /**
  * @author Ethan
  */
-public class LibraryModule extends Module {
+public class WebsiteModule extends Module {
     @Override
     protected void initialize() {
         APIConfig api = api();

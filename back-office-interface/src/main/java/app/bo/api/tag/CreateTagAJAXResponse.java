@@ -10,5 +10,5 @@ public class CreateTagAJAXResponse {
     public Integer id;
 
     @Property(name = "name")
-    public String tagName;
+    public String name;
 }

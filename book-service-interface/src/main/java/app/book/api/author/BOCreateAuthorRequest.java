@@ -10,6 +10,6 @@ import core.framework.api.validate.NotNull;
 public class BOCreateAuthorRequest {
     @NotNull
     @NotBlank
-    @Property(name = "author_name")
-    public String authorName;
+    @Property(name = "name")
+    public String name;
 }

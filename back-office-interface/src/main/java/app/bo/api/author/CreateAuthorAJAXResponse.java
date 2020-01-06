@@ -10,5 +10,5 @@ public class CreateAuthorAJAXResponse {
     public Integer id;
 
     @Property(name = "name")
-    public String authorName;
+    public String name;
 }

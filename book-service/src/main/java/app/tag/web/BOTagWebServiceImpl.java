@@ -22,7 +22,7 @@ public class BOTagWebServiceImpl implements BOTagWebService {
 
     @Override
     public BOCreateTagResponse create(BOCreateTagRequest request) {
-        ActionLogContext.put("tagName", request.tagName);
+        ActionLogContext.put("tagName", request.name);
         return boTagService.create(request);
     }
 }

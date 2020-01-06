@@ -10,6 +10,6 @@ import core.framework.api.validate.NotNull;
 public class BOCreateTagRequest {
     @NotNull
     @NotBlank
-    @Property(name = "tag_name")
-    public String tagName;
+    @Property(name = "name")
+    public String name;
 }

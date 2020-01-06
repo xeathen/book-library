@@ -9,6 +9,6 @@ public class BOCreateCategoryResponse {
     @Property(name = "id")
     public Integer id;
 
-    @Property(name = "category_name")
-    public String categoryName;
+    @Property(name = "name")
+    public String name;
 }

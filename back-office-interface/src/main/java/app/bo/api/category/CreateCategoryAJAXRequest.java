@@ -11,5 +11,5 @@ public class CreateCategoryAJAXRequest {
     @NotNull
     @NotBlank
     @Property(name = "name")
-    public String categoryName;
+    public String name;
 }

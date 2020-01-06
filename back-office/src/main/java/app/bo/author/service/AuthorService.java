@@ -24,8 +24,8 @@ public class AuthorService {
         BOListAuthorResponse boListAuthorResponse = boAuthorWebService.list();
         ajaxResponse.authors = boListAuthorResponse.authors.stream().map(boAuthorView -> {
             AuthorView authorView = new AuthorView();
-            authorView.authorId = boAuthorView.authorId;
-            authorView.authorName = boAuthorView.authorName;
+            authorView.authorId = boAuthorView.id;
+            authorView.authorName = boAuthorView.name;
             return authorView;
         }).collect(Collectors.toList());
         ajaxResponse.total = boListAuthorResponse.total;
@@ -34,14 +34,14 @@ public class AuthorService {
 
     public CreateAuthorAJAXResponse create(CreateAuthorAJAXRequest ajaxRequest) {
         BOCreateAuthorRequest boRequest = new BOCreateAuthorRequest();
-        boRequest.authorName = ajaxRequest.authorName;
+        boRequest.name = ajaxRequest.name;
         return createAuthorAJAXResponse(boAuthorWebService.create(boRequest));
     }
 
     private CreateAuthorAJAXResponse createAuthorAJAXResponse(BOCreateAuthorResponse boResponse) {
         CreateAuthorAJAXResponse ajaxResponse = new CreateAuthorAJAXResponse();
         ajaxResponse.id = boResponse.id;
-        ajaxResponse.authorName = boResponse.authorName;
+        ajaxResponse.name = boResponse.name;
         return ajaxResponse;
     }
 }

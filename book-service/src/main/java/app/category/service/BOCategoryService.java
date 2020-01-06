@@ -26,8 +26,8 @@ public class BOCategoryService {
         Query<Category> query = categoryRepository.select();
         response.categories = query.fetch().stream().map(category -> {
             CategoryView categoryView = new CategoryView();
-            categoryView.categoryId = category.id;
-            categoryView.categoryName = category.name;
+            categoryView.id = category.id;
+            categoryView.name = category.name;
             return categoryView;
         }).collect(Collectors.toList());
         response.total = query.count();
@@ -35,14 +35,14 @@ public class BOCategoryService {
     }
 
     public BOCreateCategoryResponse create(BOCreateCategoryRequest request) {
-        if (Strings.isBlank(request.categoryName)) {
+        if (Strings.isBlank(request.name)) {
             throw new BadRequestException("category name must be not null", ErrorCodes.NULL_CATEGORY);
         }
         BOCreateCategoryResponse response = new BOCreateCategoryResponse();
         Category category = new Category();
-        category.name = request.categoryName;
+        category.name = request.name;
         response.id = (int) categoryRepository.insert(category).orElseThrow();
-        response.categoryName = request.categoryName;
+        response.name = request.name;
         return response;
     }
 }

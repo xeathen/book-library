@@ -11,5 +11,5 @@ public class CreateAuthorAJAXRequest {
     @NotNull
     @NotBlank
     @Property(name = "name")
-    public String authorName;
+    public String name;
 }

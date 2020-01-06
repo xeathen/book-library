@@ -22,7 +22,7 @@ public class BOCategoryWebServiceImpl implements BOCategoryWebService {
 
     @Override
     public BOCreateCategoryResponse create(BOCreateCategoryRequest request) {
-        ActionLogContext.put("categoryName", request.categoryName);
+        ActionLogContext.put("categoryName", request.name);
         return boCategoryService.create(request);
     }
 }

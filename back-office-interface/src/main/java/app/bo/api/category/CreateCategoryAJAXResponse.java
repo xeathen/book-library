@@ -10,5 +10,5 @@ public class CreateCategoryAJAXResponse {
     public Integer id;
 
     @Property(name = "name")
-    public String categoryName;
+    public String name;
 }

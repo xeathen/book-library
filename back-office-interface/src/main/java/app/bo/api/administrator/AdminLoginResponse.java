@@ -7,10 +7,10 @@ import core.framework.api.json.Property;
  */
 public class AdminLoginResponse {
     @Property(name = "id")
-    public Long adminId;
+    public Long id;
 
-    @Property(name = "admin_name")
-    public String adminName;
+    @Property(name = "name")
+    public String name;
 
     @Property(name = "login_message")
     public LoginMessage loginMessage;

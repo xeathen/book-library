@@ -22,14 +22,14 @@ public class BOAuthorService {
     Repository<Author> authorRepository;
 
     public BOCreateAuthorResponse create(BOCreateAuthorRequest request) {
-        if (Strings.isBlank(request.authorName)) {
+        if (Strings.isBlank(request.name)) {
             throw new BadRequestException("author name must be not null", ErrorCodes.NULL_AUTHOR);
         }
         BOCreateAuthorResponse response = new BOCreateAuthorResponse();
         Author author = new Author();
-        author.name = request.authorName;
+        author.name = request.name;
         response.id = (int) authorRepository.insert(author).orElseThrow();
-        response.authorName = request.authorName;
+        response.name = request.name;
         return response;
     }
 
@@ -38,8 +38,8 @@ public class BOAuthorService {
         Query<Author> query = authorRepository.select();
         response.authors = query.fetch().stream().map(author -> {
             AuthorView authorView = new AuthorView();
-            authorView.authorId = author.id;
-            authorView.authorName = author.name;
+            authorView.id = author.id;
+            authorView.name = author.name;
             return authorView;
         }).collect(Collectors.toList());
         response.total = query.count();

@@ -17,7 +17,7 @@ public class BOAuthorWebServiceImpl implements BOAuthorWebService {
 
     @Override
     public BOCreateAuthorResponse create(BOCreateAuthorRequest request) {
-        ActionLogContext.put("authorName", request.authorName);
+        ActionLogContext.put("authorName", request.name);
         return boAuthorService.create(request);
     }
 

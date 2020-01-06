@@ -24,8 +24,8 @@ public class TagService {
         BOListTagResponse boListTagResponse = boTagWebService.list();
         ajaxResponse.tags = boListTagResponse.tags.stream().map(boTagView -> {
             TagView tagView = new TagView();
-            tagView.tagId = boTagView.tagId;
-            tagView.tagName = boTagView.tagName;
+            tagView.id = boTagView.id;
+            tagView.name = boTagView.name;
             return tagView;
         }).collect(Collectors.toList());
         ajaxResponse.total = boListTagResponse.total;
@@ -34,14 +34,14 @@ public class TagService {
 
     public CreateTagAJAXResponse create(CreateTagAJAXRequest ajaxRequest) {
         BOCreateTagRequest boRequest = new BOCreateTagRequest();
-        boRequest.tagName = ajaxRequest.tagName;
+        boRequest.name = ajaxRequest.name;
         return createTagAJAXResponse(boTagWebService.create(boRequest));
     }
 
     private CreateTagAJAXResponse createTagAJAXResponse(BOCreateTagResponse boResponse) {
         CreateTagAJAXResponse ajaxResponse = new CreateTagAJAXResponse();
         ajaxResponse.id = boResponse.id;
-        ajaxResponse.tagName = boResponse.tagName;
+        ajaxResponse.name = boResponse.name;
         return ajaxResponse;
     }
 }

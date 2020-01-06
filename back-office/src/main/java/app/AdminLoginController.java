@@ -25,7 +25,7 @@ public class AdminLoginController implements Controller {
             AdminLoginRequest adminLoginRequest = request.bean(AdminLoginRequest.class);
             adminLoginResponse = adminService.login(adminLoginRequest);
             if (adminLoginResponse.loginMessage == LoginMessage.SUCCESSFUL) {
-                request.session().set("adminId", adminLoginResponse.adminId.toString());
+                request.session().set("adminId", adminLoginResponse.id.toString());
             }
         }
         return Response.bean(adminLoginResponse);

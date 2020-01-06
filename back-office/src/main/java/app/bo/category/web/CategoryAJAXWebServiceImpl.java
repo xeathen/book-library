@@ -17,7 +17,7 @@ public class CategoryAJAXWebServiceImpl implements CategoryAJAXWebService {
 
     @Override
     public CreateCategoryAJAXResponse create(CreateCategoryAJAXRequest request) {
-        ActionLogContext.put("categoryName", request.categoryName);
+        ActionLogContext.put("categoryName", request.name);
         return categoryService.create(request);
     }
 

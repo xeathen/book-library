@@ -9,12 +9,12 @@ import java.time.Duration;
 /**
  * @author Ethan
  */
-public class LibraryApp extends App {
+public class WebsiteApp extends App {
     @Override
     protected void initialize() {
         load(new SystemModule("sys.properties"));
         loadProperties("app.properties");
-        load(new LibraryModule());
+        load(new WebsiteModule());
 
         http().gzip();
         site().session().timeout(Duration.ofMinutes(10));

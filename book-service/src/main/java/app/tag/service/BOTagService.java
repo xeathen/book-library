@@ -26,8 +26,8 @@ public class BOTagService {
         Query<Tag> query = tagRepository.select();
         response.tags = query.fetch().stream().map(tag -> {
             TagView tagView = new TagView();
-            tagView.tagId = tag.id;
-            tagView.tagName = tag.name;
+            tagView.id = tag.id;
+            tagView.name = tag.name;
             return tagView;
         }).collect(Collectors.toList());
         response.total = query.count();
@@ -35,14 +35,14 @@ public class BOTagService {
     }
 
     public BOCreateTagResponse create(BOCreateTagRequest request) {
-        if (Strings.isBlank(request.tagName)) {
+        if (Strings.isBlank(request.name)) {
             throw new BadRequestException("tag name must be not null", ErrorCodes.NULL_TAG);
         }
         BOCreateTagResponse response = new BOCreateTagResponse();
         Tag tag = new Tag();
-        tag.name = request.tagName;
+        tag.name = request.name;
         response.id = (int) tagRepository.insert(tag).orElseThrow();
-        response.tagName = request.tagName;
+        response.name = request.name;
         return response;
     }
 }

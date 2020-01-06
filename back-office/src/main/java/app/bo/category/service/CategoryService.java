@@ -24,8 +24,8 @@ public class CategoryService {
         BOListCategoryResponse boListCategoryResponse = boCategoryWebService.list();
         ajaxResponse.categories = boListCategoryResponse.categories.stream().map(boCategoryView -> {
             CategoryView categoryView = new CategoryView();
-            categoryView.categoryId = boCategoryView.categoryId;
-            categoryView.categoryName = boCategoryView.categoryName;
+            categoryView.id = boCategoryView.id;
+            categoryView.name = boCategoryView.name;
             return categoryView;
         }).collect(Collectors.toList());
         ajaxResponse.total = boListCategoryResponse.total;
@@ -34,14 +34,14 @@ public class CategoryService {
 
     public CreateCategoryAJAXResponse create(CreateCategoryAJAXRequest ajaxRequest) {
         BOCreateCategoryRequest boRequest = new BOCreateCategoryRequest();
-        boRequest.categoryName = ajaxRequest.categoryName;
+        boRequest.name = ajaxRequest.name;
         return createCategoryAJAXResponse(boCategoryWebService.create(boRequest));
     }
 
     private CreateCategoryAJAXResponse createCategoryAJAXResponse(BOCreateCategoryResponse boResponse) {
         CreateCategoryAJAXResponse ajaxResponse = new CreateCategoryAJAXResponse();
         ajaxResponse.id = boResponse.id;
-        ajaxResponse.categoryName = boResponse.categoryName;
+        ajaxResponse.name = boResponse.name;
         return ajaxResponse;
     }
 }

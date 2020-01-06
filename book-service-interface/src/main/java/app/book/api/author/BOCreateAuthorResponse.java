@@ -9,6 +9,6 @@ public class BOCreateAuthorResponse {
     @Property(name = "id")
     public Integer id;
 
-    @Property(name = "author_name")
-    public String authorName;
+    @Property(name = "name")
+    public String name;
 }

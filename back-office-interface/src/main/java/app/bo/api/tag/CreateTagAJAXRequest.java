@@ -11,5 +11,5 @@ public class CreateTagAJAXRequest {
     @NotNull
     @NotBlank
     @Property(name = "name")
-    public String tagName;
+    public String name;
 }

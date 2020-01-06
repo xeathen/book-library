@@ -17,7 +17,7 @@ public class AuthorAJAXWebServiceImpl implements AuthorAJAXWebService {
 
     @Override
     public CreateAuthorAJAXResponse create(CreateAuthorAJAXRequest request) {
-        ActionLogContext.put("authorName", request.authorName);
+        ActionLogContext.put("authorName", request.name);
         return authorService.create(request);
     }
 

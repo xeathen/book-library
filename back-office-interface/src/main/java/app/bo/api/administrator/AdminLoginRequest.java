@@ -10,8 +10,8 @@ import core.framework.api.validate.NotNull;
 public class AdminLoginRequest {
     @NotNull
     @NotBlank
-    @Property(name = "admin_name")
-    public String adminName;
+    @Property(name = "name")
+    public String name;
 
     @NotNull
     @NotBlank
