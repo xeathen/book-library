@@ -8,7 +8,8 @@ CREATE TABLE IF NOT EXISTS `users`
     `email`     VARCHAR(50) NOT NULL,
     `status`    VARCHAR(10) NOT NULL,
     PRIMARY KEY (`id`),
-    UNIQUE INDEX `unique_user_name_email` (`user_name`, `email`)
+    UNIQUE INDEX `unique_user_name` (`user_name`),
+    UNIQUE INDEX `unique_email`(`email`)
 )
     ENGINE = InnoDB
     DEFAULT CHARACTER SET = utf8;
