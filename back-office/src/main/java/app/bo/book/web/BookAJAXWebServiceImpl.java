@@ -24,22 +24,18 @@ public class BookAJAXWebServiceImpl implements BookAJAXWebService {
 
     @Override
     public GetBookAJAXResponse get(Long bookId) {
-        ActionLogContext.put("bookId", bookId);
         return bookService.get(bookId);
+    }
+
+    @Override
+    public SearchBookAJAXResponse search(SearchBookAJAXRequest request) {
+        return bookService.search(request);
     }
 
     @Override
     public CreateBookAJAXResponse create(CreateBookAJAXRequest request) {
         ActionLogContext.put("bookName", request.name);
         return bookService.create(request);
-    }
-
-    @Override
-    public SearchBookAJAXResponse search(SearchBookAJAXRequest request) {
-        if (!Strings.isBlank(request.name)) {
-            ActionLogContext.put("bookName", request.name);
-        }
-        return bookService.search(request);
     }
 
     @Override
@@ -53,7 +49,6 @@ public class BookAJAXWebServiceImpl implements BookAJAXWebService {
 
     @Override
     public SearchRecordAJAXResponse searchRecord(SearchRecordAJAXRequest request) {
-        ActionLogContext.put("bookId", request.bookId);
         return bookService.searchRecord(request);
     }
 }

@@ -24,7 +24,6 @@ public class UserAJAXWebServiceImpl implements UserAJAXWebService {
 
     @Override
     public GetUserAJAXResponse get(Long id) {
-        ActionLogContext.put("userId", id);
         return userService.get(id);
     }
 

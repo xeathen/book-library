@@ -24,7 +24,6 @@ public class BOUserWebServiceImpl implements BOUserWebService {
 
     @Override
     public BOGetUserResponse get(Long id) {
-        ActionLogContext.put("userId", id);
         return boUserService.get(id);
     }
 

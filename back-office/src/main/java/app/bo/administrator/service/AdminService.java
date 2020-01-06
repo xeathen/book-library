@@ -12,7 +12,7 @@ import core.framework.inject.Inject;
 import java.util.Optional;
 
 /**
- * @author xeathen
+ * @author Ethan
  */
 public class AdminService {
     @Inject

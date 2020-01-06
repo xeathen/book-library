@@ -19,10 +19,6 @@ public class Main {
             mongo.createIndex("borrowed_records", ascending("book_id"));
             mongo.createIndex("borrowed_records", ascending("user_name"));
             mongo.createIndex("borrowed_records", ascending("book_name"));
-            mongo.createIndex("borrowed_records", ascending("user_name"));
-            mongo.createIndex("borrowed_records", ascending("borrow_time"));
-            mongo.createIndex("borrowed_records", ascending("return_time"));
-            mongo.createIndex("borrowed_records", ascending("is_Return"));
         });
     }
 }

@@ -15,7 +15,6 @@ import app.book.api.book.SearchRecordResponse;
 import app.book.service.BookService;
 import core.framework.inject.Inject;
 import core.framework.log.ActionLogContext;
-import core.framework.util.Strings;
 
 /**
  * @author Ethan
@@ -26,15 +25,11 @@ public class BookWebServiceImpl implements BookWebService {
 
     @Override
     public GetBookResponse get(Long bookId) {
-        ActionLogContext.put("bookId", bookId);
         return bookService.get(bookId);
     }
 
     @Override
     public SearchBookResponse search(SearchBookRequest request) {
-        if (!Strings.isBlank(request.name)) {
-            ActionLogContext.put("bookName", request);
-        }
         return bookService.search(request);
     }
 
@@ -61,7 +56,6 @@ public class BookWebServiceImpl implements BookWebService {
 
     @Override
     public SearchRecordResponse searchRecord(SearchRecordRequest request) {
-        ActionLogContext.put("userId", request.userId);
         return bookService.searchRecord(request);
     }
 }

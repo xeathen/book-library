@@ -3,7 +3,7 @@ package app.book.api.category;
 import core.framework.api.json.Property;
 
 /**
- * @author xeathen
+ * @author Ethan
  */
 public class BOCreateCategoryResponse {
     @Property(name = "id")

@@ -3,7 +3,7 @@ package app.book.api.author;
 import core.framework.api.json.Property;
 
 /**
- * @author xeathen
+ * @author Ethan
  */
 public class AuthorView {
     @Property(name = "id")

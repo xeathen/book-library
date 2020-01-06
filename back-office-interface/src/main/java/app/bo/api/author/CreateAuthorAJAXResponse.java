@@ -3,7 +3,7 @@ package app.bo.api.author;
 import core.framework.api.json.Property;
 
 /**
- * @author xeathen
+ * @author Ethan
  */
 public class CreateAuthorAJAXResponse {
     @Property(name = "id")

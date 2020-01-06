@@ -5,7 +5,7 @@ import core.framework.api.validate.NotBlank;
 import core.framework.api.validate.NotNull;
 
 /**
- * @author xeathen
+ * @author Ethan
  */
 public class BOCreateCategoryRequest {
     @NotNull

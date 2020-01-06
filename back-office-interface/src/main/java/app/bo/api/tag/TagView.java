@@ -3,7 +3,7 @@ package app.bo.api.tag;
 import core.framework.api.json.Property;
 
 /**
- * @author xeathen
+ * @author Ethan
  */
 public class TagView {
     @Property(name = "id")

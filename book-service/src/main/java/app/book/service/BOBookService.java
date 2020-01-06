@@ -22,6 +22,7 @@ import core.framework.db.Database;
 import core.framework.db.Repository;
 import core.framework.inject.Inject;
 import core.framework.mongo.MongoCollection;
+import core.framework.mongo.Query;
 import core.framework.util.Strings;
 import core.framework.web.exception.NotFoundException;
 
@@ -48,11 +49,8 @@ public class BOBookService {
     Database database;
 
     public BOGetBookResponse get(Long bookId) {
-        Optional<Book> book = bookRepository.get(bookId);
-        if (book.isEmpty()) {
-            throw new NotFoundException("book not found", ErrorCodes.BOOK_NOT_FOUND);
-        }
-        return boGetBookResponse(book.get());
+        return boGetBookResponse(bookRepository.get(bookId).orElseThrow(() ->
+            new NotFoundException("book not found, id=" + bookId, ErrorCodes.BOOK_NOT_FOUND)));
     }
 
     public BOSearchBookResponse search(BOSearchBookRequest request) {
@@ -90,7 +88,7 @@ public class BOBookService {
 
     public BOSearchRecordResponse searchRecord(BOSearchRecordRequest request) {
         BOSearchRecordResponse response = new BOSearchRecordResponse();
-        core.framework.mongo.Query query = new core.framework.mongo.Query();
+        Query query = new Query();
         query.skip = request.skip;
         query.limit = request.limit;
         query.filter = Filters.eq("book_id", request.bookId);

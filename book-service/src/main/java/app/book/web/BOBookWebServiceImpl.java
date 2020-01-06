@@ -13,7 +13,6 @@ import app.book.api.book.BOUpdateBookResponse;
 import app.book.service.BOBookService;
 import core.framework.inject.Inject;
 import core.framework.log.ActionLogContext;
-import core.framework.util.Strings;
 
 /**
  * @author Ethan
@@ -24,15 +23,11 @@ public class BOBookWebServiceImpl implements BOBookWebService {
 
     @Override
     public BOGetBookResponse get(Long bookId) {
-        ActionLogContext.put("bookId", bookId);
         return boBookService.get(bookId);
     }
 
     @Override
     public BOSearchBookResponse search(BOSearchBookRequest request) {
-        if (!Strings.isBlank(request.name)) {
-            ActionLogContext.put("bookName", request);
-        }
         return boBookService.search(request);
     }
 
@@ -53,7 +48,6 @@ public class BOBookWebServiceImpl implements BOBookWebService {
 
     @Override
     public BOSearchRecordResponse searchRecord(BOSearchRecordRequest request) {
-        ActionLogContext.put("bookId", request.bookId);
         return boBookService.searchRecord(request);
     }
 }

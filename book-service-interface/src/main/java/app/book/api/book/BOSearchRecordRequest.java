@@ -4,7 +4,7 @@ import core.framework.api.validate.NotNull;
 import core.framework.api.web.service.QueryParam;
 
 /**
- * @author xeathen
+ * @author Ethan
  */
 public class BOSearchRecordRequest {
     @NotNull

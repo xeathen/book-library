@@ -3,7 +3,7 @@ package app.bo.api.administrator;
 import core.framework.api.json.Property;
 
 /**
- * @author xeathen
+ * @author Ethan
  */
 public class AdminLoginResponse {
     @Property(name = "id")

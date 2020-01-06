@@ -15,7 +15,6 @@ import app.web.api.book.SearchRecordAJAXResponse;
 import app.web.book.service.BookService;
 import core.framework.inject.Inject;
 import core.framework.log.ActionLogContext;
-import core.framework.util.Strings;
 import core.framework.web.WebContext;
 
 /**
@@ -29,15 +28,11 @@ public class BookAJAXWebServiceImpl implements BookAJAXWebService {
 
     @Override
     public GetBookAJAXResponse get(Long bookId) {
-        ActionLogContext.put("bookId", bookId);
         return bookService.get(bookId);
     }
 
     @Override
     public SearchBookAJAXResponse search(SearchBookAJAXRequest request) {
-        if (!Strings.isBlank(request.name)) {
-            ActionLogContext.put("bookName", request.name);
-        }
         return bookService.search(request);
     }
 
@@ -68,7 +63,6 @@ public class BookAJAXWebServiceImpl implements BookAJAXWebService {
     @Override
     public SearchRecordAJAXResponse searchRecord(SearchRecordAJAXRequest request) {
         Long userId = Long.valueOf(webContext.request().session().get("userId").orElseThrow());
-        ActionLogContext.put("userId", userId);
         return bookService.searchRecord(userId, request);
     }
 }
