@@ -18,4 +18,5 @@ public class ErrorCodes {
     public static final String BORROWED_ALREADY = "BORROWED_ALREADY";
     public static final String RETURN_TIME_PAST = "RETURN_TIME_PAST";
     public static final String NO_BOOK_REST = "NO_BOOK_REST";
+    public static final String INCORRECT_USER = "INCORRECT_USER";
 }

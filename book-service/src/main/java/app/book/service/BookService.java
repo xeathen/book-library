@@ -30,7 +30,7 @@ import core.framework.db.Repository;
 import core.framework.inject.Inject;
 import core.framework.mongo.MongoCollection;
 import core.framework.util.Strings;
-import core.framework.web.exception.BadRequestException;
+import core.framework.web.WebContext;
 import core.framework.web.exception.ConflictException;
 import core.framework.web.exception.ForbiddenException;
 import core.framework.web.exception.NotFoundException;
@@ -62,6 +62,8 @@ public class BookService {
     BOUserWebService boUserWebService;
     @Inject
     Database database;
+    @Inject
+    WebContext webContext;
 
     public GetBookResponse get(Long bookId) {
         Optional<Book> book = bookRepository.get(bookId);
@@ -88,12 +90,16 @@ public class BookService {
     public BorrowBookResponse borrow(BorrowBookRequest request) {
         Book book = bookRepository.get(request.bookId).orElseThrow(() ->
             new NotFoundException("Book not found.", ErrorCodes.BOOK_NOT_FOUND));
+        String userName = webContext.request().session().get("userName").orElseThrow();
         BOGetUserResponse user = boUserWebService.get(request.userId);
-        if (book.mount <= 0) {
-            throw new BadRequestException("No book rest.", ErrorCodes.NO_BOOK_REST);
-        }
         if (user == null) {
             throw new NotFoundException("User not found.", ErrorCodes.USER_NOT_FOUND);
+        }
+        if (!userName.equals(user.userName)) {
+            throw new ForbiddenException(ErrorCodes.INCORRECT_USER);
+        }
+        if (book.mount <= 0) {
+            throw new ForbiddenException(ErrorCodes.NO_BOOK_REST);
         }
         if (user.status == UserStatusView.INACTIVE) {
             throw new ConflictException("You are banned!", ErrorCodes.BANNED);
@@ -102,7 +108,7 @@ public class BookService {
             throw new ConflictException("You had borrowed this book already.", ErrorCodes.BORROWED_ALREADY);
         }
         if (ZonedDateTime.now().isAfter(request.returnTime)) {
-            throw new BadRequestException("ReturnTime is past.", ErrorCodes.RETURN_TIME_PAST);
+            throw new ForbiddenException(ErrorCodes.RETURN_TIME_PAST);
         }
         BorrowedRecord borrowedRecord = createBorrowedRecord(request, book, user);
         borrowedRecordCollection.insert(borrowedRecord);
@@ -140,7 +146,7 @@ public class BookService {
         query.where("book_id = ?", request.bookId);
         List<Reservation> collect = new ArrayList<>(query.fetch());
         if (!collect.isEmpty()) {
-            throw new BadRequestException("You have reserved this book already.", ErrorCodes.ALREADY_RESERVED);
+            throw new ForbiddenException(ErrorCodes.ALREADY_RESERVED);
         }
         createReservation(request.userId, request.bookId);
         return createReservationResponse(request);
