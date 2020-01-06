@@ -7,8 +7,8 @@ import app.book.api.book.BorrowedRecordView;
 import app.book.api.book.CreateReservationRequest;
 import app.book.api.book.CreateReservationResponse;
 import app.book.api.book.GetBookResponse;
-import app.book.api.book.ReturnBookRequest;
-import app.book.api.book.ReturnBookResponse;
+import app.book.api.book.ReturnBackBookRequest;
+import app.book.api.book.ReturnBackBookResponse;
 import app.book.api.book.SearchBookRequest;
 import app.book.api.book.SearchBookResponse;
 import app.book.api.book.SearchRecordRequest;
@@ -20,8 +20,8 @@ import app.web.api.book.BorrowedRecordAJAXView;
 import app.web.api.book.CreateReservationAJAXRequest;
 import app.web.api.book.CreateReservationAJAXResponse;
 import app.web.api.book.GetBookAJAXResponse;
-import app.web.api.book.ReturnBookAJAXRequest;
-import app.web.api.book.ReturnBookAJAXResponse;
+import app.web.api.book.ReturnBackBookAJAXRequest;
+import app.web.api.book.ReturnBackBookAJAXResponse;
 import app.web.api.book.SearchBookAJAXRequest;
 import app.web.api.book.SearchBookAJAXResponse;
 import app.web.api.book.SearchRecordAJAXRequest;
@@ -53,9 +53,9 @@ public class BookService {
         return borrowBookAJAXResponse(response);
     }
 
-    public ReturnBookAJAXResponse returnBack(Long userId, ReturnBookAJAXRequest ajaxRequest) {
-        ReturnBookRequest request = returnBookRequest(userId, ajaxRequest);
-        ReturnBookResponse response = bookWebService.returnBack(request);
+    public ReturnBackBookAJAXResponse returnBack(Long userId, ReturnBackBookAJAXRequest ajaxRequest) {
+        ReturnBackBookRequest request = returnBookRequest(userId, ajaxRequest);
+        ReturnBackBookResponse response = bookWebService.returnBack(request);
         return returnBookAJAXResponse(response);
     }
 
@@ -119,7 +119,7 @@ public class BookService {
         BorrowBookRequest request = new BorrowBookRequest();
         request.userId = userId;
         request.bookId = ajaxRequest.bookId;
-        request.returnTime = ajaxRequest.returnTime;
+        request.expectedReturnTime = ajaxRequest.expectedReturnTime;
         return request;
     }
 
@@ -130,24 +130,24 @@ public class BookService {
         ajaxResponse.bookId = response.bookId;
         ajaxResponse.bookName = response.bookName;
         ajaxResponse.borrowTime = response.borrowTime;
-        ajaxResponse.returnTime = response.returnTime;
+        ajaxResponse.expectedReturnTime = response.expectReturnTime;
         return ajaxResponse;
     }
 
-    private ReturnBookRequest returnBookRequest(Long userId, ReturnBookAJAXRequest ajaxRequest) {
-        ReturnBookRequest request = new ReturnBookRequest();
+    private ReturnBackBookRequest returnBookRequest(Long userId, ReturnBackBookAJAXRequest ajaxRequest) {
+        ReturnBackBookRequest request = new ReturnBackBookRequest();
         request.userId = userId;
         request.bookId = ajaxRequest.bookId;
         return request;
     }
 
-    private ReturnBookAJAXResponse returnBookAJAXResponse(ReturnBookResponse response) {
-        ReturnBookAJAXResponse ajaxResponse = new ReturnBookAJAXResponse();
+    private ReturnBackBookAJAXResponse returnBookAJAXResponse(ReturnBackBookResponse response) {
+        ReturnBackBookAJAXResponse ajaxResponse = new ReturnBackBookAJAXResponse();
         ajaxResponse.userId = response.userId;
         ajaxResponse.userName = response.userName;
         ajaxResponse.bookId = response.bookId;
         ajaxResponse.bookName = response.bookName;
-        ajaxResponse.returnTime = response.returnTime;
+        ajaxResponse.actualReturnTime = response.actualReturnTime;
         return ajaxResponse;
     }
 
@@ -190,8 +190,8 @@ public class BookService {
         ajaxResponse.bookId = response.bookId;
         ajaxResponse.bookName = response.bookName;
         ajaxResponse.borrowTime = response.borrowTime;
-        ajaxResponse.returnTime = response.returnTime;
-        ajaxResponse.isReturned = response.isReturned;
+        ajaxResponse.expectedReturnTime = response.expectedReturnTime;
+        ajaxResponse.actualReturnTime = response.actualReturnTime;
         return ajaxResponse;
     }
 }

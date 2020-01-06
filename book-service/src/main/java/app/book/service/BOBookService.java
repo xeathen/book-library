@@ -192,8 +192,8 @@ public class BOBookService {
         response.bookId = borrowedRecord.bookId;
         response.bookName = borrowedRecord.bookName;
         response.borrowTime = borrowedRecord.borrowTime;
-        response.returnTime = borrowedRecord.returnTime;
-        response.isReturned = borrowedRecord.isReturned;
+        response.expectedReturnTime = borrowedRecord.expectedReturnTime;
+        response.actualReturnTime = borrowedRecord.actualReturnTime;
         return response;
     }
 }

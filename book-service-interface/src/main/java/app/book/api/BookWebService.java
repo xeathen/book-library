@@ -5,8 +5,8 @@ import app.book.api.book.BorrowBookResponse;
 import app.book.api.book.CreateReservationRequest;
 import app.book.api.book.CreateReservationResponse;
 import app.book.api.book.GetBookResponse;
-import app.book.api.book.ReturnBookRequest;
-import app.book.api.book.ReturnBookResponse;
+import app.book.api.book.ReturnBackBookRequest;
+import app.book.api.book.ReturnBackBookResponse;
 import app.book.api.book.SearchBookRequest;
 import app.book.api.book.SearchBookResponse;
 import app.book.api.book.SearchRecordRequest;
@@ -35,7 +35,7 @@ public interface BookWebService {
 
     @POST
     @Path("/book/return-back")
-    ReturnBookResponse returnBack(ReturnBookRequest request);
+    ReturnBackBookResponse returnBack(ReturnBackBookRequest request);
 
     @POST
     @Path("/reservation")

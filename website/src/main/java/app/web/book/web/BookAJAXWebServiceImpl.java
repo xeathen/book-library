@@ -6,8 +6,8 @@ import app.web.api.book.BorrowBookAJAXResponse;
 import app.web.api.book.CreateReservationAJAXRequest;
 import app.web.api.book.CreateReservationAJAXResponse;
 import app.web.api.book.GetBookAJAXResponse;
-import app.web.api.book.ReturnBookAJAXRequest;
-import app.web.api.book.ReturnBookAJAXResponse;
+import app.web.api.book.ReturnBackBookAJAXRequest;
+import app.web.api.book.ReturnBackBookAJAXResponse;
 import app.web.api.book.SearchBookAJAXRequest;
 import app.web.api.book.SearchBookAJAXResponse;
 import app.web.api.book.SearchRecordAJAXRequest;
@@ -45,7 +45,7 @@ public class BookAJAXWebServiceImpl implements BookAJAXWebService {
     }
 
     @Override
-    public ReturnBookAJAXResponse returnBack(ReturnBookAJAXRequest request) {
+    public ReturnBackBookAJAXResponse returnBack(ReturnBackBookAJAXRequest request) {
         Long userId = Long.valueOf(webContext.request().session().get("userId").orElseThrow());
         ActionLogContext.put("userId", userId);
         ActionLogContext.put("bookId", request.bookId);

@@ -36,10 +36,9 @@ public class BorrowedRecord {
     public ZonedDateTime borrowTime;
 
     @NotNull
-    @Field(name = "return_time")
-    public ZonedDateTime returnTime;
+    @Field(name = "expected_return_time")
+    public ZonedDateTime expectedReturnTime;
 
-    @NotNull
-    @Field(name = "is_returned")
-    public Boolean isReturned;
+    @Field(name = "actual_return_time")
+    public ZonedDateTime actualReturnTime;
 }

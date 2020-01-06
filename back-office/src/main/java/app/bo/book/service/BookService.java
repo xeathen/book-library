@@ -162,8 +162,8 @@ public class BookService {
             borrowedRecordView.userId = boBorrowedRecordView.userId;
             borrowedRecordView.userName = boBorrowedRecordView.userName;
             borrowedRecordView.borrowTime = boBorrowedRecordView.borrowTime;
-            borrowedRecordView.returnTime = boBorrowedRecordView.returnTime;
-            borrowedRecordView.isReturned = boBorrowedRecordView.isReturned;
+            borrowedRecordView.expectedReturnTime = boBorrowedRecordView.expectedReturnTime;
+            borrowedRecordView.actualReturnTime = boBorrowedRecordView.actualReturnTime;
             return borrowedRecordView;
         }).collect(Collectors.toList());
         ajaxResponse.total = boSearchRecordResponse.total;

@@ -9,8 +9,8 @@ import app.book.api.book.BorrowedRecordView;
 import app.book.api.book.CreateReservationRequest;
 import app.book.api.book.CreateReservationResponse;
 import app.book.api.book.GetBookResponse;
-import app.book.api.book.ReturnBookRequest;
-import app.book.api.book.ReturnBookResponse;
+import app.book.api.book.ReturnBackBookRequest;
+import app.book.api.book.ReturnBackBookResponse;
 import app.book.api.book.SearchBookRequest;
 import app.book.api.book.SearchBookResponse;
 import app.book.api.book.SearchRecordRequest;
@@ -100,7 +100,7 @@ public class BookService {
         if (!isReturned(request.userId, request.bookId)) {
             throw new ConflictException("You had borrowed this book already.", ErrorCodes.BORROWED_ALREADY);
         }
-        if (ZonedDateTime.now().isAfter(request.returnTime)) {
+        if (ZonedDateTime.now().isAfter(request.expectedReturnTime)) {
             throw new ForbiddenException(ErrorCodes.RETURN_TIME_PAST);
         }
         BorrowedRecord borrowedRecord = createBorrowedRecord(request, book, user);
@@ -109,24 +109,23 @@ public class BookService {
         return borrowBookResponse(borrowedRecord);
     }
 
-    public ReturnBookResponse returnBack(ReturnBookRequest request) {
-        ReturnBookResponse response = new ReturnBookResponse();
+    public ReturnBackBookResponse returnBack(ReturnBackBookRequest request) {
+        ReturnBackBookResponse response = new ReturnBackBookResponse();
         if (isReturned(request.userId, request.bookId)) {
             throw new NotFoundException("You had returned this book already.", ErrorCodes.RECORD_NOT_FOUND);
         }
         List<BorrowedRecord> borrowedRecordList = getNotReturnedRecordList(request.userId, request.bookId);
         BorrowedRecord record = borrowedRecordList.get(0);
-        if (record.returnTime.isBefore(ZonedDateTime.now())) {
+        if (record.expectedReturnTime.isBefore(ZonedDateTime.now())) {
             throw new ForbiddenException("The return time is past");
         }
-        record.returnTime = ZonedDateTime.now();
-        record.isReturned = Boolean.TRUE;
+        record.actualReturnTime = ZonedDateTime.now();
         borrowedRecordCollection.replace(record);
         response.userId = request.userId;
         response.userName = record.userName;
         response.bookId = request.bookId;
         response.bookName = record.bookName;
-        response.returnTime = ZonedDateTime.now();
+        response.actualReturnTime = ZonedDateTime.now();
         Book book = bookRepository.get(request.bookId).orElseThrow(() ->
             new NotFoundException("Book not found.", ErrorCodes.BOOK_NOT_FOUND));
         changeBookAmount(book, 1);
@@ -215,8 +214,7 @@ public class BookService {
         borrowedRecord.bookId = request.bookId;
         borrowedRecord.bookName = book.name;
         borrowedRecord.borrowTime = ZonedDateTime.now();
-        borrowedRecord.returnTime = request.returnTime;
-        borrowedRecord.isReturned = Boolean.FALSE;
+        borrowedRecord.expectedReturnTime = request.expectedReturnTime;
         return borrowedRecord;
     }
 
@@ -240,7 +238,7 @@ public class BookService {
         response.bookId = borrowedRecord.bookId;
         response.bookName = borrowedRecord.bookName;
         response.borrowTime = borrowedRecord.borrowTime;
-        response.returnTime = borrowedRecord.returnTime;
+        response.expectReturnTime = borrowedRecord.expectedReturnTime;
         return response;
     }
 
@@ -248,7 +246,7 @@ public class BookService {
         core.framework.mongo.Query query = new core.framework.mongo.Query();
         query.filter = Filters.and(Filters.eq("book_id", bookId),
             Filters.eq("user_id", userId),
-            Filters.eq("is_returned", Boolean.FALSE));
+            Filters.eq("actual_return_time", null));
         return borrowedRecordCollection.find(query);
     }
 
@@ -277,8 +275,8 @@ public class BookService {
         response.bookId = borrowedRecord.bookId;
         response.bookName = borrowedRecord.bookName;
         response.borrowTime = borrowedRecord.borrowTime;
-        response.returnTime = borrowedRecord.returnTime;
-        response.isReturned = borrowedRecord.isReturned;
+        response.expectedReturnTime = borrowedRecord.expectedReturnTime;
+        response.actualReturnTime = borrowedRecord.actualReturnTime;
         return response;
     }
 }

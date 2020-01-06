@@ -5,8 +5,8 @@ import app.web.api.book.BorrowBookAJAXResponse;
 import app.web.api.book.CreateReservationAJAXRequest;
 import app.web.api.book.CreateReservationAJAXResponse;
 import app.web.api.book.GetBookAJAXResponse;
-import app.web.api.book.ReturnBookAJAXRequest;
-import app.web.api.book.ReturnBookAJAXResponse;
+import app.web.api.book.ReturnBackBookAJAXRequest;
+import app.web.api.book.ReturnBackBookAJAXResponse;
 import app.web.api.book.SearchBookAJAXRequest;
 import app.web.api.book.SearchBookAJAXResponse;
 import app.web.api.book.SearchRecordAJAXRequest;
@@ -35,7 +35,7 @@ public interface BookAJAXWebService {
 
     @POST
     @Path("/ajax/book/return-back")
-    ReturnBookAJAXResponse returnBack(ReturnBookAJAXRequest request);
+    ReturnBackBookAJAXResponse returnBack(ReturnBackBookAJAXRequest request);
 
     @POST
     @Path("/ajax/reservation")

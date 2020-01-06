@@ -6,7 +6,7 @@ import core.framework.api.validate.NotNull;
 /**
  * @author Ethan
  */
-public class ReturnBookAJAXRequest {
+public class ReturnBackBookAJAXRequest {
     @NotNull
     @Property(name = "book_id")
     public Long bookId;

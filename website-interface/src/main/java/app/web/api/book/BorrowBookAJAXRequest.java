@@ -14,6 +14,6 @@ public class BorrowBookAJAXRequest {
     public Long bookId;
 
     @NotNull
-    @Property(name = "return_time")
-    public ZonedDateTime returnTime;
+    @Property(name = "expected_return_time")
+    public ZonedDateTime expectedReturnTime;
 }

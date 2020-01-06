@@ -7,7 +7,7 @@ import java.time.ZonedDateTime;
 /**
  * @author Ethan
  */
-public class ReturnBookAJAXResponse {
+public class ReturnBackBookAJAXResponse {
     @Property(name = "user_id")
     public Long userId;
 
@@ -20,6 +20,6 @@ public class ReturnBookAJAXResponse {
     @Property(name = "book_name")
     public String bookName;
 
-    @Property(name = "return_time")
-    public ZonedDateTime returnTime;
+    @Property(name = "actual_return_time")
+    public ZonedDateTime actualReturnTime;
 }

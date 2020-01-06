@@ -26,9 +26,9 @@ public class BorrowedRecordAJAXView {
     @Property(name = "borrow_time")
     public ZonedDateTime borrowTime;
 
-    @Property(name = "return_time")
-    public ZonedDateTime returnTime;
+    @Property(name = "expected_return_time")
+    public ZonedDateTime expectedReturnTime;
 
-    @Property(name = "is_returned")
-    public Boolean isReturned;
+    @Property(name = "actual_return_time")
+    public ZonedDateTime actualReturnTime;
 }

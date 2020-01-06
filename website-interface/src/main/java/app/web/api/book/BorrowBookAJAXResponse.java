@@ -23,6 +23,6 @@ public class BorrowBookAJAXResponse {
     @Property(name = "borrow_time")
     public ZonedDateTime borrowTime;
 
-    @Property(name = "return_time")
-    public ZonedDateTime returnTime;
+    @Property(name = "expected_return_time")
+    public ZonedDateTime expectedReturnTime;
 }
