@@ -18,7 +18,7 @@ public class LibraryApp extends App {
 
         http().gzip();
         site().session().local();
-        site().session().timeout(Duration.ofMinutes(5));
+        site().session().timeout(Duration.ofMinutes(10));
         http().intercept(bind(UserLoginInterceptor.class));
     }
 }
