@@ -8,8 +8,8 @@ import app.bo.api.user.GetUserAJAXResponse;
 import app.bo.api.user.ListUserAJAXRequest;
 import app.bo.api.user.ListUserAJAXResponse;
 import app.bo.api.user.ResetPasswordAJAXResponse;
-import app.bo.api.user.UpdateUserAJAXRequest;
-import app.bo.api.user.UpdateUserAJAXResponse;
+import app.bo.api.user.UpdateUserPasswordAJAXRequest;
+import app.bo.api.user.UpdateUserPasswordAJAXResponse;
 import core.framework.api.web.service.DELETE;
 import core.framework.api.web.service.GET;
 import core.framework.api.web.service.POST;
@@ -38,11 +38,11 @@ public interface UserAJAXWebService {
     DeleteUserAJAXResponse delete(@PathParam("id") Long id);
 
     @PUT
-    @Path("/ajax/user/:id")
-    UpdateUserAJAXResponse update(@PathParam("id") Long id, UpdateUserAJAXRequest request);
+    @Path("/ajax/user/:id/password")
+    UpdateUserPasswordAJAXResponse updatePassword(@PathParam("id") Long id, UpdateUserPasswordAJAXRequest request);
 
     @PUT
-    @Path("/ajax/user/password/:id")
+    @Path("/ajax/user/:id/password-reset")
     ResetPasswordAJAXResponse resetPassword(@PathParam("id") Long id);
 
     @PUT

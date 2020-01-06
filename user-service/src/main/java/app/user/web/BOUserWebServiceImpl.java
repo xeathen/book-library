@@ -9,8 +9,8 @@ import app.user.api.user.BOGetUserResponse;
 import app.user.api.user.BOListUserRequest;
 import app.user.api.user.BOListUserResponse;
 import app.user.api.user.BOResetPasswordResponse;
-import app.user.api.user.BOUpdateUserRequest;
-import app.user.api.user.BOUpdateUserResponse;
+import app.user.api.user.BOUpdateUserPasswordRequest;
+import app.user.api.user.BOUpdateUserPasswordResponse;
 import app.user.service.BOUserService;
 import core.framework.inject.Inject;
 import core.framework.log.ActionLogContext;
@@ -39,9 +39,9 @@ public class BOUserWebServiceImpl implements BOUserWebService {
     }
 
     @Override
-    public BOUpdateUserResponse update(Long id, BOUpdateUserRequest request) {
+    public BOUpdateUserPasswordResponse updatePassword(Long id, BOUpdateUserPasswordRequest request) {
         ActionLogContext.put("userId", id);
-        return boUserService.update(id, request);
+        return boUserService.updatePassword(id, request);
     }
 
     @Override

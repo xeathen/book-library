@@ -9,8 +9,8 @@ import app.bo.api.user.GetUserAJAXResponse;
 import app.bo.api.user.ListUserAJAXRequest;
 import app.bo.api.user.ListUserAJAXResponse;
 import app.bo.api.user.ResetPasswordAJAXResponse;
-import app.bo.api.user.UpdateUserAJAXRequest;
-import app.bo.api.user.UpdateUserAJAXResponse;
+import app.bo.api.user.UpdateUserPasswordAJAXRequest;
+import app.bo.api.user.UpdateUserPasswordAJAXResponse;
 import app.bo.user.service.UserService;
 import core.framework.inject.Inject;
 import core.framework.log.ActionLogContext;
@@ -46,9 +46,9 @@ public class UserAJAXWebServiceImpl implements UserAJAXWebService {
     }
 
     @Override
-    public UpdateUserAJAXResponse update(Long userId, UpdateUserAJAXRequest request) {
+    public UpdateUserPasswordAJAXResponse updatePassword(Long userId, UpdateUserPasswordAJAXRequest request) {
         ActionLogContext.put("userId", userId);
-        return userService.update(userId, request);
+        return userService.updatePassword(userId, request);
     }
 
     @Override

@@ -1,11 +1,11 @@
-package app.bo.api.user;
+package app.user.api.user;
 
 import core.framework.api.json.Property;
 
 /**
  * @author Ethan
  */
-public class UpdateUserAJAXResponse {
+public class BOUpdateUserPasswordResponse {
     @Property(name = "id")
     public Long id;
 }

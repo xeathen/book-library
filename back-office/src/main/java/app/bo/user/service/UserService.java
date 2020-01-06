@@ -8,8 +8,8 @@ import app.bo.api.user.GetUserAJAXResponse;
 import app.bo.api.user.ListUserAJAXRequest;
 import app.bo.api.user.ListUserAJAXResponse;
 import app.bo.api.user.ResetPasswordAJAXResponse;
-import app.bo.api.user.UpdateUserAJAXRequest;
-import app.bo.api.user.UpdateUserAJAXResponse;
+import app.bo.api.user.UpdateUserPasswordAJAXRequest;
+import app.bo.api.user.UpdateUserPasswordAJAXResponse;
 import app.bo.api.user.UserStatusAJAXView;
 import app.bo.api.user.UserView;
 import app.user.api.BOUserWebService;
@@ -20,8 +20,8 @@ import app.user.api.user.BOGetUserResponse;
 import app.user.api.user.BOListUserRequest;
 import app.user.api.user.BOListUserResponse;
 import app.user.api.user.BOResetPasswordResponse;
-import app.user.api.user.BOUpdateUserRequest;
-import app.user.api.user.BOUpdateUserResponse;
+import app.user.api.user.BOUpdateUserPasswordRequest;
+import app.user.api.user.BOUpdateUserPasswordResponse;
 import app.user.api.user.UserStatusView;
 import core.framework.inject.Inject;
 
@@ -54,9 +54,9 @@ public class UserService {
         return response;
     }
 
-    public UpdateUserAJAXResponse update(Long id, UpdateUserAJAXRequest ajaxRequest) {
-        BOUpdateUserRequest request = boUpdateUserRequest(ajaxRequest);
-        return updateUserAJAXResponse(boUserWebService.update(id, request));
+    public UpdateUserPasswordAJAXResponse updatePassword(Long id, UpdateUserPasswordAJAXRequest ajaxRequest) {
+        BOUpdateUserPasswordRequest request = boUpdateUserRequest(ajaxRequest);
+        return updateUserAJAXResponse(boUserWebService.updatePassword(id, request));
     }
 
     public ResetPasswordAJAXResponse resetPassword(Long id) {
@@ -115,16 +115,14 @@ public class UserService {
         return boRequest;
     }
 
-    private BOUpdateUserRequest boUpdateUserRequest(UpdateUserAJAXRequest ajaxRequest) {
-        BOUpdateUserRequest boRequest = new BOUpdateUserRequest();
-        boRequest.userName = ajaxRequest.userName;
-        boRequest.email = ajaxRequest.email;
+    private BOUpdateUserPasswordRequest boUpdateUserRequest(UpdateUserPasswordAJAXRequest ajaxRequest) {
+        BOUpdateUserPasswordRequest boRequest = new BOUpdateUserPasswordRequest();
         boRequest.password = ajaxRequest.password;
         return boRequest;
     }
 
-    private UpdateUserAJAXResponse updateUserAJAXResponse(BOUpdateUserResponse boResponse) {
-        UpdateUserAJAXResponse ajaxResponse = new UpdateUserAJAXResponse();
+    private UpdateUserPasswordAJAXResponse updateUserAJAXResponse(BOUpdateUserPasswordResponse boResponse) {
+        UpdateUserPasswordAJAXResponse ajaxResponse = new UpdateUserPasswordAJAXResponse();
         ajaxResponse.id = boResponse.id;
         return ajaxResponse;
     }

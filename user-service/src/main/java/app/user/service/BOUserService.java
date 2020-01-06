@@ -10,8 +10,8 @@ import app.user.api.user.BOGetUserResponse;
 import app.user.api.user.BOListUserRequest;
 import app.user.api.user.BOListUserResponse;
 import app.user.api.user.BOResetPasswordResponse;
-import app.user.api.user.BOUpdateUserRequest;
-import app.user.api.user.BOUpdateUserResponse;
+import app.user.api.user.BOUpdateUserPasswordRequest;
+import app.user.api.user.BOUpdateUserPasswordResponse;
 import app.user.api.user.UserStatusView;
 import app.user.api.user.UserView;
 import app.user.domain.User;
@@ -72,9 +72,11 @@ public class BOUserService {
         return response;
     }
 
-    public BOUpdateUserResponse update(Long id, BOUpdateUserRequest request) {
+    public BOUpdateUserPasswordResponse updatePassword(Long id, BOUpdateUserPasswordRequest request) {
         User user = checkUser(id);
-        convert(user, request);
+        if (!Strings.isBlank(request.password)) {
+            user.password = request.password;
+        }
         user.id = id;
         int iteration = Randoms.nextInt(0, 9);
         user.iteration = iteration;
@@ -82,7 +84,7 @@ public class BOUserService {
         user.salt = salt;
         user.password = hash(request.password, salt, iteration);
         userRepository.partialUpdate(user);
-        BOUpdateUserResponse response = new BOUpdateUserResponse();
+        BOUpdateUserPasswordResponse response = new BOUpdateUserPasswordResponse();
         response.id = id;
         return response;
     }
@@ -160,18 +162,6 @@ public class BOUserService {
         user.email = request.email;
         user.status = UserStatus.valueOf(request.status.name());
         return user;
-    }
-
-    private void convert(User user, BOUpdateUserRequest request) {
-        if (!Strings.isBlank(request.userName)) {
-            user.userName = request.userName;
-        }
-        if (!Strings.isBlank(request.email)) {
-            user.email = request.email;
-        }
-        if (!Strings.isBlank(request.password)) {
-            user.password = request.password;
-        }
     }
 
     private BOCreateUserResponse boCreateUserResponse(BOCreateUserRequest request) {

@@ -8,8 +8,8 @@ import app.user.api.user.BOGetUserResponse;
 import app.user.api.user.BOListUserRequest;
 import app.user.api.user.BOListUserResponse;
 import app.user.api.user.BOResetPasswordResponse;
-import app.user.api.user.BOUpdateUserRequest;
-import app.user.api.user.BOUpdateUserResponse;
+import app.user.api.user.BOUpdateUserPasswordRequest;
+import app.user.api.user.BOUpdateUserPasswordResponse;
 import core.framework.api.web.service.DELETE;
 import core.framework.api.web.service.GET;
 import core.framework.api.web.service.POST;
@@ -38,11 +38,11 @@ public interface BOUserWebService {
     BODeleteUserResponse delete(@PathParam("id") Long id);
 
     @PUT
-    @Path("/bo/user/:id")
-    BOUpdateUserResponse update(@PathParam("id") Long id, BOUpdateUserRequest request);
+    @Path("/bo/user/:id/password")
+    BOUpdateUserPasswordResponse updatePassword(@PathParam("id") Long id, BOUpdateUserPasswordRequest request);
 
     @PUT
-    @Path("/bo/user/password/:id")
+    @Path("/bo/user/:id/password-reset")
     BOResetPasswordResponse resetPassword(@PathParam("id") Long id);
 
     @PUT
