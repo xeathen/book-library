@@ -74,18 +74,16 @@ public class BOUserService {
 
     public BOUpdateUserResponse update(Long id, BOUpdateUserRequest request) {
         User user = checkUser(id);
-        BOUpdateUserResponse response = new BOUpdateUserResponse();
-        User temp = user(request);
-        temp.id = id;
+        convert(user, request);
+        user.id = id;
         int iteration = Randoms.nextInt(0, 9);
-        temp.iteration = iteration;
+        user.iteration = iteration;
         String salt = Randoms.alphaNumeric(6);
-        temp.salt = salt;
-        temp.password = hash(request.password, salt, iteration);
-        userRepository.partialUpdate(temp);
+        user.salt = salt;
+        user.password = hash(request.password, salt, iteration);
+        userRepository.partialUpdate(user);
+        BOUpdateUserResponse response = new BOUpdateUserResponse();
         response.id = id;
-        response.userName = Strings.isBlank(request.userName) ? user.userName : request.userName;
-        response.email = Strings.isBlank(request.email) ? user.email : request.email;
         return response;
     }
 
@@ -100,14 +98,12 @@ public class BOUserService {
     public BOResetPasswordResponse resetPassword(Long id) {
         BOResetPasswordResponse response = new BOResetPasswordResponse();
         User user = checkUser(id);
-        User temp = new User();
-        temp.id = id;
         int iteration = Randoms.nextInt(0, 9);
-        temp.iteration = iteration;
+        user.iteration = iteration;
         String salt = Randoms.alphaNumeric(6);
-        temp.salt = salt;
-        temp.password = hash(Constants.PASSWORD_RESET, salt, iteration);
-        userRepository.partialUpdate(temp);
+        user.salt = salt;
+        user.password = hash(Constants.PASSWORD_RESET, salt, iteration);
+        userRepository.partialUpdate(user);
         response.userId = id;
         response.userName = user.userName;
         return response;
@@ -116,13 +112,11 @@ public class BOUserService {
     public BOChangeStatusResponse changeStatus(Long id) {
         BOChangeStatusResponse response = new BOChangeStatusResponse();
         User user = checkUser(id);
-        User temp = new User();
-        temp.id = id;
-        temp.status = user.status == UserStatus.ACTIVE ? UserStatus.INACTIVE : UserStatus.ACTIVE;
-        userRepository.partialUpdate(temp);
+        user.status = user.status == UserStatus.ACTIVE ? UserStatus.INACTIVE : UserStatus.ACTIVE;
+        userRepository.partialUpdate(user);
         response.userId = id;
         response.userName = user.userName;
-        response.status = user.status == null ? null : UserStatusView.valueOf(temp.status.name());
+        response.status = user.status == null ? null : UserStatusView.valueOf(user.status.name());
         return response;
     }
 
@@ -155,7 +149,7 @@ public class BOUserService {
     private User checkUser(Long id) {
         Optional<User> userOptional = userRepository.get(id);
         if (userOptional.isEmpty()) {
-            throw new NotFoundException("user not found", ErrorCodes.USER_NOT_FOUND);
+            throw new NotFoundException("User not found.", ErrorCodes.USER_NOT_FOUND);
         }
         return userOptional.get();
     }
@@ -168,11 +162,16 @@ public class BOUserService {
         return user;
     }
 
-    private User user(BOUpdateUserRequest request) {
-        User user = new User();
-        user.userName = request.userName;
-        user.email = request.email;
-        return user;
+    private void convert(User user, BOUpdateUserRequest request) {
+        if (!Strings.isBlank(request.userName)) {
+            user.userName = request.userName;
+        }
+        if (!Strings.isBlank(request.email)) {
+            user.email = request.email;
+        }
+        if (!Strings.isBlank(request.password)) {
+            user.password = request.password;
+        }
     }
 
     private BOCreateUserResponse boCreateUserResponse(BOCreateUserRequest request) {

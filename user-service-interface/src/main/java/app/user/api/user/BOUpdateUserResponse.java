@@ -8,10 +8,4 @@ import core.framework.api.json.Property;
 public class BOUpdateUserResponse {
     @Property(name = "id")
     public Long id;
-
-    @Property(name = "user_name")
-    public String userName;
-
-    @Property(name = "email")
-    public String email;
 }

@@ -126,8 +126,6 @@ public class UserService {
     private UpdateUserAJAXResponse updateUserAJAXResponse(BOUpdateUserResponse boResponse) {
         UpdateUserAJAXResponse ajaxResponse = new UpdateUserAJAXResponse();
         ajaxResponse.id = boResponse.id;
-        ajaxResponse.userName = boResponse.userName;
-        ajaxResponse.email = boResponse.email;
         return ajaxResponse;
     }
 

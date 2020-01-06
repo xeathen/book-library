@@ -24,8 +24,8 @@ public class AuthorService {
         BOListAuthorResponse boListAuthorResponse = boAuthorWebService.list();
         ajaxResponse.authors = boListAuthorResponse.authors.stream().map(boAuthorView -> {
             AuthorView authorView = new AuthorView();
-            authorView.authorId = boAuthorView.id;
-            authorView.authorName = boAuthorView.name;
+            authorView.id = boAuthorView.id;
+            authorView.name = boAuthorView.name;
             return authorView;
         }).collect(Collectors.toList());
         ajaxResponse.total = boListAuthorResponse.total;
