@@ -15,6 +15,5 @@ public class BookServiceApp extends App {
         load(new CategoryModule());
         load(new TagModule());
         load(new BookModule());
-        load(new ReservationModule());
     }
 }

@@ -47,6 +47,8 @@ public class BOBookService {
     MongoCollection<BorrowedRecord> borrowedRecordCollection;
     @Inject
     Database database;
+    @Inject
+    ReservationService reservationService;
 
     public BOGetBookResponse get(Long bookId) {
         return boGetBookResponse(bookRepository.get(bookId).orElseThrow(() ->
@@ -80,8 +82,8 @@ public class BOBookService {
         Book book = book(request);
         book.id = id;
         bookRepository.partialUpdate(book);
-        Optional<Book> bookOptional = bookRepository.get(id);
-        BOUpdateBookResponse response = boUpdateBookResponse(bookOptional.orElseThrow());
+        reservationService.notifyAvailability();
+        BOUpdateBookResponse response = boUpdateBookResponse(bookRepository.get(id).orElseThrow());
         response.id = id;
         return response;
     }

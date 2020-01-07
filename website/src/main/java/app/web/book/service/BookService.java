@@ -54,7 +54,7 @@ public class BookService {
     }
 
     public ReturnBackBookAJAXResponse returnBack(Long userId, ReturnBackBookAJAXRequest ajaxRequest) {
-        ReturnBackBookRequest request = returnBookRequest(userId, ajaxRequest);
+        ReturnBackBookRequest request = returnBackBookRequest(userId, ajaxRequest);
         ReturnBackBookResponse response = bookWebService.returnBack(request);
         return returnBookAJAXResponse(response);
     }
@@ -134,7 +134,7 @@ public class BookService {
         return ajaxResponse;
     }
 
-    private ReturnBackBookRequest returnBookRequest(Long userId, ReturnBackBookAJAXRequest ajaxRequest) {
+    private ReturnBackBookRequest returnBackBookRequest(Long userId, ReturnBackBookAJAXRequest ajaxRequest) {
         ReturnBackBookRequest request = new ReturnBackBookRequest();
         request.userId = userId;
         request.bookId = ajaxRequest.bookId;

@@ -61,6 +61,8 @@ public class BookService {
     BOUserWebService boUserWebService;
     @Inject
     Database database;
+    @Inject
+    ReservationService reservationService;
 
     public GetBookResponse get(Long bookId) {
         Optional<Book> book = bookRepository.get(bookId);
@@ -94,7 +96,7 @@ public class BookService {
         if (user.status == UserStatusView.INACTIVE) {
             throw new ConflictException("You are banned!", ErrorCodes.BANNED);
         }
-        if (!isReturned(request.userId, request.bookId)) {
+        if (!isReturnedBack(request.userId, request.bookId)) {
             throw new ConflictException("You had borrowed this book already.", ErrorCodes.BORROWED_ALREADY);
         }
         if (ZonedDateTime.now().isAfter(request.expectedReturnTime)) {
@@ -108,7 +110,7 @@ public class BookService {
 
     public ReturnBackBookResponse returnBack(ReturnBackBookRequest request) {
         ReturnBackBookResponse response = new ReturnBackBookResponse();
-        if (isReturned(request.userId, request.bookId)) {
+        if (isReturnedBack(request.userId, request.bookId)) {
             throw new NotFoundException("You had returned this book already.", ErrorCodes.RECORD_NOT_FOUND);
         }
         List<BorrowedRecord> borrowedRecordList = getNotReturnedRecordList(request.userId, request.bookId);
@@ -126,6 +128,7 @@ public class BookService {
         Book book = bookRepository.get(request.bookId).orElseThrow(() ->
             new NotFoundException("Book not found, id=" + request.bookId, ErrorCodes.BOOK_NOT_FOUND));
         changeBookQuantity(book, 1);
+        reservationService.notifyAvailability();
         return response;
     }
 
@@ -223,7 +226,7 @@ public class BookService {
         bookRepository.partialUpdate(borrowedBook);
     }
 
-    private Boolean isReturned(Long userId, Long bookId) {
+    private Boolean isReturnedBack(Long userId, Long bookId) {
         List<BorrowedRecord> notReturnedRecordList = getNotReturnedRecordList(userId, bookId);
         return notReturnedRecordList.isEmpty() ? Boolean.TRUE : Boolean.FALSE;
     }
