@@ -77,22 +77,23 @@ public class BOBookService {
         return response;
     }
 
-    public BOUpdateBookResponse update(Long id, BOUpdateBookRequest request) {
+    public BOUpdateBookResponse update(Long bookId, BOUpdateBookRequest request) {
         Book book = book(request);
-        book.id = id;
+        book.id = bookId;
         bookRepository.partialUpdate(book);
-        reservationService.notifyAvailability();
-        BOUpdateBookResponse response = boUpdateBookResponse(bookRepository.get(id).orElseThrow());
-        response.id = id;
+        //TODO:优化
+        reservationService.notifyAvailability(bookId);
+        BOUpdateBookResponse response = boUpdateBookResponse(bookRepository.get(bookId).orElseThrow());
+        response.id = bookId;
         return response;
     }
 
-    public BOSearchRecordResponse searchRecord(BOSearchRecordRequest request) {
+    public BOSearchRecordResponse searchRecord(Long bookId, BOSearchRecordRequest request) {
         BOSearchRecordResponse response = new BOSearchRecordResponse();
         Query query = new Query();
         query.skip = request.skip;
         query.limit = request.limit;
-        query.filter = Filters.eq("book_id", request.bookId);
+        query.filter = Filters.eq("book_id", bookId);
         List<BorrowedRecord> borrowedRecordList = borrowedRecordCollection.find(query);
         response.borrowedRecords = borrowedRecordList.stream().map(this::borrowedRecordView).collect(Collectors.toList());
         response.total = borrowedRecordCollection.count(query.filter);

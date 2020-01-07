@@ -47,7 +47,7 @@ public class BOBookWebServiceImpl implements BOBookWebService {
     }
 
     @Override
-    public BOSearchRecordResponse searchRecord(BOSearchRecordRequest request) {
-        return boBookService.searchRecord(request);
+    public BOSearchRecordResponse searchRecord(Long bookId, BOSearchRecordRequest request) {
+        return boBookService.searchRecord(bookId, request);
     }
 }

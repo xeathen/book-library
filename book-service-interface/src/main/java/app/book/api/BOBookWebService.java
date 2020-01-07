@@ -36,6 +36,6 @@ public interface BOBookWebService {
     BOUpdateBookResponse update(@PathParam("id") Long bookId, BOUpdateBookRequest request);
 
     @GET
-    @Path("/bo/borrowed-record")
-    BOSearchRecordResponse searchRecord(BOSearchRecordRequest request);
+    @Path("/bo/book/:id/borrowed-record")
+    BOSearchRecordResponse searchRecord(@PathParam("id")Long id,  BOSearchRecordRequest request);
 }

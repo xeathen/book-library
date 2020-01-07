@@ -1,11 +1,13 @@
 package app.bo.api.user;
 
 import core.framework.api.json.Property;
+import core.framework.api.validate.NotNull;
 
 /**
- * @author Ethan
+ * @author xeathen
  */
-public class ChangeStatusAJAXResponse {
+public class ChangeStatusAJAXRequest {
+    @NotNull
     @Property(name = "status")
     public UserStatusAJAXView status;
 }

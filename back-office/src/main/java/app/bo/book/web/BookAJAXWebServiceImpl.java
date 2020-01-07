@@ -48,7 +48,7 @@ public class BookAJAXWebServiceImpl implements BookAJAXWebService {
     }
 
     @Override
-    public SearchRecordAJAXResponse searchRecord(SearchRecordAJAXRequest request) {
-        return bookService.searchRecord(request);
+    public SearchRecordAJAXResponse searchRecord(Long id, SearchRecordAJAXRequest request) {
+        return bookService.searchRecord(id, request);
     }
 }

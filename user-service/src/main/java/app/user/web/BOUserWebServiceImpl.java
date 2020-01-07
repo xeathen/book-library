@@ -1,6 +1,7 @@
 package app.user.web;
 
 import app.user.api.BOUserWebService;
+import app.user.api.user.BOChangeStatusRequest;
 import app.user.api.user.BOChangeStatusResponse;
 import app.user.api.user.BOCreateUserRequest;
 import app.user.api.user.BOCreateUserResponse;
@@ -57,8 +58,8 @@ public class BOUserWebServiceImpl implements BOUserWebService {
     }
 
     @Override
-    public BOChangeStatusResponse changeStatus(Long id) {
+    public BOChangeStatusResponse changeStatus(Long id, BOChangeStatusRequest request) {
         ActionLogContext.put("userId", id);
-        return boUserService.changeStatus(id);
+        return boUserService.changeStatus(id, request);
     }
 }

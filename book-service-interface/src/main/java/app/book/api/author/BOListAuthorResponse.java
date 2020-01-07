@@ -12,5 +12,13 @@ public class BOListAuthorResponse {
     public Integer total;
 
     @Property(name = "authors")
-    public List<AuthorView> authors;
+    public List<Author> authors;
+
+    public static class Author {
+        @Property(name = "id")
+        public Integer id;
+
+        @Property(name = "name")
+        public String name;
+    }
 }

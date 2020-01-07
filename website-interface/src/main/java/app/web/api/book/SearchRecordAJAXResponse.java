@@ -12,7 +12,6 @@ public class SearchRecordAJAXResponse {
     @Property(name = "total")
     public Long total;
 
-    //TODO:inner class
     @Property(name = "records")
     public List<BorrowedRecord> borrowedRecords;
 

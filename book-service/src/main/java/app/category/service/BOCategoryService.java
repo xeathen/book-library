@@ -4,7 +4,6 @@ import app.ErrorCodes;
 import app.book.api.category.BOCreateCategoryRequest;
 import app.book.api.category.BOCreateCategoryResponse;
 import app.book.api.category.BOListCategoryResponse;
-import app.book.api.category.CategoryView;
 import app.category.domain.Category;
 import core.framework.db.Query;
 import core.framework.db.Repository;
@@ -25,7 +24,7 @@ public class BOCategoryService {
         BOListCategoryResponse response = new BOListCategoryResponse();
         Query<Category> query = categoryRepository.select();
         response.categories = query.fetch().stream().map(category -> {
-            CategoryView categoryView = new CategoryView();
+            BOListCategoryResponse.Category categoryView = new BOListCategoryResponse.Category();
             categoryView.id = category.id;
             categoryView.name = category.name;
             return categoryView;

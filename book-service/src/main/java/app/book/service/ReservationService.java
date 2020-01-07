@@ -4,6 +4,7 @@ import app.book.api.kafka.BorrowedRecordExpirationMessage;
 import app.book.api.kafka.ReservationMessage;
 import app.book.domain.Book;
 import app.book.domain.Reservation;
+import core.framework.db.Query;
 import core.framework.db.Repository;
 import core.framework.inject.Inject;
 import core.framework.kafka.MessagePublisher;
@@ -30,12 +31,13 @@ public class ReservationService {
 
     //TODO:待优化
     public void notifyAvailability(Long bookId) {
-
-        reservationRepository.select().fetch().forEach(reservation -> {
+        Query<Reservation> reservationQuery = reservationRepository.select();
+        reservationQuery.where("book_id = ?", bookId);
+        reservationQuery.fetch().forEach(reservation -> {
             Book book = bookRepository.get(reservation.bookId).orElseThrow(() -> new NotFoundException("Book not found, id=" + reservation.bookId));
             if (book.quantity > 0) {
                 logger.info("publish reservationMessage, userId={}, bookId={}", reservation.userId, reservation.bookId);
-                //TODO:
+                //TODO:并发问题
                 reservationRepository.delete(reservation.id);
                 ReservationMessage message = new ReservationMessage();
                 message.userId = reservation.userId;
@@ -45,6 +47,7 @@ public class ReservationService {
         });
     }
 
+    //TODO:应该改成提醒用户还书
     public void notifyExpiration() {
         reservationRepository.select().fetch().forEach(reservation -> {
             bookRepository.get(reservation.bookId).orElseThrow(() -> new NotFoundException("Book not found, id=" + reservation.bookId));

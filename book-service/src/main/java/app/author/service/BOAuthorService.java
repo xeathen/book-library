@@ -2,7 +2,6 @@ package app.author.service;
 
 import app.ErrorCodes;
 import app.author.domain.Author;
-import app.book.api.author.AuthorView;
 import app.book.api.author.BOCreateAuthorRequest;
 import app.book.api.author.BOCreateAuthorResponse;
 import app.book.api.author.BOListAuthorResponse;
@@ -37,7 +36,7 @@ public class BOAuthorService {
         BOListAuthorResponse response = new BOListAuthorResponse();
         Query<Author> query = authorRepository.select();
         response.authors = query.fetch().stream().map(author -> {
-            AuthorView authorView = new AuthorView();
+            BOListAuthorResponse.Author authorView = new BOListAuthorResponse.Author();
             authorView.id = author.id;
             authorView.name = author.name;
             return authorView;

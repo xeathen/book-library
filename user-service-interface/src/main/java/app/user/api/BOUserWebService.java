@@ -1,5 +1,6 @@
 package app.user.api;
 
+import app.user.api.user.BOChangeStatusRequest;
 import app.user.api.user.BOChangeStatusResponse;
 import app.user.api.user.BOCreateUserRequest;
 import app.user.api.user.BOCreateUserResponse;
@@ -45,8 +46,7 @@ public interface BOUserWebService {
     @Path("/bo/user/:id/password-reset")
     BOResetPasswordResponse resetPassword(@PathParam("id") Long id);
 
-    //TODO:request
     @PUT
     @Path("/bo/user/:id/status")
-    BOChangeStatusResponse changeStatus(@PathParam("id") Long id);
+    BOChangeStatusResponse changeStatus(@PathParam("id") Long id, BOChangeStatusRequest request);
 }

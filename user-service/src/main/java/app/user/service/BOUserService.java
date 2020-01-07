@@ -2,6 +2,7 @@ package app.user.service;
 
 import app.user.Constants;
 import app.user.ErrorCodes;
+import app.user.api.user.BOChangeStatusRequest;
 import app.user.api.user.BOChangeStatusResponse;
 import app.user.api.user.BOCreateUserRequest;
 import app.user.api.user.BOCreateUserResponse;
@@ -83,7 +84,7 @@ public class BOUserService {
         user.password = hash(request.password, salt, iteration);
         userRepository.partialUpdate(user);
         BOUpdateUserPasswordResponse response = new BOUpdateUserPasswordResponse();
-        response.id = id;
+        response.userName = user.userName;
         return response;
     }
 
@@ -104,18 +105,15 @@ public class BOUserService {
         user.salt = salt;
         user.password = hash(Constants.PASSWORD_RESET, salt, iteration);
         userRepository.partialUpdate(user);
-        response.userId = id;
         response.userName = user.userName;
         return response;
     }
 
-    public BOChangeStatusResponse changeStatus(Long id) {
+    public BOChangeStatusResponse changeStatus(Long id, BOChangeStatusRequest request) {
         BOChangeStatusResponse response = new BOChangeStatusResponse();
         User user = checkUser(id);
-        user.status = user.status == UserStatus.ACTIVE ? UserStatus.INACTIVE : UserStatus.ACTIVE;
+        user.status = request.status == null ? null : UserStatus.valueOf(request.status.name());
         userRepository.partialUpdate(user);
-        response.userId = id;
-        response.userName = user.userName;
         response.status = user.status == null ? null : UserStatusView.valueOf(user.status.name());
         return response;
     }

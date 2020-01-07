@@ -229,8 +229,6 @@ public class BookService {
 
     private BorrowBookResponse borrowBookResponse(BorrowedRecord borrowedRecord) {
         BorrowBookResponse response = new BorrowBookResponse();
-        response.userId = borrowedRecord.userId;
-        response.userName = borrowedRecord.userName;
         response.bookId = borrowedRecord.bookId;
         response.bookName = borrowedRecord.bookName;
         response.borrowTime = borrowedRecord.borrowTime;

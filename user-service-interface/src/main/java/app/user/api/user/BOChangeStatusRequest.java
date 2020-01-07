@@ -3,9 +3,9 @@ package app.user.api.user;
 import core.framework.api.json.Property;
 
 /**
- * @author Ethan
+ * @author xeathen
  */
-public class BOChangeStatusResponse {
+public class BOChangeStatusRequest {
     @Property(name = "status")
     public UserStatusView status;
 }

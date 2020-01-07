@@ -51,9 +51,9 @@ public class BookService {
         return updateBookAJAXResponse(boBookWebService.update(id, boRequest));
     }
 
-    public SearchRecordAJAXResponse searchRecord(SearchRecordAJAXRequest ajaxRequest) {
+    public SearchRecordAJAXResponse searchRecord(Long bookId, SearchRecordAJAXRequest ajaxRequest) {
         BOSearchRecordRequest request = boSearchRecordRequest(ajaxRequest);
-        return searchRecordAJAXResponse(boBookWebService.searchRecord(request));
+        return searchRecordAJAXResponse(boBookWebService.searchRecord(bookId, request));
     }
 
     private GetBookAJAXResponse getBookAJAXResponse(BOGetBookResponse bookResponse) {
@@ -148,7 +148,6 @@ public class BookService {
         BOSearchRecordRequest request = new BOSearchRecordRequest();
         request.skip = ajaxRequest.skip;
         request.limit = ajaxRequest.limit;
-        request.bookId = ajaxRequest.bookId;
         return request;
     }
 

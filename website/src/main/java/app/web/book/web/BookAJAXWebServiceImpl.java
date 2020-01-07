@@ -50,6 +50,7 @@ public class BookAJAXWebServiceImpl implements BookAJAXWebService {
         return bookService.returnBack(userId, bookId);
     }
 
+    //TODO:库存不为0时无法预约
     @Override
     public CreateReservationAJAXResponse reserve(Long bookId) {
         Long userId = Long.valueOf(webContext.request().session().get("userId").orElseThrow());

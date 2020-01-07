@@ -1,5 +1,6 @@
 package app.bo.api;
 
+import app.bo.api.user.ChangeStatusAJAXRequest;
 import app.bo.api.user.ChangeStatusAJAXResponse;
 import app.bo.api.user.CreateUserAJAXRequest;
 import app.bo.api.user.CreateUserAJAXResponse;
@@ -41,12 +42,12 @@ public interface UserAJAXWebService {
     @Path("/ajax/user/:id/password")
     UpdateUserPasswordAJAXResponse updatePassword(@PathParam("id") Long id, UpdateUserPasswordAJAXRequest request);
 
+    //TODO:encript bug
     @PUT
     @Path("/ajax/user/:id/password-reset")
     ResetPasswordAJAXResponse resetPassword(@PathParam("id") Long id);
 
-    //TODO: add Request
     @PUT
     @Path("/ajax/user/:id/status")
-    ChangeStatusAJAXResponse changeStatus(@PathParam("id") Long id);
+    ChangeStatusAJAXResponse changeStatus(@PathParam("id") Long id, ChangeStatusAJAXRequest request);
 }

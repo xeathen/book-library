@@ -4,7 +4,6 @@ import app.ErrorCodes;
 import app.book.api.tag.BOCreateTagRequest;
 import app.book.api.tag.BOCreateTagResponse;
 import app.book.api.tag.BOListTagResponse;
-import app.book.api.tag.TagView;
 import app.tag.domain.Tag;
 import core.framework.db.Query;
 import core.framework.db.Repository;
@@ -25,7 +24,7 @@ public class BOTagService {
         BOListTagResponse response = new BOListTagResponse();
         Query<Tag> query = tagRepository.select();
         response.tags = query.fetch().stream().map(tag -> {
-            TagView tagView = new TagView();
+            BOListTagResponse.Tag tagView = new BOListTagResponse.Tag();
             tagView.id = tag.id;
             tagView.name = tag.name;
             return tagView;

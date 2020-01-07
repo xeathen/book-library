@@ -1,6 +1,7 @@
 package app.bo.user.web;
 
 import app.bo.api.UserAJAXWebService;
+import app.bo.api.user.ChangeStatusAJAXRequest;
 import app.bo.api.user.ChangeStatusAJAXResponse;
 import app.bo.api.user.CreateUserAJAXRequest;
 import app.bo.api.user.CreateUserAJAXResponse;
@@ -58,8 +59,8 @@ public class UserAJAXWebServiceImpl implements UserAJAXWebService {
     }
 
     @Override
-    public ChangeStatusAJAXResponse changeStatus(Long userId) {
+    public ChangeStatusAJAXResponse changeStatus(Long userId, ChangeStatusAJAXRequest request) {
         ActionLogContext.put("userId", userId);
-        return userService.changeStatus(userId);
+        return userService.changeStatus(userId, request);
     }
 }

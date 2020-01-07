@@ -6,6 +6,6 @@ import core.framework.api.json.Property;
  * @author Ethan
  */
 public class BOUpdateUserPasswordResponse {
-    @Property(name = "id")
-    public Long id;
+    @Property(name = "user_name")
+    public String userName;
 }

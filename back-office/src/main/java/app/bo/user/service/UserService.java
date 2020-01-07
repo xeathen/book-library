@@ -1,5 +1,6 @@
 package app.bo.user.service;
 
+import app.bo.api.user.ChangeStatusAJAXRequest;
 import app.bo.api.user.ChangeStatusAJAXResponse;
 import app.bo.api.user.CreateUserAJAXRequest;
 import app.bo.api.user.CreateUserAJAXResponse;
@@ -13,6 +14,7 @@ import app.bo.api.user.UpdateUserPasswordAJAXRequest;
 import app.bo.api.user.UpdateUserPasswordAJAXResponse;
 import app.bo.api.user.UserStatusAJAXView;
 import app.user.api.BOUserWebService;
+import app.user.api.user.BOChangeStatusRequest;
 import app.user.api.user.BOChangeStatusResponse;
 import app.user.api.user.BOCreateUserRequest;
 import app.user.api.user.BOCreateUserResponse;
@@ -63,8 +65,10 @@ public class UserService {
         return resetPasswordAJAXResponse(boUserWebService.resetPassword(id));
     }
 
-    public ChangeStatusAJAXResponse changeStatus(Long id) {
-        return changeStatusAJAXResponse(boUserWebService.changeStatus(id));
+    public ChangeStatusAJAXResponse changeStatus(Long id, ChangeStatusAJAXRequest ajaxRequest) {
+        BOChangeStatusRequest request = new BOChangeStatusRequest();
+        request.status = UserStatusView.valueOf(ajaxRequest.status.name());
+        return changeStatusAJAXResponse(boUserWebService.changeStatus(id, request));
     }
 
     private GetUserAJAXResponse getUserAJAXResponse(BOGetUserResponse response) {
@@ -123,21 +127,18 @@ public class UserService {
 
     private UpdateUserPasswordAJAXResponse updateUserAJAXResponse(BOUpdateUserPasswordResponse boResponse) {
         UpdateUserPasswordAJAXResponse ajaxResponse = new UpdateUserPasswordAJAXResponse();
-        ajaxResponse.id = boResponse.id;
+        ajaxResponse.userName = boResponse.userName;
         return ajaxResponse;
     }
 
     private ResetPasswordAJAXResponse resetPasswordAJAXResponse(BOResetPasswordResponse boResponse) {
         ResetPasswordAJAXResponse response = new ResetPasswordAJAXResponse();
-        response.userId = boResponse.userId;
         response.userName = boResponse.userName;
         return response;
     }
 
     private ChangeStatusAJAXResponse changeStatusAJAXResponse(BOChangeStatusResponse boResponse) {
         ChangeStatusAJAXResponse response = new ChangeStatusAJAXResponse();
-        response.userId = boResponse.userId;
-        response.userName = boResponse.userName;
         response.status = boResponse.status == null ? null : UserStatusAJAXView.valueOf(boResponse.status.name());
         return response;
     }
