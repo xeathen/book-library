@@ -65,7 +65,7 @@ public class BookService {
         ajaxResponse.tagName = bookResponse.tagName;
         ajaxResponse.description = bookResponse.description;
         ajaxResponse.publishingHouse = bookResponse.publishingHouse;
-        ajaxResponse.amount = bookResponse.amount;
+        ajaxResponse.quantity = bookResponse.quantity;
         return ajaxResponse;
     }
 
@@ -77,7 +77,7 @@ public class BookService {
         boCreateBookRequest.tagId = ajaxRequest.tagId;
         boCreateBookRequest.description = ajaxRequest.description;
         boCreateBookRequest.publishingHouse = ajaxRequest.publishingHouse;
-        boCreateBookRequest.amount = ajaxRequest.amount;
+        boCreateBookRequest.quantity = ajaxRequest.quantity;
         return boCreateBookRequest;
     }
 
@@ -112,7 +112,7 @@ public class BookService {
             bookAJAXView.tagName = boBookView.tagName;
             bookAJAXView.description = boBookView.description;
             bookAJAXView.publishingHouse = boBookView.publishingHouse;
-            bookAJAXView.amount = boBookView.amount;
+            bookAJAXView.quantity = boBookView.quantity;
             return bookAJAXView;
         }).collect(Collectors.toList());
         ajaxResponse.total = boResponse.total;
@@ -128,7 +128,7 @@ public class BookService {
         ajaxResponse.authorId = boResponse.authorId;
         ajaxResponse.publishingHouse = boResponse.publishingHouse;
         ajaxResponse.description = boResponse.description;
-        ajaxResponse.amount = boResponse.amount;
+        ajaxResponse.quantity = boResponse.quantity;
         return ajaxResponse;
     }
 
@@ -140,7 +140,7 @@ public class BookService {
         boRequest.categoryId = ajaxRequest.categoryId;
         boRequest.publishingHouse = ajaxRequest.publishingHouse;
         boRequest.description = ajaxRequest.description;
-        boRequest.amount = ajaxRequest.amount;
+        boRequest.quantity = ajaxRequest.quantity;
         return boRequest;
     }
 

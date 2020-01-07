@@ -23,7 +23,7 @@ public class BOAuthorService {
 
     public BOCreateAuthorResponse create(BOCreateAuthorRequest request) {
         if (Strings.isBlank(request.name)) {
-            throw new BadRequestException("author name must be not null", ErrorCodes.NULL_AUTHOR);
+            throw new BadRequestException("Author name must be not null.", ErrorCodes.NULL_AUTHOR);
         }
         BOCreateAuthorResponse response = new BOCreateAuthorResponse();
         Author author = new Author();

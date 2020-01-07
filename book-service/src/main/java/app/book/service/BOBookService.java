@@ -57,7 +57,7 @@ public class BOBookService {
         List<String> params = new ArrayList<>();
         String selectSQL = "SELECT books.id AS id, books.name AS name, authors.name AS author_name, "
             + "categories.name AS category_name, tags.name AS tag_name, "
-            + "books.publishing_house, books.description , books.amount ";
+            + "books.publishing_house, books.description , books.quantity ";
         String fromSQL = "FROM books JOIN categories JOIN tags JOIN authors "
             + "ON books.category_id = categories.id AND tags.id = books.tag_id AND authors.id = books.author_id ";
         String whereSQL = whereSQL(request, params);
@@ -103,14 +103,14 @@ public class BOBookService {
         response.id = book.id;
         response.name = book.name;
         response.categoryName = categoryRepository.get(book.categoryId).orElseThrow(() ->
-            new NotFoundException("Category not found.", ErrorCodes.CATEGORY_NOT_FOUND)).name;
+            new NotFoundException("Category not found, id=" + book.categoryId, ErrorCodes.CATEGORY_NOT_FOUND)).name;
         response.tagName = tagRepository.get(book.tagId).orElseThrow(() ->
-            new NotFoundException("Tag not found.", ErrorCodes.TAG_NOT_FOUND)).name;
+            new NotFoundException("Tag not found, id=" + book.tagId, ErrorCodes.TAG_NOT_FOUND)).name;
         response.authorName = authorRepository.get(book.authorId).orElseThrow(() ->
-            new NotFoundException("Author not found.", ErrorCodes.AUTHOR_NOT_FOUND)).name;
+            new NotFoundException("Author not found, id=" + book.authorId, ErrorCodes.AUTHOR_NOT_FOUND)).name;
         response.publishingHouse = book.publishingHouse;
         response.description = book.description;
-        response.amount = book.amount;
+        response.quantity = book.quantity;
         return response;
     }
 
@@ -156,7 +156,7 @@ public class BOBookService {
         book.tagId = request.tagId;
         book.publishingHouse = request.publishingHouse;
         book.description = request.description;
-        book.amount = request.amount;
+        book.quantity = request.quantity;
         return book;
     }
 
@@ -168,7 +168,7 @@ public class BOBookService {
         book.tagId = request.tagId;
         book.publishingHouse = request.publishingHouse;
         book.description = request.description;
-        book.amount = request.amount;
+        book.quantity = request.quantity;
         return book;
     }
 
@@ -180,7 +180,7 @@ public class BOBookService {
         response.tagId = book.tagId;
         response.publishingHouse = book.publishingHouse;
         response.description = book.description;
-        response.amount = book.amount;
+        response.quantity = book.quantity;
         return response;
     }
 

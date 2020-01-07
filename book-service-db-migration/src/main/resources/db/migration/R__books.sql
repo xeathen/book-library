@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS `books`
     `tag_id`           INT(11)      NOT NULL,
     `publishing_house` VARCHAR(50)  NOT NULL,
     `description`      VARCHAR(255) NULL DEFAULT NULL,
-    `amount`           INT(11)      NOT NULL,
+    `quantity`         INT(11)      NOT NULL,
     PRIMARY KEY (`id`)
 )
     ENGINE = InnoDB

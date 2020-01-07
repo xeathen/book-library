@@ -38,6 +38,6 @@ public class Book {
     public String description;
 
     @NotNull
-    @Column(name = "amount")
-    public Integer amount;
+    @Column(name = "quantity")
+    public Integer quantity;
 }

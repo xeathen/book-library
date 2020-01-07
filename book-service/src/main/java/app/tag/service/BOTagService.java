@@ -36,7 +36,7 @@ public class BOTagService {
 
     public BOCreateTagResponse create(BOCreateTagRequest request) {
         if (Strings.isBlank(request.name)) {
-            throw new BadRequestException("tag name must be not null", ErrorCodes.NULL_TAG);
+            throw new BadRequestException("Tag name must be not null.", ErrorCodes.NULL_TAG);
         }
         BOCreateTagResponse response = new BOCreateTagResponse();
         Tag tag = new Tag();

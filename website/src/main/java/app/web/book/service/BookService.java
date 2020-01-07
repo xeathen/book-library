@@ -80,7 +80,7 @@ public class BookService {
         ajaxResponse.tagName = response.tagName;
         ajaxResponse.description = response.description;
         ajaxResponse.publishingHouse = response.publishingHouse;
-        ajaxResponse.amount = response.amount;
+        ajaxResponse.quantity = response.quantity;
         return ajaxResponse;
     }
 
@@ -108,7 +108,7 @@ public class BookService {
             bookView.tagName = boBookView.tagName;
             bookView.publishingHouse = boBookView.publishingHouse;
             bookView.description = boBookView.description;
-            bookView.amount = boBookView.amount;
+            bookView.quantity = boBookView.quantity;
             return bookView;
         }).collect(Collectors.toList());
         ajaxResponse.total = boResponse.total;

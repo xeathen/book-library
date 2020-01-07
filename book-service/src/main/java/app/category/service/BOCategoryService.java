@@ -36,7 +36,7 @@ public class BOCategoryService {
 
     public BOCreateCategoryResponse create(BOCreateCategoryRequest request) {
         if (Strings.isBlank(request.name)) {
-            throw new BadRequestException("category name must be not null", ErrorCodes.NULL_CATEGORY);
+            throw new BadRequestException("Category name must be not null.", ErrorCodes.NULL_CATEGORY);
         }
         BOCreateCategoryResponse response = new BOCreateCategoryResponse();
         Category category = new Category();

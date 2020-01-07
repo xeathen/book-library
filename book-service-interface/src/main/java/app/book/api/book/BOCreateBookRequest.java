@@ -34,6 +34,6 @@ public class BOCreateBookRequest {
     public String description;
 
     @NotNull
-    @Property(name = "amount")
-    public Integer amount;
+    @Property(name = "quantity")
+    public Integer quantity;
 }

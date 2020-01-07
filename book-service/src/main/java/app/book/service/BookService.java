@@ -72,7 +72,7 @@ public class BookService {
         List<String> params = new ArrayList<>();
         String selectSQL = "SELECT books.id AS id, books.name AS name, authors.name AS author_name, "
             + "categories.name AS category_name, tags.name AS tag_name, "
-            + "books.publishing_house, books.description , books.amount ";
+            + "books.publishing_house, books.description , books.quantity ";
         String fromSQL = "FROM books JOIN categories JOIN tags JOIN authors "
             + "ON books.category_id = categories.id AND tags.id = books.tag_id AND authors.id = books.author_id ";
         String whereSQL = whereSQL(request, params);
@@ -91,7 +91,7 @@ public class BookService {
         if (user == null) {
             throw new NotFoundException("User not found.", ErrorCodes.USER_NOT_FOUND);
         }
-        if (book.amount <= 0) {
+        if (book.quantity <= 0) {
             throw new ForbiddenException(ErrorCodes.NO_BOOK_REST);
         }
         if (user.status == UserStatusView.INACTIVE) {
@@ -105,7 +105,7 @@ public class BookService {
         }
         BorrowedRecord borrowedRecord = createBorrowedRecord(request, book, user);
         borrowedRecordCollection.insert(borrowedRecord);
-        changeBookAmount(book, -1);
+        changeBookQuantity(book, -1);
         return borrowBookResponse(borrowedRecord);
     }
 
@@ -117,7 +117,7 @@ public class BookService {
         List<BorrowedRecord> borrowedRecordList = getNotReturnedRecordList(request.userId, request.bookId);
         BorrowedRecord record = borrowedRecordList.get(0);
         if (record.expectedReturnTime.isBefore(ZonedDateTime.now())) {
-            throw new ForbiddenException("The return time is past");
+            throw new ForbiddenException("The return time is past.");
         }
         record.actualReturnTime = ZonedDateTime.now();
         borrowedRecordCollection.replace(record);
@@ -128,7 +128,7 @@ public class BookService {
         response.actualReturnTime = ZonedDateTime.now();
         Book book = bookRepository.get(request.bookId).orElseThrow(() ->
             new NotFoundException("Book not found.", ErrorCodes.BOOK_NOT_FOUND));
-        changeBookAmount(book, 1);
+        changeBookQuantity(book, 1);
         return response;
     }
 
@@ -168,7 +168,7 @@ public class BookService {
             new NotFoundException("Author not found.", ErrorCodes.AUTHOR_NOT_FOUND)).name;
         response.publishingHouse = book.publishingHouse;
         response.description = book.description;
-        response.amount = book.amount;
+        response.quantity = book.quantity;
         return response;
     }
 
@@ -218,11 +218,11 @@ public class BookService {
         return borrowedRecord;
     }
 
-    private void changeBookAmount(Book book, Integer x) {
-        Integer amount = book.amount;
+    private void changeBookQuantity(Book book, Integer x) {
+        Integer quantity = book.quantity;
         Book borrowedBook = new Book();
         borrowedBook.id = book.id;
-        borrowedBook.amount = amount + x;
+        borrowedBook.quantity = quantity + x;
         bookRepository.partialUpdate(borrowedBook);
     }
 

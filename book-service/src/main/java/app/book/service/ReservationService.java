@@ -35,12 +35,13 @@ public class ReservationService {
                 throw new NotFoundException("book not found.");
             }
             Book book = bookOptional.get();
-            if (book.amount > 0) {
+            if (book.quantity > 0) {
                 logger.info("publish reservationMessage, userId={}, bookId={}", reservation.userId, reservation.bookId);
                 ReservationMessage message = new ReservationMessage();
                 message.userId = reservation.userId;
                 message.bookId = reservation.bookId;
                 reservationMessagePublisher.publish(reservation.id.toString(), message);
+                reservationRepository.delete(reservation.id);
             }
         });
     }

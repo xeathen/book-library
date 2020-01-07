@@ -24,6 +24,6 @@ public class UpdateBookAJAXRequest {
     @Property(name = "description")
     public String description;
 
-    @Property(name = "amount")
-    public Integer amount;
+    @Property(name = "quantity")
+    public Integer quantity;
 }
