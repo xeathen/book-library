@@ -22,6 +22,6 @@ public class ExpireMassageHandler implements MessageHandler<ExpirationMessage> {
         ActionLogContext.put("userId", value.userId);
         ActionLogContext.put("bookId", value.bookId);
         BOGetUserResponse user = boUserWebService.get(value.userId);
-        logger.info("Sending expiration email, userName={},userEmail={}", user.userName, user.email);
+        logger.info("Sending expiration email, userName={}, userEmail={}, bookId={}", user.userName, user.email, value.bookId);
     }
 }

@@ -38,10 +38,10 @@ public interface BookAJAXWebService {
     ReturnBackBookAJAXResponse returnBack(ReturnBackBookAJAXRequest request);
 
     @POST
-    @Path("/ajax/reservation")
+    @Path("/ajax/book/reservation")
     CreateReservationAJAXResponse reserve(CreateReservationAJAXRequest request);
 
     @GET
-    @Path("/ajax/borrowed-record")
+    @Path("/ajax/book/borrowed-record")
     SearchRecordAJAXResponse searchRecord(SearchRecordAJAXRequest request);
 }

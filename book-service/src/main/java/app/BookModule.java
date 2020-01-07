@@ -40,7 +40,9 @@ public class BookModule extends Module {
         APIConfig api = api();
         api.client(BOUserWebService.class, requiredProperty("app.user.serviceURL"));
 
-        bind(ReservationService.class);
+        ReservationService reservationService = bind(ReservationService.class);
+        reservationService.expiredDays = Integer.valueOf(requiredProperty("app.reservation.expiredDays"));
+
         bind(BookService.class);
         bind(BOBookService.class);
 

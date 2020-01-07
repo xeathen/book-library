@@ -38,10 +38,10 @@ public interface BookWebService {
     ReturnBackBookResponse returnBack(ReturnBackBookRequest request);
 
     @POST
-    @Path("/reservation")
+    @Path("/book/reservation")
     CreateReservationResponse reserve(CreateReservationRequest request);
 
     @GET
-    @Path("/borrowed-record/")
+    @Path("/book/borrowed-record")
     SearchRecordResponse searchRecord(SearchRecordRequest request);
 }

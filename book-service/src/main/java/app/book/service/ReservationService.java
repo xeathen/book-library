@@ -18,6 +18,7 @@ import java.time.ZonedDateTime;
  */
 public class ReservationService {
     private final Logger logger = LoggerFactory.getLogger(ReservationService.class);
+    public Integer expiredDays;
     @Inject
     Repository<Reservation> reservationRepository;
     @Inject
@@ -44,11 +45,12 @@ public class ReservationService {
     public void notifyExpiration() {
         reservationRepository.select().fetch().forEach(reservation -> {
             bookRepository.get(reservation.bookId).orElseThrow(() -> new NotFoundException("Book not found, id=" + reservation.bookId));
-            if (ZonedDateTime.now().isAfter(reservation.reserveTime.plusDays(7))) {
+            ZonedDateTime expiredTime = reservation.reserveTime.plusDays(expiredDays);
+            if (ZonedDateTime.now().isAfter(expiredTime)) {
                 reservationRepository.delete(reservation.id);
                 return;
             }
-            if (reservation.reserveTime.plusDays(6).getDayOfMonth() == ZonedDateTime.now().getDayOfMonth()) {
+            if (expiredTime.minusDays(1).getDayOfMonth() == ZonedDateTime.now().getDayOfMonth()) {
                 logger.info("publish expirationMessage, userId={}, bookId={}", reservation.userId, reservation.bookId);
                 ExpirationMessage message = new ExpirationMessage();
                 message.bookId = reservation.bookId;
