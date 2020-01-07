@@ -46,6 +46,6 @@ public interface BOUserWebService {
     BOResetPasswordResponse resetPassword(@PathParam("id") Long id);
 
     @PUT
-    @Path("/bo/user/status/:id")
+    @Path("/bo/user/:id/status")
     BOChangeStatusResponse changeStatus(@PathParam("id") Long id);
 }
