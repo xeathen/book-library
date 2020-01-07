@@ -104,7 +104,7 @@ public class BookService {
         }
         BorrowedRecord borrowedRecord = createBorrowedRecord(request, book, user);
         borrowedRecordCollection.insert(borrowedRecord);
-        changeBookQuantity(book, -1);
+        updateBookQuantity(book.id, book.quantity - 1);
         return borrowBookResponse(borrowedRecord);
     }
 
@@ -127,7 +127,7 @@ public class BookService {
         response.actualReturnTime = ZonedDateTime.now();
         Book book = bookRepository.get(request.bookId).orElseThrow(() ->
             new NotFoundException("Book not found, id=" + request.bookId, ErrorCodes.BOOK_NOT_FOUND));
-        changeBookQuantity(book, 1);
+        updateBookQuantity(book.id, book.quantity + 1);
         reservationService.notifyAvailability();
         return response;
     }
@@ -218,12 +218,11 @@ public class BookService {
         return borrowedRecord;
     }
 
-    private void changeBookQuantity(Book book, Integer x) {
-        Integer quantity = book.quantity;
-        Book borrowedBook = new Book();
-        borrowedBook.id = book.id;
-        borrowedBook.quantity = quantity + x;
-        bookRepository.partialUpdate(borrowedBook);
+    private void updateBookQuantity(Long id, Integer updatedQuantity) {
+        Book book = new Book();
+        book.id = id;
+        book.quantity = updatedQuantity;
+        bookRepository.partialUpdate(book);
     }
 
     private Boolean isReturnedBack(Long userId, Long bookId) {
