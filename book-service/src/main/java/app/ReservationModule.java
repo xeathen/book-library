@@ -18,7 +18,7 @@ public class ReservationModule extends Module {
         configureKafka();
 
         bind(ReservationService.class);
-        schedule().fixedRate("availability-notify-job", bind(AvailabilityNotificationJob.class), Duration.ofHours(5));
+        schedule().fixedRate("availability-notify-job", bind(AvailabilityNotificationJob.class), Duration.ofHours(1));
         schedule().fixedRate("expiration-notify-job", bind(ExpirationNotificationJob.class), Duration.ofDays(1));
     }
 

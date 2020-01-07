@@ -64,7 +64,7 @@ public class BookService {
 
     public GetBookResponse get(Long bookId) {
         Optional<Book> book = bookRepository.get(bookId);
-        book.orElseThrow(() -> new NotFoundException("Book not found.", ErrorCodes.BOOK_NOT_FOUND));
+        book.orElseThrow(() -> new NotFoundException("Book not found, id=" + bookId, ErrorCodes.BOOK_NOT_FOUND));
         return getBookResponse(book.get());
     }
 
@@ -86,11 +86,8 @@ public class BookService {
 
     public BorrowBookResponse borrow(BorrowBookRequest request) {
         Book book = bookRepository.get(request.bookId).orElseThrow(() ->
-            new NotFoundException("Book not found.", ErrorCodes.BOOK_NOT_FOUND));
+            new NotFoundException("Book not found, id=" + request.bookId, ErrorCodes.BOOK_NOT_FOUND));
         BOGetUserResponse user = boUserWebService.get(request.userId);
-        if (user == null) {
-            throw new NotFoundException("User not found.", ErrorCodes.USER_NOT_FOUND);
-        }
         if (book.quantity <= 0) {
             throw new ForbiddenException(ErrorCodes.NO_BOOK_REST);
         }
@@ -127,7 +124,7 @@ public class BookService {
         response.bookName = record.bookName;
         response.actualReturnTime = ZonedDateTime.now();
         Book book = bookRepository.get(request.bookId).orElseThrow(() ->
-            new NotFoundException("Book not found.", ErrorCodes.BOOK_NOT_FOUND));
+            new NotFoundException("Book not found, id=" + request.bookId, ErrorCodes.BOOK_NOT_FOUND));
         changeBookQuantity(book, 1);
         return response;
     }
@@ -161,11 +158,11 @@ public class BookService {
         response.id = book.id;
         response.name = book.name;
         response.categoryName = categoryRepository.get(book.categoryId).orElseThrow(() ->
-            new NotFoundException("Category not found.", ErrorCodes.CATEGORY_NOT_FOUND)).name;
+            new NotFoundException("Category not found, id=" + book.categoryId, ErrorCodes.CATEGORY_NOT_FOUND)).name;
         response.tagName = tagRepository.get(book.tagId).orElseThrow(() ->
-            new NotFoundException("Tag not found.", ErrorCodes.TAG_NOT_FOUND)).name;
+            new NotFoundException("Tag not found, id=" + book.tagId, ErrorCodes.TAG_NOT_FOUND)).name;
         response.authorName = authorRepository.get(book.authorId).orElseThrow(() ->
-            new NotFoundException("Author not found.", ErrorCodes.AUTHOR_NOT_FOUND)).name;
+            new NotFoundException("Author not found, id=" + book.authorId, ErrorCodes.AUTHOR_NOT_FOUND)).name;
         response.publishingHouse = book.publishingHouse;
         response.description = book.description;
         response.quantity = book.quantity;

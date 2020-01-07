@@ -25,7 +25,6 @@ import core.framework.util.Strings;
 import core.framework.web.exception.ConflictException;
 import core.framework.web.exception.NotFoundException;
 
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -149,11 +148,7 @@ public class BOUserService {
     }
 
     private User checkUser(Long id) {
-        Optional<User> userOptional = userRepository.get(id);
-        if (userOptional.isEmpty()) {
-            throw new NotFoundException("User not found.", ErrorCodes.USER_NOT_FOUND);
-        }
-        return userOptional.get();
+        return userRepository.get(id).orElseThrow(() -> new NotFoundException("User not found, id=" + id, ErrorCodes.USER_NOT_FOUND));
     }
 
     private User user(BOCreateUserRequest request) {
