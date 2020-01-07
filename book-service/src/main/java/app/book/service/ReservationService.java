@@ -12,7 +12,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.time.ZonedDateTime;
-import java.util.Optional;
 
 /**
  * @author Ethan
@@ -30,11 +29,7 @@ public class ReservationService {
 
     public void notifyAvailability() {
         reservationRepository.select().fetch().forEach(reservation -> {
-            Optional<Book> bookOptional = bookRepository.get(reservation.bookId);
-            if (bookOptional.isEmpty()) {
-                throw new NotFoundException("book not found.");
-            }
-            Book book = bookOptional.get();
+            Book book = bookRepository.get(reservation.bookId).orElseThrow(() -> new NotFoundException("Book not found, id=" + reservation.bookId));
             if (book.quantity > 0) {
                 logger.info("publish reservationMessage, userId={}, bookId={}", reservation.userId, reservation.bookId);
                 ReservationMessage message = new ReservationMessage();
@@ -48,10 +43,7 @@ public class ReservationService {
 
     public void notifyExpiration() {
         reservationRepository.select().fetch().forEach(reservation -> {
-            Optional<Book> bookOptional = bookRepository.get(reservation.bookId);
-            if (bookOptional.isEmpty()) {
-                throw new NotFoundException("book not found.");
-            }
+            bookRepository.get(reservation.bookId).orElseThrow(() -> new NotFoundException("Book not found, id=" + reservation.bookId));
             if (ZonedDateTime.now().isAfter(reservation.reserveTime.plusDays(7))) {
                 reservationRepository.delete(reservation.id);
                 return;
