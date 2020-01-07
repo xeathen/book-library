@@ -36,6 +36,6 @@ public interface BookAJAXWebService {
     UpdateBookAJAXResponse update(@PathParam("id") Long id, UpdateBookAJAXRequest request);
 
     @GET
-    @Path("/ajax/borrowed-record")
-    SearchRecordAJAXResponse searchRecord(SearchRecordAJAXRequest recordAJAXRequest);
+    @Path("/ajax/book/:id/borrowed-record")
+    SearchRecordAJAXResponse searchRecord(@PathParam("id") Long id, SearchRecordAJAXRequest request);
 }

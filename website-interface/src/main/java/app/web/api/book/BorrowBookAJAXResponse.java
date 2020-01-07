@@ -7,13 +7,8 @@ import java.time.ZonedDateTime;
 /**
  * @author Ethan
  */
+//TODO:检查response是否多余
 public class BorrowBookAJAXResponse {
-    @Property(name = "user_id")
-    public Long userId;
-
-    @Property(name = "user_name")
-    public String userName;
-
     @Property(name = "book_id")
     public Long bookId;
 

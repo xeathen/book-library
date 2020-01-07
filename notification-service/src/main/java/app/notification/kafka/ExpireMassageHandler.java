@@ -1,6 +1,6 @@
-package app.kafka;
+package app.notification.kafka;
 
-import app.book.api.kafka.ExpirationMessage;
+import app.book.api.kafka.BorrowedRecordExpirationMessage;
 import app.user.api.BOUserWebService;
 import app.user.api.user.BOGetUserResponse;
 import core.framework.inject.Inject;
@@ -12,13 +12,13 @@ import org.slf4j.LoggerFactory;
 /**
  * @author Ethan
  */
-public class ExpireMassageHandler implements MessageHandler<ExpirationMessage> {
+public class ExpireMassageHandler implements MessageHandler<BorrowedRecordExpirationMessage> {
     private final Logger logger = LoggerFactory.getLogger(ExpireMassageHandler.class);
     @Inject
     BOUserWebService boUserWebService;
 
     @Override
-    public void handle(String key, ExpirationMessage value) {
+    public void handle(String key, BorrowedRecordExpirationMessage value) {
         ActionLogContext.put("userId", value.userId);
         ActionLogContext.put("bookId", value.bookId);
         BOGetUserResponse user = boUserWebService.get(value.userId);

@@ -14,10 +14,6 @@ public class BorrowBookRequest {
     public Long userId;
 
     @NotNull
-    @Property(name = "book_id")
-    public Long bookId;
-
-    @NotNull
     @Property(name = "expected_return_time")
     public ZonedDateTime expectedReturnTime;
 }

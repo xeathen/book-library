@@ -7,11 +7,11 @@ import app.bo.api.user.DeleteUserAJAXResponse;
 import app.bo.api.user.GetUserAJAXResponse;
 import app.bo.api.user.ListUserAJAXRequest;
 import app.bo.api.user.ListUserAJAXResponse;
+import app.bo.api.user.ListUserAJAXResponse.User;
 import app.bo.api.user.ResetPasswordAJAXResponse;
 import app.bo.api.user.UpdateUserPasswordAJAXRequest;
 import app.bo.api.user.UpdateUserPasswordAJAXResponse;
 import app.bo.api.user.UserStatusAJAXView;
-import app.bo.api.user.UserView;
 import app.user.api.BOUserWebService;
 import app.user.api.user.BOChangeStatusResponse;
 import app.user.api.user.BOCreateUserRequest;
@@ -86,12 +86,12 @@ public class UserService {
     private ListUserAJAXResponse listUserAJAXResponse(BOListUserResponse response) {
         ListUserAJAXResponse ajaxResponse = new ListUserAJAXResponse();
         ajaxResponse.users = response.users.stream().map(userView -> {
-            UserView ajaxView = new UserView();
-            ajaxView.id = userView.id;
-            ajaxView.userName = userView.userName;
-            ajaxView.email = userView.email;
-            ajaxView.status = userView.status == null ? null : UserStatusAJAXView.valueOf(userView.status.name());
-            return ajaxView;
+            User user = new User();
+            user.id = userView.id;
+            user.userName = userView.userName;
+            user.email = userView.email;
+            user.status = userView.status == null ? null : UserStatusAJAXView.valueOf(userView.status.name());
+            return user;
         }).collect(Collectors.toList());
         ajaxResponse.total = response.total;
         return ajaxResponse;

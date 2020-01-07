@@ -86,9 +86,9 @@ public class BookService {
         return response;
     }
 
-    public BorrowBookResponse borrow(BorrowBookRequest request) {
-        Book book = bookRepository.get(request.bookId).orElseThrow(() ->
-            new NotFoundException("Book not found, id=" + request.bookId, ErrorCodes.BOOK_NOT_FOUND));
+    public BorrowBookResponse borrow(Long bookId, BorrowBookRequest request) {
+        Book book = bookRepository.get(bookId).orElseThrow(() ->
+            new NotFoundException("Book not found, id=" + bookId, ErrorCodes.BOOK_NOT_FOUND));
         BOGetUserResponse user = boUserWebService.get(request.userId);
         if (book.quantity <= 0) {
             throw new ForbiddenException(ErrorCodes.NO_BOOK_REST);
@@ -96,7 +96,7 @@ public class BookService {
         if (user.status == UserStatusView.INACTIVE) {
             throw new ConflictException("You are banned!", ErrorCodes.BANNED);
         }
-        if (!isReturnedBack(request.userId, request.bookId)) {
+        if (!isReturnedBack(request.userId, bookId)) {
             throw new ConflictException("You had borrowed this book already.", ErrorCodes.BORROWED_ALREADY);
         }
         if (ZonedDateTime.now().isAfter(request.expectedReturnTime)) {
@@ -104,44 +104,41 @@ public class BookService {
         }
         BorrowedRecord borrowedRecord = createBorrowedRecord(request, book, user);
         borrowedRecordCollection.insert(borrowedRecord);
-        updateBookQuantity(book.id, book.quantity - 1);
+        updateBookQuantity(bookId, book.quantity - 1);
         return borrowBookResponse(borrowedRecord);
     }
 
-    public ReturnBackBookResponse returnBack(ReturnBackBookRequest request) {
+    public ReturnBackBookResponse returnBack(Long bookId, ReturnBackBookRequest request) {
         ReturnBackBookResponse response = new ReturnBackBookResponse();
-        if (isReturnedBack(request.userId, request.bookId)) {
+        if (isReturnedBack(request.userId, bookId)) {
             throw new NotFoundException("You had returned this book already.", ErrorCodes.RECORD_NOT_FOUND);
         }
-        List<BorrowedRecord> borrowedRecordList = getNotReturnedRecordList(request.userId, request.bookId);
+        List<BorrowedRecord> borrowedRecordList = getNotReturnedRecordList(request.userId, bookId);
         BorrowedRecord record = borrowedRecordList.get(0);
         if (record.expectedReturnTime.isBefore(ZonedDateTime.now())) {
             throw new ForbiddenException("The return time is past.");
         }
         record.actualReturnTime = ZonedDateTime.now();
         borrowedRecordCollection.replace(record);
-        response.userId = request.userId;
-        response.userName = record.userName;
-        response.bookId = request.bookId;
-        response.bookName = record.bookName;
         response.actualReturnTime = ZonedDateTime.now();
-        Book book = bookRepository.get(request.bookId).orElseThrow(() ->
-            new NotFoundException("Book not found, id=" + request.bookId, ErrorCodes.BOOK_NOT_FOUND));
+        Book book = bookRepository.get(bookId).orElseThrow(() ->
+            new NotFoundException("Book not found, id=" + bookId, ErrorCodes.BOOK_NOT_FOUND));
         updateBookQuantity(book.id, book.quantity + 1);
-        reservationService.notifyAvailability();
+        //TODO:优化
+//        reservationService.notifyAvailability();
         return response;
     }
 
-    public CreateReservationResponse reserve(CreateReservationRequest request) {
+    public CreateReservationResponse reserve(Long bookId, CreateReservationRequest request) {
         Query<Reservation> query = reservationRepository.select();
         query.where("user_id = ?", request.userId);
-        query.where("book_id = ?", request.bookId);
+        query.where("book_id = ?", bookId);
         List<Reservation> collect = new ArrayList<>(query.fetch());
         if (!collect.isEmpty()) {
             throw new ForbiddenException(ErrorCodes.ALREADY_RESERVED);
         }
-        createReservation(request.userId, request.bookId);
-        return createReservationResponse(request);
+        createReservation(request.userId, bookId);
+        return createReservationResponse(bookId);
     }
 
     public SearchRecordResponse searchRecord(SearchRecordRequest request) {
@@ -211,16 +208,16 @@ public class BookService {
         borrowedRecord.id = UUID.randomUUID().toString();
         borrowedRecord.userId = request.userId;
         borrowedRecord.userName = response.userName;
-        borrowedRecord.bookId = request.bookId;
+        borrowedRecord.bookId = book.id;
         borrowedRecord.bookName = book.name;
         borrowedRecord.borrowTime = ZonedDateTime.now();
         borrowedRecord.expectedReturnTime = request.expectedReturnTime;
         return borrowedRecord;
     }
 
-    private void updateBookQuantity(Long id, Integer updatedQuantity) {
+    private void updateBookQuantity(Long bookId, Integer updatedQuantity) {
         Book book = new Book();
-        book.id = id;
+        book.id = bookId;
         book.quantity = updatedQuantity;
         bookRepository.partialUpdate(book);
     }
@@ -257,12 +254,10 @@ public class BookService {
         reservationRepository.insert(reservation);
     }
 
-    private CreateReservationResponse createReservationResponse(CreateReservationRequest request) {
+    private CreateReservationResponse createReservationResponse(Long bookId) {
         CreateReservationResponse response = new CreateReservationResponse();
-        response.userId = request.userId;
-        response.userName = boUserWebService.get(request.userId).userName;
-        response.bookId = request.bookId;
-        response.bookName = bookRepository.get(request.bookId).orElseThrow().name;
+        response.bookId = bookId;
+        response.bookName = bookRepository.get(bookId).orElseThrow().name;
         return response;
     }
 

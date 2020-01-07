@@ -12,7 +12,7 @@ import core.framework.api.web.service.Path;
  */
 public interface TagAJAXWebService {
     @POST
-    @Path("/ajax/book/tag")
+    @Path("/ajax/tag")
     CreateTagAJAXResponse create(CreateTagAJAXRequest request);
 
     @GET

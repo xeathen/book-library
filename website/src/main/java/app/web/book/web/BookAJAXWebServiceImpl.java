@@ -3,10 +3,8 @@ package app.web.book.web;
 import app.web.api.BookAJAXWebService;
 import app.web.api.book.BorrowBookAJAXRequest;
 import app.web.api.book.BorrowBookAJAXResponse;
-import app.web.api.book.CreateReservationAJAXRequest;
 import app.web.api.book.CreateReservationAJAXResponse;
 import app.web.api.book.GetBookAJAXResponse;
-import app.web.api.book.ReturnBackBookAJAXRequest;
 import app.web.api.book.ReturnBackBookAJAXResponse;
 import app.web.api.book.SearchBookAJAXRequest;
 import app.web.api.book.SearchBookAJAXResponse;
@@ -37,27 +35,27 @@ public class BookAJAXWebServiceImpl implements BookAJAXWebService {
     }
 
     @Override
-    public BorrowBookAJAXResponse borrow(BorrowBookAJAXRequest request) {
+    public BorrowBookAJAXResponse borrow(Long bookId, BorrowBookAJAXRequest request) {
         Long userId = Long.valueOf(webContext.request().session().get("userId").orElseThrow());
         ActionLogContext.put("userId", userId);
-        ActionLogContext.put("bookId", request.bookId);
-        return bookService.borrow(userId, request);
+        ActionLogContext.put("bookId", bookId);
+        return bookService.borrow(userId, bookId, request);
     }
 
     @Override
-    public ReturnBackBookAJAXResponse returnBack(ReturnBackBookAJAXRequest request) {
+    public ReturnBackBookAJAXResponse returnBack(Long bookId) {
         Long userId = Long.valueOf(webContext.request().session().get("userId").orElseThrow());
         ActionLogContext.put("userId", userId);
-        ActionLogContext.put("bookId", request.bookId);
-        return bookService.returnBack(userId, request);
+        ActionLogContext.put("bookId", bookId);
+        return bookService.returnBack(userId, bookId);
     }
 
     @Override
-    public CreateReservationAJAXResponse reserve(CreateReservationAJAXRequest request) {
+    public CreateReservationAJAXResponse reserve(Long bookId) {
         Long userId = Long.valueOf(webContext.request().session().get("userId").orElseThrow());
         ActionLogContext.put("userId", userId);
-        ActionLogContext.put("bookId", request.bookId);
-        return bookService.reserve(userId, request);
+        ActionLogContext.put("bookId", bookId);
+        return bookService.reserve(userId, bookId);
     }
 
     @Override

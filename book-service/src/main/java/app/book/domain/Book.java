@@ -1,5 +1,6 @@
 package app.book.domain;
 
+import core.framework.api.validate.NotBlank;
 import core.framework.api.validate.NotNull;
 import core.framework.db.Column;
 import core.framework.db.PrimaryKey;
@@ -15,6 +16,7 @@ public class Book {
     public Long id;
 
     @NotNull
+    @NotBlank
     @Column(name = "name")
     public String name;
 
@@ -31,6 +33,7 @@ public class Book {
     public Integer tagId;
 
     @NotNull
+    @NotBlank
     @Column(name = "publishing_house")
     public String publishingHouse;
 

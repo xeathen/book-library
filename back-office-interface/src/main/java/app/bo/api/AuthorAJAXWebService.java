@@ -12,10 +12,10 @@ import core.framework.api.web.service.Path;
  */
 public interface AuthorAJAXWebService {
     @POST
-    @Path("/ajax/book/author")
+    @Path("/ajax/author")
     CreateAuthorAJAXResponse create(CreateAuthorAJAXRequest request);
 
     @GET
-    @Path("/ajax/book/author")
+    @Path("/ajax/author")
     ListAuthorAJAXResponse list();
 }

@@ -12,10 +12,10 @@ import core.framework.api.web.service.Path;
  */
 public interface BOAuthorWebService {
     @GET
-    @Path("/bo/book/author")
+    @Path("/bo/author")
     BOListAuthorResponse list();
 
     @POST
-    @Path("/bo/book/author")
+    @Path("/bo/author")
     BOCreateAuthorResponse create(BOCreateAuthorRequest request);
 }

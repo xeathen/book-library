@@ -1,4 +1,4 @@
-package app.kafka;
+package app.notification.kafka;
 
 import app.book.api.kafka.ReservationMessage;
 import app.user.api.BOUserWebService;

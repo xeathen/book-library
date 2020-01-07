@@ -12,5 +12,19 @@ public class BOListUserResponse {
     public Integer total;
 
     @Property(name = "users")
-    public List<UserView> users;
+    public List<User> users;
+
+    public static class User {
+        @Property(name = "id")
+        public Long id;
+
+        @Property(name = "user_name")
+        public String userName;
+
+        @Property(name = "email")
+        public String email;
+
+        @Property(name = "status")
+        public UserStatusView status;
+    }
 }

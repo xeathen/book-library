@@ -1,9 +1,9 @@
 package app.notification;
 
-import app.book.api.kafka.ExpirationMessage;
+import app.book.api.kafka.BorrowedRecordExpirationMessage;
 import app.book.api.kafka.ReservationMessage;
-import app.kafka.ExpireMassageHandler;
-import app.kafka.ReservationMessageHandler;
+import app.notification.kafka.ExpireMassageHandler;
+import app.notification.kafka.ReservationMessageHandler;
 import app.user.api.BOUserWebService;
 import core.framework.module.Module;
 
@@ -19,6 +19,6 @@ public class NotificationModule extends Module {
 
     private void configureKafka() {
         kafka().subscribe("reservation", ReservationMessage.class, bind(ReservationMessageHandler.class));
-        kafka().subscribe("expiration", ExpirationMessage.class, bind(ExpireMassageHandler.class));
+        kafka().subscribe("expiration", BorrowedRecordExpirationMessage.class, bind(ExpireMassageHandler.class));
     }
 }

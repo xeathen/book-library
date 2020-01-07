@@ -45,6 +45,7 @@ public interface UserAJAXWebService {
     @Path("/ajax/user/:id/password-reset")
     ResetPasswordAJAXResponse resetPassword(@PathParam("id") Long id);
 
+    //TODO: add Request
     @PUT
     @Path("/ajax/user/:id/status")
     ChangeStatusAJAXResponse changeStatus(@PathParam("id") Long id);

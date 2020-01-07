@@ -3,7 +3,7 @@ package app;
 import app.book.api.BOBookWebService;
 import app.book.api.BookWebService;
 import app.book.api.book.BookView;
-import app.book.api.kafka.ExpirationMessage;
+import app.book.api.kafka.BorrowedRecordExpirationMessage;
 import app.book.api.kafka.ReservationMessage;
 import app.book.domain.Book;
 import app.book.domain.BorrowedRecord;
@@ -60,6 +60,6 @@ public class BookModule extends Module {
 
     private void configureKafka() {
         kafka().publish("reservation", ReservationMessage.class);
-        kafka().publish("expiration", ExpirationMessage.class);
+        kafka().publish("expiration", BorrowedRecordExpirationMessage.class);
     }
 }

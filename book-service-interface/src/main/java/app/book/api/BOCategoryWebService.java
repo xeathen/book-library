@@ -12,10 +12,10 @@ import core.framework.api.web.service.Path;
  */
 public interface BOCategoryWebService {
     @GET
-    @Path("/bo/book/category")
+    @Path("/bo/category")
     BOListCategoryResponse list();
 
     @POST
-    @Path("/bo/book/category")
+    @Path("/bo/category")
     BOCreateCategoryResponse create(BOCreateCategoryRequest request);
 }

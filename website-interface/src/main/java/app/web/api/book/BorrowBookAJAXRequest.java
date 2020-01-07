@@ -10,10 +10,6 @@ import java.time.ZonedDateTime;
  */
 public class BorrowBookAJAXRequest {
     @NotNull
-    @Property(name = "book_id")
-    public Long bookId;
-
-    @NotNull
     @Property(name = "expected_return_time")
     public ZonedDateTime expectedReturnTime;
 }

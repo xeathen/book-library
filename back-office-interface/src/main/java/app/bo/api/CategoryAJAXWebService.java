@@ -12,10 +12,10 @@ import core.framework.api.web.service.Path;
  */
 public interface CategoryAJAXWebService {
     @POST
-    @Path("/ajax/book/category")
+    @Path("/ajax/category")
     CreateCategoryAJAXResponse create(CreateCategoryAJAXRequest request);
 
     @GET
-    @Path("/ajax/book/category")
+    @Path("/ajax/category")
     ListCategoryAJAXResponse list();
 }

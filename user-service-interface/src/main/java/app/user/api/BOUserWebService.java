@@ -45,6 +45,7 @@ public interface BOUserWebService {
     @Path("/bo/user/:id/password-reset")
     BOResetPasswordResponse resetPassword(@PathParam("id") Long id);
 
+    //TODO:request
     @PUT
     @Path("/bo/user/:id/status")
     BOChangeStatusResponse changeStatus(@PathParam("id") Long id);

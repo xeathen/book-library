@@ -14,8 +14,4 @@ public class SearchRecordAJAXRequest {
     @NotNull
     @QueryParam(name = "limit")
     public Integer limit;
-
-    @NotNull
-    @QueryParam(name = "bookId")
-    public Long bookId;
 }

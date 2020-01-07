@@ -13,7 +13,6 @@ import app.user.api.user.BOResetPasswordResponse;
 import app.user.api.user.BOUpdateUserPasswordRequest;
 import app.user.api.user.BOUpdateUserPasswordResponse;
 import app.user.api.user.UserStatusView;
-import app.user.api.user.UserView;
 import app.user.domain.User;
 import app.user.domain.UserStatus;
 import core.framework.crypto.Hash;
@@ -44,7 +43,7 @@ public class BOUserService {
         Query<User> query = userRepository.select();
         query.skip(request.skip);
         query.limit(request.limit);
-        response.users = query.fetch().stream().map(this::userview).collect(Collectors.toList());
+        response.users = query.fetch().stream().map(this::user).collect(Collectors.toList());
         response.total = query.count();
         return response;
     }
@@ -138,8 +137,8 @@ public class BOUserService {
         return response;
     }
 
-    private UserView userview(User user) {
-        UserView userView = new UserView();
+    private BOListUserResponse.User user(User user) {
+        BOListUserResponse.User userView = new BOListUserResponse.User();
         userView.id = user.id;
         userView.userName = user.userName;
         userView.email = user.email;

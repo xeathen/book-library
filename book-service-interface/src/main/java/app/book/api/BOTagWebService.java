@@ -12,10 +12,10 @@ import core.framework.api.web.service.Path;
  */
 public interface BOTagWebService {
     @GET
-    @Path("/bo/book/tag")
+    @Path("/bo/tag")
     BOListTagResponse list();
 
     @POST
-    @Path("/bo/book/tag")
+    @Path("/bo/tag")
     BOCreateTagResponse create(BOCreateTagRequest request);
 }

@@ -30,16 +30,16 @@ public interface BookWebService {
     SearchBookResponse search(SearchBookRequest request);
 
     @POST
-    @Path("/book/borrow")
-    BorrowBookResponse borrow(BorrowBookRequest request);
+    @Path("/book/:id/borrowed-record")
+    BorrowBookResponse borrow(@PathParam("id") Long id, BorrowBookRequest request);
 
     @POST
-    @Path("/book/return-back")
-    ReturnBackBookResponse returnBack(ReturnBackBookRequest request);
+    @Path("/book/:id/borrowed-record/return")
+    ReturnBackBookResponse returnBack(@PathParam("id") Long id, ReturnBackBookRequest request);
 
     @POST
-    @Path("/book/reservation")
-    CreateReservationResponse reserve(CreateReservationRequest request);
+    @Path("/book/:id/reservation")
+    CreateReservationResponse reserve(@PathParam("id") Long id, CreateReservationRequest request);
 
     @GET
     @Path("/book/borrowed-record")
