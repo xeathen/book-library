@@ -1,7 +1,7 @@
 apply from: file("${rootDir}/gradle/project.gradle")
 
 subprojects {
-    group = 'book-library'
+    group = 'book-library-ethan'
     version = '1.0.0'
 
     repositories {
@@ -35,49 +35,17 @@ configure(subprojects.findAll { it.name.endsWith('-mongo-migration') }) {
     }
 }
 
-configure(subprojects.findAll { it.name.matches('.*-service-interface') }) {
+configure(subprojects.findAll { it.name.matches('.*-interface') }) {
     dependencies {
         implementation "core.framework:core-ng-api:${coreNGVersion}"
     }
 }
 
 configure([project(':user-service'),
-           project(':user-service-interface')]) {
-    apply from: file("${rootDir}/gradle/app.gradle")
-    dependencies {
-        implementation "core.framework:core-ng:${coreNGVersion}"
-        testImplementation "core.framework:core-ng-test:${coreNGVersion}"
-    }
-}
-
-configure([project(':book-service'),
-           project(':book-service-interface')]) {
-    apply from: file("${rootDir}/gradle/app.gradle")
-    dependencies {
-        implementation "core.framework:core-ng:${coreNGVersion}"
-        testImplementation "core.framework:core-ng-test:${coreNGVersion}"
-    }
-}
-
-configure([project(':notification-service')]) {
-    apply from: file("${rootDir}/gradle/app.gradle")
-    dependencies {
-        implementation "core.framework:core-ng:${coreNGVersion}"
-        testImplementation "core.framework:core-ng-test:${coreNGVersion}"
-    }
-}
-
-configure([project(':back-office'),
-           project(':back-office-interface')]) {
-    apply from: file("${rootDir}/gradle/app.gradle")
-    dependencies {
-        implementation "core.framework:core-ng:${coreNGVersion}"
-        testImplementation "core.framework:core-ng-test:${coreNGVersion}"
-    }
-}
-
-configure([project(':website'),
-           project(':website-interface')]) {
+           project(':book-service'),
+           project(':notification-service'),
+           project(':back-office'),
+           project(':website')]) {
     apply from: file("${rootDir}/gradle/app.gradle")
     dependencies {
         implementation "core.framework:core-ng:${coreNGVersion}"
@@ -116,7 +84,6 @@ project(':back-office') {
         implementation project(':user-service-interface')
     }
 }
-
 
 project(':website') {
     dependencies {
