@@ -1,9 +1,15 @@
-# Project exclude paths
 .idea/
 /.gradle/
 /build/
+/out/
 *.iml
 /classes/
 */src/dev/java/
 .DS_Store
 node_modules/
+wiki/
+*-webapp/dist/
+*-webapp/src/static/css/
+*.lock
+back-office-webapp/package-lock.json
+back-office-webapp/src/static/js/controllers/authentication.js
