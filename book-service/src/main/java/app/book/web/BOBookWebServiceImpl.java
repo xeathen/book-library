@@ -40,9 +40,6 @@ public class BOBookWebServiceImpl implements BOBookWebService {
     @Override
     public BOUpdateBookResponse update(Long bookId, BOUpdateBookRequest request) {
         ActionLogContext.put("bookId", bookId);
-        if (request.name != null) {
-            ActionLogContext.put("bookName", request.name);
-        }
         return boBookService.update(bookId, request);
     }
 

@@ -16,6 +16,6 @@ public interface TagAJAXWebService {
     CreateTagAJAXResponse create(CreateTagAJAXRequest request);
 
     @GET
-    @Path("/ajax/book/tag")
+    @Path("/ajax/tag")
     ListTagAJAXResponse list();
 }

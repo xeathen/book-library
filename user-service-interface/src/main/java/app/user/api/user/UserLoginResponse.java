@@ -9,8 +9,8 @@ public class UserLoginResponse {
     @Property(name = "user_id")
     public Long userId;
 
-    @Property(name = "user_name")
-    public String userName;
+    @Property(name = "username")
+    public String username;
 
     @Property(name = "login_message")
     public LoginMessage loginMessage;

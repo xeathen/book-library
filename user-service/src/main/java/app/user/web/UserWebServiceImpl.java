@@ -1,6 +1,7 @@
 package app.user.web;
 
 import app.user.api.UserWebService;
+import app.user.api.user.GetUserResponse;
 import app.user.api.user.UserLoginRequest;
 import app.user.api.user.UserLoginResponse;
 import app.user.service.UserService;
@@ -15,8 +16,13 @@ public class UserWebServiceImpl implements UserWebService {
     UserService userService;
 
     @Override
+    public GetUserResponse get(Long id) {
+        return userService.get(id);
+    }
+
+    @Override
     public UserLoginResponse login(UserLoginRequest request) {
-        ActionLogContext.put("userName", request.userName);
+        ActionLogContext.put("username", request.username);
         return userService.login(request);
     }
 }

@@ -1,6 +1,5 @@
 package app.web.user.service;
 
-import app.user.api.BOUserWebService;
 import app.user.api.UserWebService;
 import app.user.api.user.UserLoginRequest;
 import app.user.api.user.UserLoginResponse;
@@ -20,8 +19,6 @@ public class UserService {
     @Inject
     UserWebService userWebService;
     @Inject
-    BOUserWebService boUserWebService;
-    @Inject
     WebContext webContext;
 
     public UserLoginAJAXResponse login(UserLoginAJAXRequest ajaxRequest) {
@@ -30,7 +27,7 @@ public class UserService {
         Optional<String> userIdOptional = session.get("userId");
         if (userIdOptional.isPresent()) {
             Long userId = Long.valueOf(userIdOptional.get());
-            if (boUserWebService.get(userId).userName.equals(ajaxRequest.userName)) {
+            if (userWebService.get(userId).username.equals(ajaxRequest.username)) {
                 ajaxResponse.loginMessage = LoginMessage.ALREADY_LOGIN;
                 return ajaxResponse;
             }
@@ -38,7 +35,7 @@ public class UserService {
         UserLoginRequest request = userLoginRequest(ajaxRequest);
         UserLoginResponse response = userWebService.login(request);
         ajaxResponse.userId = response.userId;
-        ajaxResponse.userName = response.userName;
+        ajaxResponse.username = response.username;
         if (response.loginMessage != null) {
             ajaxResponse.loginMessage = LoginMessage.valueOf(response.loginMessage.name());
         }
@@ -50,7 +47,7 @@ public class UserService {
 
     private UserLoginRequest userLoginRequest(UserLoginAJAXRequest ajaxRequest) {
         UserLoginRequest request = new UserLoginRequest();
-        request.userName = ajaxRequest.userName;
+        request.username = ajaxRequest.username;
         request.password = ajaxRequest.password;
         return request;
     }

@@ -1,6 +1,7 @@
 package app.book.api.kafka;
 
 import core.framework.api.json.Property;
+import core.framework.api.validate.NotBlank;
 import core.framework.api.validate.NotNull;
 
 /**
@@ -8,10 +9,17 @@ import core.framework.api.validate.NotNull;
  */
 public class BorrowedRecordExpirationMessage {
     @NotNull
-    @Property(name = "user_id")
-    public Long userId;
+    @NotBlank
+    @Property(name = "username")
+    public String username;
 
     @NotNull
-    @Property(name = "book_id")
-    public Long bookId;
+    @NotBlank
+    @Property(name = "email")
+    public String email;
+
+    @NotNull
+    @NotBlank
+    @Property(name = "book_name")
+    public String bookName;
 }

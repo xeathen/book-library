@@ -1,7 +1,6 @@
 package app;
 
 import app.book.api.BookWebService;
-import app.user.api.BOUserWebService;
 import app.user.api.UserWebService;
 import app.web.api.BookAJAXWebService;
 import app.web.api.UserAJAXWebService;
@@ -20,7 +19,6 @@ public class WebsiteModule extends Module {
     protected void initialize() {
         APIConfig api = api();
         api.client(UserWebService.class, requiredProperty("app.user.serviceURL"));
-        api.client(BOUserWebService.class, requiredProperty("app.user.serviceURL"));
         api.client(BookWebService.class, requiredProperty("app.book.serviceURL"));
 
         bind(UserService.class);

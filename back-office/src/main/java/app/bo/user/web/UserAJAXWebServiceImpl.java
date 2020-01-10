@@ -5,7 +5,6 @@ import app.bo.api.user.ChangeStatusAJAXRequest;
 import app.bo.api.user.ChangeStatusAJAXResponse;
 import app.bo.api.user.CreateUserAJAXRequest;
 import app.bo.api.user.CreateUserAJAXResponse;
-import app.bo.api.user.DeleteUserAJAXResponse;
 import app.bo.api.user.GetUserAJAXResponse;
 import app.bo.api.user.ListUserAJAXRequest;
 import app.bo.api.user.ListUserAJAXResponse;
@@ -35,15 +34,9 @@ public class UserAJAXWebServiceImpl implements UserAJAXWebService {
 
     @Override
     public CreateUserAJAXResponse create(CreateUserAJAXRequest request) {
-        ActionLogContext.put("userName", request.userName);
+        ActionLogContext.put("username", request.username);
         ActionLogContext.put("userEmail", request.email);
         return userService.create(request);
-    }
-
-    @Override
-    public DeleteUserAJAXResponse delete(Long userId) {
-        ActionLogContext.put("userId", userId);
-        return userService.delete(userId);
     }
 
     @Override

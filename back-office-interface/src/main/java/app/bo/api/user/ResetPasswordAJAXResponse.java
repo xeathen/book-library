@@ -6,6 +6,6 @@ import core.framework.api.json.Property;
  * @author Ethan
  */
 public class ResetPasswordAJAXResponse {
-    @Property(name = "user_name")
-    public String userName;
+    @Property(name = "username")
+    public String username;
 }

@@ -1,6 +1,5 @@
 package app.bo.category.service;
 
-import app.bo.api.category.CategoryView;
 import app.bo.api.category.CreateCategoryAJAXRequest;
 import app.bo.api.category.CreateCategoryAJAXResponse;
 import app.bo.api.category.ListCategoryAJAXResponse;
@@ -23,7 +22,7 @@ public class CategoryService {
         ListCategoryAJAXResponse ajaxResponse = new ListCategoryAJAXResponse();
         BOListCategoryResponse boListCategoryResponse = boCategoryWebService.list();
         ajaxResponse.categories = boListCategoryResponse.categories.stream().map(boCategoryView -> {
-            CategoryView categoryView = new CategoryView();
+            ListCategoryAJAXResponse.Category categoryView = new ListCategoryAJAXResponse.Category();
             categoryView.id = boCategoryView.id;
             categoryView.name = boCategoryView.name;
             return categoryView;

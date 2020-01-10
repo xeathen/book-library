@@ -168,16 +168,16 @@ public class BookService {
         return ajaxResponse;
     }
 
-    private BorrowedRecord borrowedRecord(BorrowedRecordView response) {
+    private BorrowedRecord borrowedRecord(BorrowedRecordView view) {
         BorrowedRecord borrowedRecord = new BorrowedRecord();
-        borrowedRecord.id = response.id;
-        borrowedRecord.userId = response.userId;
-        borrowedRecord.userName = response.userName;
-        borrowedRecord.bookId = response.bookId;
-        borrowedRecord.bookName = response.bookName;
-        borrowedRecord.borrowTime = response.borrowTime;
-        borrowedRecord.expectedReturnTime = response.expectedReturnTime;
-        borrowedRecord.actualReturnTime = response.actualReturnTime;
+        borrowedRecord.id = view.id;
+        borrowedRecord.userId = view.userId;
+        borrowedRecord.username = view.username;
+        borrowedRecord.bookId = view.bookId;
+        borrowedRecord.bookName = view.bookName;
+        borrowedRecord.borrowTime = view.borrowTime;
+        borrowedRecord.expectedReturnTime = view.expectedReturnTime;
+        borrowedRecord.actualReturnTime = view.actualReturnTime;
         return borrowedRecord;
     }
 }

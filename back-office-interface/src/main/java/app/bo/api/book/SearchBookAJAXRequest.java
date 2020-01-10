@@ -1,7 +1,6 @@
 package app.bo.api.book;
 
 import core.framework.api.json.Property;
-import core.framework.api.validate.Length;
 import core.framework.api.validate.NotNull;
 
 /**
@@ -20,7 +19,6 @@ public class SearchBookAJAXRequest {
     public String name;
 
     @Property(name = "author")
-    @Length(max = 50)
     public String author;
 
     @Property(name = "publishing_house")

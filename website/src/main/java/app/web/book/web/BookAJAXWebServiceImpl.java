@@ -43,6 +43,12 @@ public class BookAJAXWebServiceImpl implements BookAJAXWebService {
     }
 
     @Override
+    public SearchRecordAJAXResponse searchRecord(SearchRecordAJAXRequest request) {
+        Long userId = Long.valueOf(webContext.request().session().get("userId").orElseThrow());
+        return bookService.searchRecord(userId, request);
+    }
+
+    @Override
     public ReturnBackBookAJAXResponse returnBack(Long bookId) {
         Long userId = Long.valueOf(webContext.request().session().get("userId").orElseThrow());
         ActionLogContext.put("userId", userId);
@@ -50,18 +56,11 @@ public class BookAJAXWebServiceImpl implements BookAJAXWebService {
         return bookService.returnBack(userId, bookId);
     }
 
-    //TODO:库存不为0时无法预约
     @Override
     public CreateReservationAJAXResponse reserve(Long bookId) {
         Long userId = Long.valueOf(webContext.request().session().get("userId").orElseThrow());
         ActionLogContext.put("userId", userId);
         ActionLogContext.put("bookId", bookId);
         return bookService.reserve(userId, bookId);
-    }
-
-    @Override
-    public SearchRecordAJAXResponse searchRecord(SearchRecordAJAXRequest request) {
-        Long userId = Long.valueOf(webContext.request().session().get("userId").orElseThrow());
-        return bookService.searchRecord(userId, request);
     }
 }

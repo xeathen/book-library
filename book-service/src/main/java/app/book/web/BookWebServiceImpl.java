@@ -41,6 +41,11 @@ public class BookWebServiceImpl implements BookWebService {
     }
 
     @Override
+    public SearchRecordResponse searchRecord(SearchRecordRequest request) {
+        return bookService.searchRecord(request);
+    }
+
+    @Override
     public ReturnBackBookResponse returnBack(Long bookId, ReturnBackBookRequest request) {
         ActionLogContext.put("userId", request.userId);
         ActionLogContext.put("bookId", bookId);
@@ -52,10 +57,5 @@ public class BookWebServiceImpl implements BookWebService {
         ActionLogContext.put("userId", request.userId);
         ActionLogContext.put("bookId", bookId);
         return bookService.reserve(bookId, request);
-    }
-
-    @Override
-    public SearchRecordResponse searchRecord(SearchRecordRequest request) {
-        return bookService.searchRecord(request);
     }
 }

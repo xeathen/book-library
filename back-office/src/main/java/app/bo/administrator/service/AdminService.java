@@ -19,10 +19,10 @@ public class AdminService {
     Repository<Administrator> administratorRepository;
 
     public AdminLoginResponse login(AdminLoginRequest request) {
-        AdminLoginResponse response = new AdminLoginResponse();
         Query<Administrator> query = administratorRepository.select();
         query.where("admin_name = ?", request.name);
         Optional<Administrator> administratorOptional = query.fetchOne();
+        AdminLoginResponse response = new AdminLoginResponse();
         if (administratorOptional.isEmpty()) {
             response.loginMessage = LoginMessage.ADMINISTRATOR_NOT_FOUND;
         } else {

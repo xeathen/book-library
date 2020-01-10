@@ -1,11 +1,12 @@
 package app.book.domain;
 
+import core.framework.api.validate.NotBlank;
 import core.framework.api.validate.NotNull;
 import core.framework.mongo.Collection;
 import core.framework.mongo.Field;
 import core.framework.mongo.Id;
 
-import java.time.ZonedDateTime;
+import java.time.LocalDateTime;
 
 /**
  * @author Ethan
@@ -20,25 +21,27 @@ public class BorrowedRecord {
     public Long userId;
 
     @NotNull
-    @Field(name = "user_name")
-    public String userName;
+    @NotBlank
+    @Field(name = "username")
+    public String username;
 
     @NotNull
     @Field(name = "book_id")
     public Long bookId;
 
     @NotNull
+    @NotBlank
     @Field(name = "book_name")
     public String bookName;
 
     @NotNull
     @Field(name = "borrow_time")
-    public ZonedDateTime borrowTime;
+    public LocalDateTime borrowTime;
 
     @NotNull
     @Field(name = "expected_return_time")
-    public ZonedDateTime expectedReturnTime;
+    public LocalDateTime expectedReturnTime;
 
     @Field(name = "actual_return_time")
-    public ZonedDateTime actualReturnTime;
+    public LocalDateTime actualReturnTime;
 }

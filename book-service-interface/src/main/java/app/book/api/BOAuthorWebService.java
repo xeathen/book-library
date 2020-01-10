@@ -11,11 +11,11 @@ import core.framework.api.web.service.Path;
  * @author Ethan
  */
 public interface BOAuthorWebService {
-    @GET
-    @Path("/bo/author")
-    BOListAuthorResponse list();
-
     @POST
     @Path("/bo/author")
     BOCreateAuthorResponse create(BOCreateAuthorRequest request);
+
+    @GET
+    @Path("/bo/author")
+    BOListAuthorResponse list();
 }

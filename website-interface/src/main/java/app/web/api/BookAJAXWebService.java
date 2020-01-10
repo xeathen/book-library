@@ -31,6 +31,10 @@ public interface BookAJAXWebService {
     @Path("/ajax/book/:id/borrowed-record")
     BorrowBookAJAXResponse borrow(@PathParam("id") Long id, BorrowBookAJAXRequest request);
 
+    @GET
+    @Path("/ajax/book/borrowed-record")
+    SearchRecordAJAXResponse searchRecord(SearchRecordAJAXRequest request);
+
     @POST
     @Path("/ajax/book/:id/borrowed-record/return")
     ReturnBackBookAJAXResponse returnBack(@PathParam("id") Long id);
@@ -38,8 +42,4 @@ public interface BookAJAXWebService {
     @POST
     @Path("/ajax/book/:id/reservation")
     CreateReservationAJAXResponse reserve(@PathParam("id") Long id);
-
-    @GET
-    @Path("/ajax/book/borrowed-record")
-    SearchRecordAJAXResponse searchRecord(SearchRecordAJAXRequest request);
 }

@@ -20,6 +20,7 @@ public class UserLoginInterceptor implements Interceptor {
         logger.info("path:" + path);
         Optional<String> userIdOptional = invocation.context().request().session().get("userId");
         if (!"/ajax/user/login".equals(path) && userIdOptional.isEmpty()) {
+            //TODO:Response.bean()
             return Response.text("You should login first.");
         }
         return invocation.proceed();

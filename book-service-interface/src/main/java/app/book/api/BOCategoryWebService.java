@@ -11,11 +11,11 @@ import core.framework.api.web.service.Path;
  * @author Ethan
  */
 public interface BOCategoryWebService {
-    @GET
-    @Path("/bo/category")
-    BOListCategoryResponse list();
-
     @POST
     @Path("/bo/category")
     BOCreateCategoryResponse create(BOCreateCategoryRequest request);
+
+    @GET
+    @Path("/bo/category")
+    BOListCategoryResponse list();
 }

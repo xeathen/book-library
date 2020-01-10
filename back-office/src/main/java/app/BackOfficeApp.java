@@ -5,6 +5,7 @@ import app.bo.api.administrator.AdminLoginRequest;
 import app.bo.api.administrator.AdminLoginResponse;
 import core.framework.http.HTTPMethod;
 import core.framework.module.App;
+import core.framework.module.SessionConfig;
 import core.framework.module.SystemModule;
 
 import java.time.Duration;
@@ -21,7 +22,9 @@ public class BackOfficeApp extends App {
         http().gzip();
         http().bean(AdminLoginRequest.class);
         http().bean(AdminLoginResponse.class);
-        site().session().timeout(Duration.ofMinutes(10));
+        SessionConfig session = site().session();
+        session.cookie("back-office", null);
+        session.timeout(Duration.ofMinutes(30));
         http().route(HTTPMethod.PUT, "/ajax/admin/login", bind(AdminLoginController.class));
         http().intercept(bind(AdminLoginInterceptor.class));
     }

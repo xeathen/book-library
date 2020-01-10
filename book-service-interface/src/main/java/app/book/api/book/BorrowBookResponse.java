@@ -2,7 +2,7 @@ package app.book.api.book;
 
 import core.framework.api.json.Property;
 
-import java.time.ZonedDateTime;
+import java.time.LocalDateTime;
 
 /**
  * @author Ethan
@@ -15,8 +15,8 @@ public class BorrowBookResponse {
     public String bookName;
 
     @Property(name = "borrow_time")
-    public ZonedDateTime borrowTime;
+    public LocalDateTime borrowTime;
 
     @Property(name = "expected_return_time")
-    public ZonedDateTime expectedReturnTime;
+    public LocalDateTime expectedReturnTime;
 }

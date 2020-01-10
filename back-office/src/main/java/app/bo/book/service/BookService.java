@@ -159,7 +159,7 @@ public class BookService {
             borrowedRecordView.bookId = boBorrowedRecordView.bookId;
             borrowedRecordView.bookName = boBorrowedRecordView.bookName;
             borrowedRecordView.userId = boBorrowedRecordView.userId;
-            borrowedRecordView.userName = boBorrowedRecordView.userName;
+            borrowedRecordView.username = boBorrowedRecordView.username;
             borrowedRecordView.borrowTime = boBorrowedRecordView.borrowTime;
             borrowedRecordView.expectedReturnTime = boBorrowedRecordView.expectedReturnTime;
             borrowedRecordView.actualReturnTime = boBorrowedRecordView.actualReturnTime;

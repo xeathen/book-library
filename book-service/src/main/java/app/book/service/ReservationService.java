@@ -1,66 +1,42 @@
 package app.book.service;
 
-import app.book.api.kafka.BorrowedRecordExpirationMessage;
-import app.book.api.kafka.ReservationMessage;
-import app.book.domain.Book;
+import app.book.api.kafka.ReservationAvailabilityMessage;
 import app.book.domain.Reservation;
+import app.user.api.BOUserWebService;
+import app.user.api.user.BOGetUserResponse;
+import app.user.api.user.UserStatusView;
 import core.framework.db.Query;
 import core.framework.db.Repository;
 import core.framework.inject.Inject;
 import core.framework.kafka.MessagePublisher;
-import core.framework.web.exception.NotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.time.ZonedDateTime;
 
 /**
  * @author Ethan
  */
 public class ReservationService {
     private final Logger logger = LoggerFactory.getLogger(ReservationService.class);
-    public Integer expiredDays;
     @Inject
     Repository<Reservation> reservationRepository;
     @Inject
-    Repository<Book> bookRepository;
+    BOUserWebService boUserWebService;
     @Inject
-    MessagePublisher<ReservationMessage> reservationMessagePublisher;
-    @Inject
-    MessagePublisher<BorrowedRecordExpirationMessage> expirationMessagePublisher;
+    MessagePublisher<ReservationAvailabilityMessage> reservationMessagePublisher;
 
-    //TODO:待优化
-    public void notifyAvailability(Long bookId) {
+    public void notifyReservationAvailability(Long bookId, String bookName) {
         Query<Reservation> reservationQuery = reservationRepository.select();
         reservationQuery.where("book_id = ?", bookId);
         reservationQuery.fetch().forEach(reservation -> {
-            Book book = bookRepository.get(reservation.bookId).orElseThrow(() -> new NotFoundException("Book not found, id=" + reservation.bookId));
-            if (book.quantity > 0) {
-                logger.info("publish reservationMessage, userId={}, bookId={}", reservation.userId, reservation.bookId);
-                //TODO:并发问题
-                reservationRepository.delete(reservation.id);
-                ReservationMessage message = new ReservationMessage();
-                message.userId = reservation.userId;
-                message.bookId = reservation.bookId;
+            logger.info("publish reservationAvailabilityMessage, userId={}, bookId={}", reservation.userId, reservation.bookId);
+            reservationRepository.delete(reservation.id);
+            BOGetUserResponse boGetUserResponse = boUserWebService.get(reservation.userId);
+            if (boGetUserResponse.status == UserStatusView.ACTIVE) {
+                ReservationAvailabilityMessage message = new ReservationAvailabilityMessage();
+                message.username = boGetUserResponse.username;
+                message.email = boGetUserResponse.email;
+                message.bookName = bookName;
                 reservationMessagePublisher.publish(reservation.id.toString(), message);
-            }
-        });
-    }
-
-    //TODO:应该改成提醒用户还书
-    public void notifyExpiration() {
-        reservationRepository.select().fetch().forEach(reservation -> {
-            bookRepository.get(reservation.bookId).orElseThrow(() -> new NotFoundException("Book not found, id=" + reservation.bookId));
-            ZonedDateTime expiredTime = reservation.reserveTime.plusDays(expiredDays);
-            if (ZonedDateTime.now().isAfter(expiredTime)) {
-                reservationRepository.delete(reservation.id);
-            }
-            if (expiredTime.minusDays(1).getDayOfMonth() == ZonedDateTime.now().getDayOfMonth()) {
-                logger.info("publish expirationMessage, userId={}, bookId={}", reservation.userId, reservation.bookId);
-                BorrowedRecordExpirationMessage message = new BorrowedRecordExpirationMessage();
-                message.bookId = reservation.bookId;
-                message.userId = reservation.userId;
-                expirationMessagePublisher.publish(reservation.id.toString(), message);
             }
         });
     }

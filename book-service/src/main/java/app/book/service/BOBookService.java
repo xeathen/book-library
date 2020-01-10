@@ -11,9 +11,10 @@ import app.book.api.book.BOSearchRecordRequest;
 import app.book.api.book.BOSearchRecordResponse;
 import app.book.api.book.BOUpdateBookRequest;
 import app.book.api.book.BOUpdateBookResponse;
-import app.book.api.book.BookView;
 import app.book.api.book.BorrowedRecordView;
+import app.book.api.book.GetBookResponse;
 import app.book.domain.Book;
+import app.book.domain.BookView;
 import app.book.domain.BorrowedRecord;
 import app.category.domain.Category;
 import app.tag.domain.Tag;
@@ -50,8 +51,9 @@ public class BOBookService {
     ReservationService reservationService;
 
     public BOGetBookResponse get(Long bookId) {
-        return boGetBookResponse(bookRepository.get(bookId).orElseThrow(() ->
-            new NotFoundException("book not found, id=" + bookId, ErrorCodes.BOOK_NOT_FOUND)));
+        Book book = bookRepository.get(bookId).orElseThrow(() ->
+            new NotFoundException("book not found, id=" + bookId, ErrorCodes.BOOK_NOT_FOUND));
+        return boGetBookResponse(book);
     }
 
     public BOSearchBookResponse search(BOSearchBookRequest request) {
@@ -64,15 +66,17 @@ public class BOBookService {
         String whereSQL = whereSQL(request, params);
         String limitSQL = "limit " + request.skip + ", " + request.limit;
         BOSearchBookResponse response = new BOSearchBookResponse();
-        response.books = database.select(selectSQL + fromSQL + whereSQL + limitSQL, BookView.class, params.toArray());
+        response.books = database.select(selectSQL + fromSQL + whereSQL + limitSQL, BookView.class, params.toArray())
+            .stream().map(this::getBookResponse).collect(Collectors.toList());
         String countSQL = "SELECT COUNT(1) ";
         response.total = database.selectOne(countSQL + fromSQL + whereSQL, Integer.class, params.toArray()).orElse(0);
         return response;
     }
 
     public BOCreateBookResponse create(BOCreateBookRequest request) {
+        Long id = bookRepository.insert(book(request)).orElseThrow();
         BOCreateBookResponse response = new BOCreateBookResponse();
-        response.id = bookRepository.insert(book(request)).orElseThrow();
+        response.id = id;
         response.name = request.name;
         return response;
     }
@@ -81,20 +85,27 @@ public class BOBookService {
         Book book = book(request);
         book.id = bookId;
         bookRepository.partialUpdate(book);
-        //TODO:优化
-        reservationService.notifyAvailability(bookId);
+        if (request.quantity != null && request.quantity != 0) {
+            String bookName;
+            if (request.name == null) {
+                bookName = bookRepository.get(bookId).orElseThrow().name;
+            } else {
+                bookName = book.name;
+            }
+            reservationService.notifyReservationAvailability(bookId, bookName);
+        }
         BOUpdateBookResponse response = boUpdateBookResponse(bookRepository.get(bookId).orElseThrow());
         response.id = bookId;
         return response;
     }
 
     public BOSearchRecordResponse searchRecord(Long bookId, BOSearchRecordRequest request) {
-        BOSearchRecordResponse response = new BOSearchRecordResponse();
         Query query = new Query();
         query.skip = request.skip;
         query.limit = request.limit;
         query.filter = Filters.eq("book_id", bookId);
         List<BorrowedRecord> borrowedRecordList = borrowedRecordCollection.find(query);
+        BOSearchRecordResponse response = new BOSearchRecordResponse();
         response.borrowedRecords = borrowedRecordList.stream().map(this::borrowedRecordView).collect(Collectors.toList());
         response.total = borrowedRecordCollection.count(query.filter);
         return response;
@@ -174,6 +185,19 @@ public class BOBookService {
         return book;
     }
 
+    private GetBookResponse getBookResponse(BookView bookView) {
+        GetBookResponse getBookResponse = new GetBookResponse();
+        getBookResponse.id = bookView.id;
+        getBookResponse.name = bookView.name;
+        getBookResponse.authorName = bookView.authorName;
+        getBookResponse.categoryName = bookView.categoryName;
+        getBookResponse.tagName = bookView.tagName;
+        getBookResponse.publishingHouse = bookView.publishingHouse;
+        getBookResponse.description = bookView.description;
+        getBookResponse.quantity = bookView.quantity;
+        return getBookResponse;
+    }
+
     private BOUpdateBookResponse boUpdateBookResponse(Book book) {
         BOUpdateBookResponse response = new BOUpdateBookResponse();
         response.name = book.name;
@@ -190,7 +214,7 @@ public class BOBookService {
         BorrowedRecordView response = new BorrowedRecordView();
         response.id = borrowedRecord.id;
         response.userId = borrowedRecord.userId;
-        response.userName = borrowedRecord.userName;
+        response.username = borrowedRecord.username;
         response.bookId = borrowedRecord.bookId;
         response.bookName = borrowedRecord.bookName;
         response.borrowTime = borrowedRecord.borrowTime;

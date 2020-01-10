@@ -1,5 +1,6 @@
 package app.tag.domain;
 
+import core.framework.api.validate.NotBlank;
 import core.framework.api.validate.NotNull;
 import core.framework.db.Column;
 import core.framework.db.PrimaryKey;
@@ -15,6 +16,7 @@ public class Tag {
     public Integer id;
 
     @NotNull
+    @NotBlank
     @Column(name = "name")
     public String name;
 }

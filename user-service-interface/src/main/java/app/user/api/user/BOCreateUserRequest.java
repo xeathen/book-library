@@ -10,8 +10,8 @@ import core.framework.api.validate.NotNull;
 public class BOCreateUserRequest {
     @NotNull
     @NotBlank
-    @Property(name = "user_name")
-    public String userName;
+    @Property(name = "username")
+    public String username;
 
     @NotNull
     @NotBlank

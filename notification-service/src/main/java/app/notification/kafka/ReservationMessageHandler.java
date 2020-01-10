@@ -1,9 +1,6 @@
 package app.notification.kafka;
 
-import app.book.api.kafka.ReservationMessage;
-import app.user.api.BOUserWebService;
-import app.user.api.user.BOGetUserResponse;
-import core.framework.inject.Inject;
+import app.book.api.kafka.ReservationAvailabilityMessage;
 import core.framework.kafka.MessageHandler;
 import core.framework.log.ActionLogContext;
 import org.slf4j.Logger;
@@ -12,16 +9,13 @@ import org.slf4j.LoggerFactory;
 /**
  * @author Ethan
  */
-public class ReservationMessageHandler implements MessageHandler<ReservationMessage> {
+public class ReservationMessageHandler implements MessageHandler<ReservationAvailabilityMessage> {
     private final Logger logger = LoggerFactory.getLogger(ReservationMessageHandler.class);
-    @Inject
-    BOUserWebService boUserWebService;
 
     @Override
-    public void handle(String key, ReservationMessage value) {
-        ActionLogContext.put("userId", value.userId);
-        ActionLogContext.put("bookId", value.bookId);
-        BOGetUserResponse user = boUserWebService.get(value.userId);
-        logger.info("Sending reservation email, userName={}, userEmail={}, bookId={}", user.userName, user.email, value.bookId);
+    public void handle(String key, ReservationAvailabilityMessage value) {
+        ActionLogContext.put("username", value.username);
+        ActionLogContext.put("bookId", value.bookName);
+        logger.info("Sending reservation availability email, username={}, userEmail={}, bookName={}", value.username, value.email, value.bookName);
     }
 }

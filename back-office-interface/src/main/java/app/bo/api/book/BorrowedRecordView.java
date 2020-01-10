@@ -2,7 +2,7 @@ package app.bo.api.book;
 
 import core.framework.api.json.Property;
 
-import java.time.ZonedDateTime;
+import java.time.LocalDateTime;
 
 /**
  * @author Ethan
@@ -14,8 +14,8 @@ public class BorrowedRecordView {
     @Property(name = "user_id")
     public Long userId;
 
-    @Property(name = "user_name")
-    public String userName;
+    @Property(name = "username")
+    public String username;
 
     @Property(name = "book_id")
     public Long bookId;
@@ -24,11 +24,11 @@ public class BorrowedRecordView {
     public String bookName;
 
     @Property(name = "borrow_time")
-    public ZonedDateTime borrowTime;
+    public LocalDateTime borrowTime;
 
     @Property(name = "expected_return_time")
-    public ZonedDateTime expectedReturnTime;
+    public LocalDateTime expectedReturnTime;
 
     @Property(name = "actual_return_time")
-    public ZonedDateTime actualReturnTime;
+    public LocalDateTime actualReturnTime;
 }

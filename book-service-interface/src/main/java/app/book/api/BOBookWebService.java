@@ -37,5 +37,5 @@ public interface BOBookWebService {
 
     @GET
     @Path("/bo/book/:id/borrowed-record")
-    BOSearchRecordResponse searchRecord(@PathParam("id")Long id,  BOSearchRecordRequest request);
+    BOSearchRecordResponse searchRecord(@PathParam("id") Long id, BOSearchRecordRequest request);
 }

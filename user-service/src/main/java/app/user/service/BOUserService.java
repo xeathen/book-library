@@ -6,7 +6,6 @@ import app.user.api.user.BOChangeStatusRequest;
 import app.user.api.user.BOChangeStatusResponse;
 import app.user.api.user.BOCreateUserRequest;
 import app.user.api.user.BOCreateUserResponse;
-import app.user.api.user.BODeleteUserResponse;
 import app.user.api.user.BOGetUserResponse;
 import app.user.api.user.BOListUserRequest;
 import app.user.api.user.BOListUserResponse;
@@ -21,7 +20,6 @@ import core.framework.db.Query;
 import core.framework.db.Repository;
 import core.framework.inject.Inject;
 import core.framework.util.Randoms;
-import core.framework.util.Strings;
 import core.framework.web.exception.ConflictException;
 import core.framework.web.exception.NotFoundException;
 
@@ -40,10 +38,10 @@ public class BOUserService {
     }
 
     public BOListUserResponse list(BOListUserRequest request) {
-        BOListUserResponse response = new BOListUserResponse();
         Query<User> query = userRepository.select();
         query.skip(request.skip);
         query.limit(request.limit);
+        BOListUserResponse response = new BOListUserResponse();
         response.users = query.fetch().stream().map(this::user).collect(Collectors.toList());
         response.total = query.count();
         return response;
@@ -51,14 +49,14 @@ public class BOUserService {
 
     public BOCreateUserResponse create(BOCreateUserRequest request) {
         Query<User> query = userRepository.select();
-        query.where("user_name = ? ", request.userName);
+        query.where("username = ? ", request.username);
         if (!query.fetch().isEmpty()) {
-            throw new ConflictException("find duplicate username", ErrorCodes.DUPLICATE_USERNAME);
+            throw new ConflictException("Find duplicate user name.", ErrorCodes.DUPLICATE_USERNAME);
         }
         query = userRepository.select();
         query.where("email = ?", request.email);
         if (!query.fetch().isEmpty()) {
-            throw new ConflictException("find duplicate email", ErrorCodes.DUPLICATE_EMAIL);
+            throw new ConflictException("Find duplicate email.", ErrorCodes.DUPLICATE_EMAIL);
         }
         User user = user(request);
         String salt = Randoms.alphaNumeric(6);
@@ -66,17 +64,16 @@ public class BOUserService {
         int iteration = Randoms.nextInt(0, 9);
         user.password = hash(request.password, salt, iteration);
         user.iteration = iteration;
+        long id = userRepository.insert(user).orElseThrow();
         BOCreateUserResponse response = boCreateUserResponse(request);
-        response.id = userRepository.insert(user).orElseThrow();
+        response.id = id;
         return response;
     }
 
     public BOUpdateUserPasswordResponse updatePassword(Long id, BOUpdateUserPasswordRequest request) {
         User user = checkUser(id);
-        if (!Strings.isBlank(request.password)) {
-            user.password = request.password;
-        }
         user.id = id;
+        user.password = request.password;
         int iteration = Randoms.nextInt(0, 9);
         user.iteration = iteration;
         String salt = Randoms.alphaNumeric(6);
@@ -84,20 +81,11 @@ public class BOUserService {
         user.password = hash(request.password, salt, iteration);
         userRepository.partialUpdate(user);
         BOUpdateUserPasswordResponse response = new BOUpdateUserPasswordResponse();
-        response.userName = user.userName;
-        return response;
-    }
-
-    public BODeleteUserResponse delete(Long id) {
-        checkUser(id);
-        BODeleteUserResponse response = new BODeleteUserResponse();
-        userRepository.delete(id);
-        response.id = id;
+        response.username = user.username;
         return response;
     }
 
     public BOResetPasswordResponse resetPassword(Long id) {
-        BOResetPasswordResponse response = new BOResetPasswordResponse();
         User user = checkUser(id);
         int iteration = Randoms.nextInt(0, 9);
         user.iteration = iteration;
@@ -105,16 +93,17 @@ public class BOUserService {
         user.salt = salt;
         user.password = hash(Constants.PASSWORD_RESET, salt, iteration);
         userRepository.partialUpdate(user);
-        response.userName = user.userName;
+        BOResetPasswordResponse response = new BOResetPasswordResponse();
+        response.username = user.username;
         return response;
     }
 
     public BOChangeStatusResponse changeStatus(Long id, BOChangeStatusRequest request) {
-        BOChangeStatusResponse response = new BOChangeStatusResponse();
         User user = checkUser(id);
-        user.status = request.status == null ? null : UserStatus.valueOf(request.status.name());
+        user.status = UserStatus.valueOf(request.status.name());
         userRepository.partialUpdate(user);
-        response.status = user.status == null ? null : UserStatusView.valueOf(user.status.name());
+        BOChangeStatusResponse response = new BOChangeStatusResponse();
+        response.status = UserStatusView.valueOf(user.status.name());
         return response;
     }
 
@@ -129,28 +118,28 @@ public class BOUserService {
     private BOGetUserResponse getUserResponse(User user) {
         BOGetUserResponse response = new BOGetUserResponse();
         response.id = user.id;
-        response.userName = user.userName;
+        response.username = user.username;
         response.email = user.email;
-        response.status = user.status == null ? null : UserStatusView.valueOf(user.status.name());
+        response.status = UserStatusView.valueOf(user.status.name());
         return response;
-    }
-
-    private BOListUserResponse.User user(User user) {
-        BOListUserResponse.User userView = new BOListUserResponse.User();
-        userView.id = user.id;
-        userView.userName = user.userName;
-        userView.email = user.email;
-        userView.status = user.status == null ? null : UserStatusView.valueOf(user.status.name());
-        return userView;
     }
 
     private User checkUser(Long id) {
         return userRepository.get(id).orElseThrow(() -> new NotFoundException("User not found, id=" + id, ErrorCodes.USER_NOT_FOUND));
     }
 
+    private BOListUserResponse.User user(User user) {
+        BOListUserResponse.User userView = new BOListUserResponse.User();
+        userView.id = user.id;
+        userView.username = user.username;
+        userView.email = user.email;
+        userView.status = UserStatusView.valueOf(user.status.name());
+        return userView;
+    }
+
     private User user(BOCreateUserRequest request) {
         User user = new User();
-        user.userName = request.userName;
+        user.username = request.username;
         user.email = request.email;
         user.status = UserStatus.valueOf(request.status.name());
         return user;
@@ -158,7 +147,7 @@ public class BOUserService {
 
     private BOCreateUserResponse boCreateUserResponse(BOCreateUserRequest request) {
         BOCreateUserResponse response = new BOCreateUserResponse();
-        response.userName = request.userName;
+        response.username = request.username;
         response.email = request.email;
         response.status = request.status;
         return response;

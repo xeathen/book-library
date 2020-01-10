@@ -17,7 +17,7 @@ public class Main {
         migration.migrate(mongo -> {
             mongo.createIndex("borrowed_records", ascending("user_id"));
             mongo.createIndex("borrowed_records", ascending("book_id"));
-            mongo.createIndex("borrowed_records", ascending("user_name"));
+            mongo.createIndex("borrowed_records", ascending("username"));
             mongo.createIndex("borrowed_records", ascending("book_name"));
             mongo.createIndex("borrowed_records", ascending("actual_return_time"));
         });

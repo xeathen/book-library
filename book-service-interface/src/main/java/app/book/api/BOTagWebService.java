@@ -11,11 +11,11 @@ import core.framework.api.web.service.Path;
  * @author Ethan
  */
 public interface BOTagWebService {
-    @GET
-    @Path("/bo/tag")
-    BOListTagResponse list();
-
     @POST
     @Path("/bo/tag")
     BOCreateTagResponse create(BOCreateTagRequest request);
+
+    @GET
+    @Path("/bo/tag")
+    BOListTagResponse list();
 }

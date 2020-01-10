@@ -3,7 +3,6 @@ package app.bo.tag.service;
 import app.bo.api.tag.CreateTagAJAXRequest;
 import app.bo.api.tag.CreateTagAJAXResponse;
 import app.bo.api.tag.ListTagAJAXResponse;
-import app.bo.api.tag.TagView;
 import app.book.api.BOTagWebService;
 import app.book.api.tag.BOCreateTagRequest;
 import app.book.api.tag.BOCreateTagResponse;
@@ -23,7 +22,7 @@ public class TagService {
         ListTagAJAXResponse ajaxResponse = new ListTagAJAXResponse();
         BOListTagResponse boListTagResponse = boTagWebService.list();
         ajaxResponse.tags = boListTagResponse.tags.stream().map(boTagView -> {
-            TagView tagView = new TagView();
+            ListTagAJAXResponse.Tag tagView = new ListTagAJAXResponse.Tag();
             tagView.id = boTagView.id;
             tagView.name = boTagView.name;
             return tagView;

@@ -12,5 +12,13 @@ public class ListTagAJAXResponse {
     public Integer total;
 
     @Property(name = "tags")
-    public List<TagView> tags;
+    public List<Tag> tags;
+
+    public static class Tag {
+        @Property(name = "id")
+        public Integer id;
+
+        @Property(name = "name")
+        public String name;
+    }
 }

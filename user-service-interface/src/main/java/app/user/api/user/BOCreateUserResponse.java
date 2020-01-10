@@ -9,8 +9,8 @@ public class BOCreateUserResponse {
     @Property(name = "id")
     public Long id;
 
-    @Property(name = "user_name")
-    public String userName;
+    @Property(name = "username")
+    public String username;
 
     @Property(name = "email")
     public String email;

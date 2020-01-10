@@ -1,6 +1,5 @@
 package app.bo.author.service;
 
-import app.bo.api.author.AuthorView;
 import app.bo.api.author.CreateAuthorAJAXRequest;
 import app.bo.api.author.CreateAuthorAJAXResponse;
 import app.bo.api.author.ListAuthorAJAXResponse;
@@ -23,7 +22,7 @@ public class AuthorService {
         ListAuthorAJAXResponse ajaxResponse = new ListAuthorAJAXResponse();
         BOListAuthorResponse boListAuthorResponse = boAuthorWebService.list();
         ajaxResponse.authors = boListAuthorResponse.authors.stream().map(boAuthorView -> {
-            AuthorView authorView = new AuthorView();
+            ListAuthorAJAXResponse.Author authorView = new ListAuthorAJAXResponse.Author();
             authorView.id = boAuthorView.id;
             authorView.name = boAuthorView.name;
             return authorView;

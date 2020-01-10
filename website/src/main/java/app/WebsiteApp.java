@@ -2,6 +2,7 @@ package app;
 
 import app.web.user.web.interceptor.UserLoginInterceptor;
 import core.framework.module.App;
+import core.framework.module.SessionConfig;
 import core.framework.module.SystemModule;
 
 import java.time.Duration;
@@ -17,7 +18,9 @@ public class WebsiteApp extends App {
         load(new WebsiteModule());
 
         http().gzip();
-        site().session().timeout(Duration.ofMinutes(10));
+        SessionConfig session = site().session();
+        session.cookie("website", null);
+        session.timeout(Duration.ofMinutes(30));
         http().intercept(bind(UserLoginInterceptor.class));
     }
 }

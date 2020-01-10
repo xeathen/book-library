@@ -6,9 +6,9 @@ import core.framework.api.json.Property;
  * @author Ethan
  */
 public enum LoginMessage {
-    @Property(name = "successful")
+    @Property(name = "SUCCESSFUL")
     SUCCESSFUL,
-    @Property(name = "administrator_not_found")
+    @Property(name = "ADMINISTRATOR_NOT_FOUND")
     ADMINISTRATOR_NOT_FOUND,
     @Property(name = "wrong_password")
     WRONG_PASSWORD,

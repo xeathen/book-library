@@ -16,7 +16,7 @@ public class UserAJAXWebServiceImpl implements UserAJAXWebService {
 
     @Override
     public UserLoginAJAXResponse login(UserLoginAJAXRequest request) {
-        ActionLogContext.put("userName", request.userName);
+        ActionLogContext.put("username", request.username);
         return userService.login(request);
     }
 }

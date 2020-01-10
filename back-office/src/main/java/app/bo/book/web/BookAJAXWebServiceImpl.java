@@ -13,7 +13,6 @@ import app.bo.api.book.UpdateBookAJAXResponse;
 import app.bo.book.service.BookService;
 import core.framework.inject.Inject;
 import core.framework.log.ActionLogContext;
-import core.framework.util.Strings;
 
 /**
  * @author Ethan
@@ -41,9 +40,6 @@ public class BookAJAXWebServiceImpl implements BookAJAXWebService {
     @Override
     public UpdateBookAJAXResponse update(Long bookId, UpdateBookAJAXRequest request) {
         ActionLogContext.put("bookId", bookId);
-        if (!Strings.isBlank(request.name)) {
-            ActionLogContext.put("bookName", request.name);
-        }
         return bookService.update(bookId, request);
     }
 
