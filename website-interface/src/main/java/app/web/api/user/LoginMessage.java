@@ -13,5 +13,7 @@ public enum LoginMessage {
     @Property(name = "wrong_password")
     WRONG_PASSWORD,
     @Property(name = "already_login")
-    ALREADY_LOGIN
+    ALREADY_LOGIN,
+    @Property(name = "NOT_LOGGED_IN")
+    NOT_LOGGED_IN
 }

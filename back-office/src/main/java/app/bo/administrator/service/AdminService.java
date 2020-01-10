@@ -1,8 +1,8 @@
 package app.bo.administrator.service;
 
 import app.bo.administrator.domain.Administrator;
-import app.bo.api.administrator.AdminLoginRequest;
-import app.bo.api.administrator.AdminLoginResponse;
+import app.bo.api.administrator.AdminLoginAJAXRequest;
+import app.bo.api.administrator.AdminLoginAJAXResponse;
 import app.bo.api.administrator.LoginMessage;
 import core.framework.crypto.Hash;
 import core.framework.db.Query;
@@ -18,11 +18,11 @@ public class AdminService {
     @Inject
     Repository<Administrator> administratorRepository;
 
-    public AdminLoginResponse login(AdminLoginRequest request) {
+    public AdminLoginAJAXResponse login(AdminLoginAJAXRequest request) {
         Query<Administrator> query = administratorRepository.select();
         query.where("admin_name = ?", request.name);
         Optional<Administrator> administratorOptional = query.fetchOne();
-        AdminLoginResponse response = new AdminLoginResponse();
+        AdminLoginAJAXResponse response = new AdminLoginAJAXResponse();
         if (administratorOptional.isEmpty()) {
             response.loginMessage = LoginMessage.ADMINISTRATOR_NOT_FOUND;
         } else {

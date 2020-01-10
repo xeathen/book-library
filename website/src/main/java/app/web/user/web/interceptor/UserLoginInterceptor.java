@@ -1,5 +1,7 @@
 package app.web.user.web.interceptor;
 
+import app.web.api.user.LoginMessage;
+import app.web.api.user.UserLoginAJAXResponse;
 import core.framework.web.Interceptor;
 import core.framework.web.Invocation;
 import core.framework.web.Response;
@@ -20,8 +22,9 @@ public class UserLoginInterceptor implements Interceptor {
         logger.info("path:" + path);
         Optional<String> userIdOptional = invocation.context().request().session().get("userId");
         if (!"/ajax/user/login".equals(path) && userIdOptional.isEmpty()) {
-            //TODO:Response.bean()
-            return Response.text("You should login first.");
+            UserLoginAJAXResponse response = new UserLoginAJAXResponse();
+            response.loginMessage = LoginMessage.NOT_LOGGED_IN;
+            return Response.bean(response);
         }
         return invocation.proceed();
     }

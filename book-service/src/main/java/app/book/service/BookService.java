@@ -171,7 +171,8 @@ public class BookService {
         LocalDate today = LocalDate.now();
         recordQuery.filter = Filters.and(
             Filters.eq("actual_return_time", null),
-            Filters.regex("expected_return_time", today.plusDays(1).toString()));
+            Filters.gte("expected_return_time", today.plusDays(1).atStartOfDay().plusHours(8)),
+            Filters.lt("expected_return_time", today.plusDays(2).atStartOfDay().plusHours(8)));
         borrowedRecordCollection.find(recordQuery).forEach(borrowedRecord -> {
             logger.info("publish recordExpirationMessage, userId={}, bookId={}, borrowTime={}",
                 borrowedRecord.userId, borrowedRecord.bookId, borrowedRecord.borrowTime);
@@ -197,6 +198,19 @@ public class BookService {
         response.description = book.description;
         response.quantity = book.quantity;
         return response;
+    }
+
+    private GetBookResponse getBookResponse(BookView bookView) {
+        GetBookResponse getBookResponse = new GetBookResponse();
+        getBookResponse.id = bookView.id;
+        getBookResponse.name = bookView.name;
+        getBookResponse.authorName = bookView.authorName;
+        getBookResponse.categoryName = bookView.categoryName;
+        getBookResponse.tagName = bookView.tagName;
+        getBookResponse.publishingHouse = bookView.publishingHouse;
+        getBookResponse.description = bookView.description;
+        getBookResponse.quantity = bookView.quantity;
+        return getBookResponse;
     }
 
     private String whereSQL(SearchBookRequest request, List<String> params) {
@@ -231,19 +245,6 @@ public class BookService {
         }
         whereClause.append(condition);
         params.add(param);
-    }
-
-    private GetBookResponse getBookResponse(BookView bookView) {
-        GetBookResponse getBookResponse = new GetBookResponse();
-        getBookResponse.id = bookView.id;
-        getBookResponse.name = bookView.name;
-        getBookResponse.authorName = bookView.authorName;
-        getBookResponse.categoryName = bookView.categoryName;
-        getBookResponse.tagName = bookView.tagName;
-        getBookResponse.publishingHouse = bookView.publishingHouse;
-        getBookResponse.description = bookView.description;
-        getBookResponse.quantity = bookView.quantity;
-        return getBookResponse;
     }
 
     private BorrowedRecord createBorrowedRecord(BorrowBookRequest request, Book book, BOGetUserResponse response) {

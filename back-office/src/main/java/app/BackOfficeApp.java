@@ -1,8 +1,8 @@
 package app;
 
 import app.bo.administrator.web.interceptor.AdminLoginInterceptor;
-import app.bo.api.administrator.AdminLoginRequest;
-import app.bo.api.administrator.AdminLoginResponse;
+import app.bo.api.administrator.AdminLoginAJAXRequest;
+import app.bo.api.administrator.AdminLoginAJAXResponse;
 import core.framework.http.HTTPMethod;
 import core.framework.module.App;
 import core.framework.module.SessionConfig;
@@ -20,8 +20,8 @@ public class BackOfficeApp extends App {
         loadProperties("app.properties");
         load(new BackOfficeModule());
         http().gzip();
-        http().bean(AdminLoginRequest.class);
-        http().bean(AdminLoginResponse.class);
+        http().bean(AdminLoginAJAXRequest.class);
+        http().bean(AdminLoginAJAXResponse.class);
         SessionConfig session = site().session();
         session.cookie("back-office", null);
         session.timeout(Duration.ofMinutes(30));

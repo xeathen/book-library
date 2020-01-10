@@ -1,5 +1,7 @@
 package app.bo.administrator.web.interceptor;
 
+import app.bo.api.administrator.AdminLoginAJAXResponse;
+import app.bo.api.administrator.LoginMessage;
 import core.framework.web.Interceptor;
 import core.framework.web.Invocation;
 import core.framework.web.Response;
@@ -20,7 +22,9 @@ public class AdminLoginInterceptor implements Interceptor {
         logger.info("path:" + path);
         Optional<String> userIdOptional = invocation.context().request().session().get("adminId");
         if (!"/ajax/admin/login".equals(path) && userIdOptional.isEmpty()) {
-            return Response.text("You should login first.");
+            AdminLoginAJAXResponse response = new AdminLoginAJAXResponse();
+            response.loginMessage = LoginMessage.NOT_LOGGED_IN;
+            return Response.bean(response);
         }
         return invocation.proceed();
     }

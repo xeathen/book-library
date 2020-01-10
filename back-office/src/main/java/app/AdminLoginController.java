@@ -1,8 +1,8 @@
 package app;
 
 import app.bo.administrator.service.AdminService;
-import app.bo.api.administrator.AdminLoginRequest;
-import app.bo.api.administrator.AdminLoginResponse;
+import app.bo.api.administrator.AdminLoginAJAXRequest;
+import app.bo.api.administrator.AdminLoginAJAXResponse;
 import app.bo.api.administrator.LoginMessage;
 import core.framework.inject.Inject;
 import core.framework.web.Controller;
@@ -18,16 +18,16 @@ public class AdminLoginController implements Controller {
 
     @Override
     public Response execute(Request request) throws Exception {
-        AdminLoginResponse adminLoginResponse = new AdminLoginResponse();
+        AdminLoginAJAXResponse adminLoginAJAXResponse = new AdminLoginAJAXResponse();
         if (request.session().get("adminId").isPresent()) {
-            adminLoginResponse.loginMessage = LoginMessage.ALREADY_LOGIN;
+            adminLoginAJAXResponse.loginMessage = LoginMessage.ALREADY_LOGIN;
         } else {
-            AdminLoginRequest adminLoginRequest = request.bean(AdminLoginRequest.class);
-            adminLoginResponse = adminService.login(adminLoginRequest);
-            if (adminLoginResponse.loginMessage == LoginMessage.SUCCESSFUL) {
-                request.session().set("adminId", adminLoginResponse.id.toString());
+            AdminLoginAJAXRequest adminLoginAJAXRequest = request.bean(AdminLoginAJAXRequest.class);
+            adminLoginAJAXResponse = adminService.login(adminLoginAJAXRequest);
+            if (adminLoginAJAXResponse.loginMessage == LoginMessage.SUCCESSFUL) {
+                request.session().set("adminId", adminLoginAJAXResponse.id.toString());
             }
         }
-        return Response.bean(adminLoginResponse);
+        return Response.bean(adminLoginAJAXResponse);
     }
 }

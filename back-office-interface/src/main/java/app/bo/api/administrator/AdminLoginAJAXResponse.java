@@ -5,7 +5,7 @@ import core.framework.api.json.Property;
 /**
  * @author Ethan
  */
-public class AdminLoginResponse {
+public class AdminLoginAJAXResponse {
     @Property(name = "id")
     public Long id;
 
